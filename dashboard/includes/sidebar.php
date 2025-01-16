@@ -1,9 +1,7 @@
-<!-- includes/sidebar.php -->
-
 <div class="sidebar">
-    <h2>Menu</h2>
-    <a href="index.php">Home</a>
-    <a href="#">Users</a>
-    <a href="#">Settings</a>
-    <a href="#">Logout</a>
+    <ul>
+        <li><a href="#" class="sidebar-link" data-page="includes/pages/dashboard.php">Dashboard</a></li>
+        <li><a href="#" class="sidebar-link" data-page="includes/pages/settings.php">Settings</a></li>
+        <li><a href="#" class="sidebar-link" data-page="includes/pages/reports.php">Reports</a></li>
+    </ul>
 </div>
