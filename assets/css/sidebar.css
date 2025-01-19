@@ -5,7 +5,7 @@
 
 .sidebar {
     background-color: var(--sidebar-background-color);
-    color: white;
+    color: var(--sidebar-background-color);
     padding-left: 20px;
     padding-right: 0px;
     padding-top: 0px;
@@ -15,7 +15,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 230px;
+    width: 250px;
     height: 100%;
     z-index: 1000;
 
@@ -33,7 +33,7 @@
     border-radius: 5px 0px 0px 5px;
     margin-bottom: 0px;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.1s ease, color 0.1s ease;
     height: 29px; /* Set explicit height */
     line-height: 29px; /* Center text vertically */
 }
@@ -48,11 +48,9 @@
 .submenu {
     max-height: 200px; /* Set a limit to the submenu height */
     overflow-y: auto; /* Enable scrolling when content exceeds max height */
-    margin-left: 0px;
-    margin-top: 0px;
     background-color: var(--sidebar-background-color);
     border-left: 20px solid var(--sidebar-background-color);
-    padding-left: 0px;
+    padding: 0px 0px 10px 0px;
     border-radius: 5px 0px 0px 5px;
     display: none; /* Initially hidden */
 }
@@ -62,12 +60,13 @@
     display: block;
     color: white;
     text-decoration: none;
-    padding: 0px 10px; /* Adjusted padding for consistent height */
-    border-radius: 3px;
-    margin-bottom: 3px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0px 5px; /* Adjusted padding for consistent height */
+    border-radius: 5px 0px 0px 5px;
+    margin-bottom: 0px;
+    transition: background-color 0.1s ease, color 0.1s ease;
     height: 29px; /* Set explicit height */
     line-height: 29px; /* Center text vertically */
+    align-items: center;
 }
 
 /* Change submenu item background to white and text to black on hover */
@@ -79,6 +78,13 @@
 /* Hide Scrollbar While Keeping Scrolling Functional */
 .submenu::-webkit-scrollbar {
     width: 0; /* Removes the scrollbar for WebKit browsers */
+}
+
+.submenu-item img.submenu-icon {
+    width: 23px; /* Set the icon size */
+    height: 23px; /* Ensure the icon is square */
+    margin-right: 3px; /* Space between icon and text */
+    vertical-align: middle;
 }
 
 .submenu {

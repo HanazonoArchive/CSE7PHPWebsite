@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    margin-top: 60px; /* To avoid overlap with fixed header */
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 0px;
+    width: 100%;
+}
