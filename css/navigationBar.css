@@ -1,0 +1,40 @@
+@import url(./fonts/inter.css);
+
+:root {
+    --background-color: #1C1C1C; /* Light gray background for a clean and modern look */
+    --navbar-color: #303030; /* Light gray for the navigation bar */
+    --text-color: #F4F4F4; /* Dark gray for text to ensure readability */
+    --optional-color: #FF6F61; /* Muted blue for optional or secondary elements */
+    --highlighted-color: #FF8C00; /* Rich blue for hover and active states */
+}
+
+.Navigation_Bar {
+    background-color: var(--navbar-color);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Equal spacing between buttons */
+    align-items: center; /* Vertically center items */
+    border-radius: 10px;
+    width: 490px; /* Keeps navigation bar at a fixed width */
+    padding: 10px; /* Increased padding for better spacing */
+}
+
+.navigationButtons {
+    font-family: 'Inter', serif;
+    font-size: 15px;
+    color: var(--text-color);
+    padding: 10px 15px; /* Ensures balanced button sizing */
+    border: 1px solid var(--optional-color);
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 156px; /* Ensures equal button width */
+}
+
+.navigationButtons:hover {
+    background-color: var(--highlight-color);
+    color: var(--color1);
+    border-color: var(--highlight-color);
+}

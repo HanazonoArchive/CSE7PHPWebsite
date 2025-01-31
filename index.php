@@ -41,12 +41,14 @@
     </div>
 
     <div class="content_container">
-        <h2>Testing the Database!</h2>
-        <?php include('database/database-connection.php') ?>
+        <div id="content">
+            
+        </div>
+
     </div>
 
     <footer>
-        <script src="script/index.js"></script>
+        <script src="index.js"></script>
     </footer>
 </body>
 </html>
