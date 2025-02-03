@@ -17,9 +17,9 @@
             </button>
             <div class="dropdown-menu">
                 <h1 id="title_for_tab">Schedule and Appointment</h1>
-                <a href="./dashboard.php">Dashboard</a> <!-- Corrected link -->
-                <a href="./view_schedule.php">Schedule</a> <!-- Corrected link -->
-                <a href="./appointment_history.php">Appointment</a> <!-- Corrected link -->
+                <a href="./pageCT1_dashboard.php">Dashboard</a> <!-- Corrected link -->
+                <a href="./pageCT1_schedule.php">Schedule</a> <!-- Corrected link -->
+                <a href="./pageCT1_appointment.php">Appointment</a> <!-- Corrected link -->
             </div>
         </div>
 
@@ -35,9 +35,9 @@
             </button>
             <div class="dropdown-menu">
                 <h1 id="title_for_tab">Billing and Invoice</h1>
-                <a href="./new_invoice.php">Quotation</a> <!-- Corrected link -->
-                <a href="./pending_payments.php">Services Report</a> <!-- Corrected link -->
-                <a href="./billing_history.php">Billing Statement</a> <!-- Corrected link -->
+                <a href="./pageCT2_quotation.php">Quotation</a> <!-- Corrected link -->
+                <a href="./pageCT2_service_report.php">Services Report</a> <!-- Corrected link -->
+                <a href="./pageCT2_billing_statement.php">Billing Statement</a> <!-- Corrected link -->
             </div>
         </div>
 
@@ -50,9 +50,9 @@
             </button>
             <div class="dropdown-menu">
                 <h1 id="title_for_tab">Tracking and Report</h1>
-                <a href="./track_services.php">Employee Log</a> <!-- Corrected link -->
-                <a href="./generate_reports.php">Employee Pay</a> <!-- Corrected link -->
-                <a href="./technician_performance.php">Feedback</a> <!-- Corrected link -->
+                <a href="./pageCT3_employee_log.php">Employee Log</a> <!-- Corrected link -->
+                <a href="./pageCT3_employee_pay.php">Employee Pay</a> <!-- Corrected link -->
+                <a href="./pageCT3_feedback.php">Feedback</a> <!-- Corrected link -->
             </div>
         </div>
     </div>

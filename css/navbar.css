@@ -123,7 +123,6 @@ button:hover svg {
 .dropdown-menu a:hover {
     background: var(--highlighted-color);
     color:  var(--background-color);
-    border: 2px solid var(--optional-color);
 }
 
 #title_for_tab {

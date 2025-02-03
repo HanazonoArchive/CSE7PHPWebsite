@@ -1,4 +1,4 @@
-@import url('fonts/inter.css');
+@import url('../fonts/inter.css');
 
 :root {
     --background-color: #1C1C1C;
@@ -18,7 +18,7 @@ body {
 }
 
 /* Dashboard Content Wrapper */
-.index_content {
+.appointment_content {
     background-color: var(--navbar-color);
     margin: 10px;
     border-radius: 10px;
@@ -27,20 +27,20 @@ body {
 }
 
 /* Dashboard Title (Row 1) */
-.index_title {
+.appointment_title {
     text-align: left;
     padding-bottom: 10px;
     padding-left: 10px;
 }
 
-.index_title h1 {
+.appointment_title h1 {
     color: var(--text-color);
     font-size: 24px;
     font-weight: 700;
 }
 
 /* Dashboard Main (Row 2 - Two Columns) */
-.index_main {
+.appointment_main {
     display: flex;
     width: 100%;
     gap: 20px;
