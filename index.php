@@ -8,7 +8,7 @@ define('PROJECT_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Field Service</title>
+    <title>Coolant</title>
 </head>
 
 <body>
