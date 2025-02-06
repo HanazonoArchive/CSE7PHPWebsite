@@ -1,4 +1,4 @@
-# CSE7PHPWebsite
+# Tailored-System for a Small Scale Business, built on PHP.
 
 Coolant System UI Guide
 
