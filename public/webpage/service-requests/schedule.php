@@ -32,13 +32,13 @@ $conn = Database::getInstance();
                     SELECT 
                         customer.name AS Customer_Name, 
                         appointment.date AS Appointment_Date, 
-                        customer.address AS Location, 
+                        customer.address AS Address, 
                         appointment.category AS Category, 
                         appointment.priority AS Priority, 
                         appointment.status AS Status
                     FROM appointment
                     JOIN customer ON appointment.customer_id = customer.id
-                    ORDER BY appointment.date DESC"; // Latest appointments first
+                    ORDER BY appointment.date DESC";
 
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
