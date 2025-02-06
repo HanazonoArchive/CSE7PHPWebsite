@@ -29,7 +29,8 @@ $conn = Database::getInstance();
                 try {
                     // Fetch relevant appointment details
                     $query = "
-                    SELECT 
+                    SELECT
+                        appointment.id as Ticket_Number, 
                         customer.name AS Customer_Name, 
                         appointment.date AS Appointment_Date, 
                         customer.address AS Address, 
