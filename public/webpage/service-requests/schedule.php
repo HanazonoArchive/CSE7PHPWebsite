@@ -2,7 +2,7 @@
 define('PROJECT_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public');
 define('JUST_URL', '/CSE7PHPWebsite/public');
 
-require PROJECT_ROOT . "/db/DBConnection.php";
+include PROJECT_ROOT . "/db/DBConnection.php";
 
 // Get the database instance
 $conn = Database::getInstance();
@@ -73,6 +73,42 @@ $conn = Database::getInstance();
                     echo "Error fetching data: " . $e->getMessage();
                 }
                 ?>
+            </div>
+        </div>
+        <div class="appointment-holderv2">
+            <div class="appointment_details">
+                <p class="appointment_header">Schedule Details</p>
+                <div class="information-column">
+                    <div class="column">
+                        <p class="information_header">Customer ID</p>
+                        <p class="highlighted_information" id="customer_id">1</p>
+                        <p class="information_header">Customer Name</p>
+                        <p class="highlighted_information" id="customer_name"> Yurine Rose Hanazono</p>
+                    </div>
+                    <div class="column">
+                        <p class="information_header">Contact Number</p>
+                        <p class="highlighted_information" id="customer_contact-number">09551004950 </p>
+                        <p class="information_header">Address</p>
+                        <p class="highlighted_information" id="customer_address">Davao City</p>
+                    </div>
+                    <div class="column">
+                        <p class="information_header">Appointment ID</p>
+                        <p class="highlighted_information" id="appointment_id">1</p>
+                        <p class="information_header">Date</p>
+                        <p class="highlighted_information" id="appointment_date">2025-01-7</p>
+                    </div>
+                    <div class="column">
+                        <p class="information_header">Category</p>
+                        <p class="highlighted_information" id="appointment_category">Installation</p>
+                        <p class="information_header">Priority</p>
+                        <p class="highlighted_information" id="appointment_priority">High</p>
+                    </div>
+
+                    <div class="column">
+                        <p class="information_header">Status</p>
+                        <p class="highlighted_information" id="appointment_status">Pending</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
