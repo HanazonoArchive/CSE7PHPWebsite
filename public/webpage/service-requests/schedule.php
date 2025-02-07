@@ -23,6 +23,46 @@ $conn = Database::getInstance();
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
 
     <div class="content">
+        <div class="appointment-holderv3">
+            <div class="appointment_filter">
+                <div class="column">
+                    <p class="highlighted_information">Filter</p>
+                    <div class="filter_column">
+                        <div class="filter">
+                            <input class="checkbox" type="checkbox" id="filter_by_date">
+                            <p class="information_headerv2">by Date</p>
+                        </div>
+                        <div class="filter">
+                            <input class="checkbox" type="checkbox" id="filter_by_priority">
+                            <p class="information_headerv2">by Priority</p>
+                        </div>
+                        <div class="filter">
+                            <input class="checkbox" type="checkbox" id="filter_by_ticket-number">
+                            <p class="information_headerv2">by Ticket Number</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="column">
+                    <p class="highlighted_information">Status</p>
+                    <div class="filter_column">
+                        <div class="filter">
+                            <input class="checkbox" type="checkbox" id="filter_by_date">
+                            <p class="information_headerv2">Pending</p>
+                        </div>
+                        <div class="filter">
+                            <input class="checkbox" type="checkbox" id="filter_by_priority">
+                            <p class="information_headerv2">Comfirmed</p>
+                        </div>
+                        <div class="filter">
+                            <input class="checkbox" type="checkbox" id="filter_by_ticket-number">
+                            <p class="information_headerv2">Completed</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <div class="appointment-holder">
             <div class="appointment-table">
                 <?php
@@ -39,7 +79,7 @@ $conn = Database::getInstance();
                         appointment.status AS Status
                     FROM appointment
                     JOIN customer ON appointment.customer_id = customer.id
-                    ORDER BY appointment.date DESC";
+                    ORDER BY appointment.id ASC";
 
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
@@ -107,7 +147,11 @@ $conn = Database::getInstance();
                     <div class="column">
                         <p class="information_header">Status</p>
                         <p class="highlighted_information" id="appointment_status">Pending</p>
+                        <p class="information_header">Assign</p>
+                        <button class="assign_button" id="assign_button" type="button">Assign</button>
                     </div>
+
+
                 </div>
             </div>
         </div>

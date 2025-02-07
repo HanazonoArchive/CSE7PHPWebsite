@@ -1,8 +1,8 @@
 @import url('../fonts/inter.css');
 
 :root {
-    --background-color: #F0F0F0;
-    --navbar-color: #F0F0F0;
+    --background-color: #F5F5F5;
+    --navbar-color: #F8F5E9;
     --text-color: #000000;
     --optional-color: #FF6F61;
     --highlighted-color: #FF8C00;
@@ -20,7 +20,7 @@
 
 .appointment-holder {
     padding: 10px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* Smooth modern shadow */
     border-radius: 10px;
     z-index: 50;
@@ -84,7 +84,7 @@
     padding-bottom: 20px;
     padding-left: 10px;
     padding-right: 10px;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     margin-top: 10px;
     z-index: 50;
@@ -122,7 +122,7 @@
     flex-direction: column;
     flex-wrap: nowrap;
     justify-content: center;
-    padding: 0px 20px;
+    padding: 0px 30px;
 }
 
 .information_header {
@@ -138,6 +138,77 @@
     font-size: 20px;
     font-weight: 600;
     padding: 0px;
+    margin: 0px;
+}
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.assign_button {
+    width: auto;
+    height: auto;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 10px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: var(--background-color);
+    border: 0px solid var(--background-color);
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.assign_button:hover {
+    background-color: var(--highlighted-color);
+    border: 0px solid var(--highlighted-color);
+}
+
+.checkbox {
+    margin: 10px;
+}
+
+.appointment-holderv3 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    z-index: 50;
+    background-color: var(--navbar-color);
+}
+
+.appointment_filter {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.filter_column {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px 0px;
+}
+
+.information_headerv2 {
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: 400;
+    padding: 10px 0px;
     margin: 0px;
 }
 
