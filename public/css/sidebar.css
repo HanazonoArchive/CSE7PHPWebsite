@@ -1,11 +1,11 @@
 @import url('../fonts/inter.css');
 
 :root {
-    --background-color: #F5F5F5;
-    --navbar-color: #F8F5E9;
+    --background-color: #F2EAD3;
+    --navbar-color: #F5F5F5;
     --text-color: #000000;
     --optional-color: #FF6F61;
-    --highlighted-color: #FF8C00;
+    --highlighted-color: #ED7D31;
 }
 
 * {
@@ -180,7 +180,7 @@ body {
     width: 100%;
     display: flex;
     background-color: var(--navbar-color);
-    box-shadow: 0 6px 6px -3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: left 0.3s ease-in-out;
     flex-direction: row;
     align-items: center;

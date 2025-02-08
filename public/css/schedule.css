@@ -1,12 +1,12 @@
 @import url('../fonts/inter.css');
 
 :root {
-    --background-color: #F5F5F5;
-    --navbar-color: #F8F5E9;
+    --background-color: #F2EAD3;
+    --navbar-color: #F5F5F5;
     --text-color: #000000;
     --optional-color: #FF6F61;
-    --highlighted-color: #FF8C00;
-    --afuckingcolor: #ffb459;
+    --highlighted-color: #ED7D31;
+    --afuckingcolor: #EDb459;
     --afuckingtextcolor: #424242;
 }
 
@@ -19,9 +19,9 @@
 }
 
 .appointment-holder {
+    background-color: var(--navbar-color);
     padding: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* Smooth modern shadow */
     border-radius: 10px;
     z-index: 50;
 }
@@ -81,7 +81,7 @@
 
 .appointment-holderv2 {
     padding-top: 10px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     padding-left: 10px;
     padding-right: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -151,26 +151,22 @@
 }
 
 .assign_button {
-    width: auto;
+    width: 100px;
     height: auto;
     font-size: 16px;
-    font-weight: 400;
-    padding: 10px 10px;
-    border-radius: 10px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 5px;
     cursor: pointer;
-    background-color: var(--background-color);
-    border: 0px solid var(--background-color);
+    background-color: var(--afuckingcolor);
+    border: 1px solid var(--optional-color);
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .assign_button:hover {
-    background-color: var(--highlighted-color);
-    border: 0px solid var(--highlighted-color);
-}
-
-.checkbox {
-    margin: 10px;
+    background-color: var(--optional-color);
+    border: 1px solid var(--optional-color);
 }
 
 .appointment-holderv3 {
@@ -187,30 +183,48 @@
 
 .appointment_filter {
     display: flex;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    flex-direction: row;
-}
-
-.filter_column {
-    display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+}
+
+.filter-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
     padding: 0px 0px;
 }
 
-.information_headerv2 {
-    color: var(--text-color);
-    font-size: 18px;
-    font-weight: 400;
-    padding: 10px 0px;
-    margin: 0px;
+.filter-column-row {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 10px;
 }
+
+.filter_header {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0px;
+    padding: 10px;
+}
+
+.filter_button {
+    margin-right: 10px;
+    width: 100px;
+    height: auto;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--afuckingcolor);
+    border: 1px solid var(--optional-color);
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 
 /* Responsive Behavior */
 @media (max-width: 600px) {

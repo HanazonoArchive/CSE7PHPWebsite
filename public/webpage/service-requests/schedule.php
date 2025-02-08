@@ -6,6 +6,20 @@ include PROJECT_ROOT . "/db/DBConnection.php";
 
 // Get the database instance
 $conn = Database::getInstance();
+
+$query = "
+    SELECT
+        appointment.id AS Ticket_Number, 
+        customer.name AS Customer_Name, 
+        appointment.date AS Appointment_Date, 
+        customer.address AS Address, 
+        appointment.category AS Category, 
+        appointment.priority AS Priority, 
+        appointment.status AS Status
+    FROM appointment
+    JOIN customer ON appointment.customer_id = customer.id
+";
+
 ?>
 
 <!DOCTYPE html>
@@ -19,47 +33,35 @@ $conn = Database::getInstance();
 </head>
 
 <body>
+    <script src="<?= JUST_URL ?>/js/schedule.js"></script>
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
 
     <div class="content">
         <div class="appointment-holderv3">
             <div class="appointment_filter">
-                <div class="column">
-                    <p class="highlighted_information">Filter</p>
-                    <div class="filter_column">
-                        <div class="filter">
-                            <input class="checkbox" type="checkbox" id="filter_by_date">
-                            <p class="information_headerv2">by Date</p>
-                        </div>
-                        <div class="filter">
-                            <input class="checkbox" type="checkbox" id="filter_by_priority">
-                            <p class="information_headerv2">by Priority</p>
-                        </div>
-                        <div class="filter">
-                            <input class="checkbox" type="checkbox" id="filter_by_ticket-number">
-                            <p class="information_headerv2">by Ticket Number</p>
-                        </div>
+                <div class="filter-column">
+                    <p class="filter_header">Filter by</p>
+                    <div class="filter-column-row">
+                        <button class="filter_button" id="filter_DATE">Date</button>
+                        <button class="filter_button" id="filter_PRIORITY">Priority</button>
+                        <button class="filter_button" id="filter_TICKET">Ticket #</button>
                     </div>
-
                 </div>
-                <div class="column">
-                    <p class="highlighted_information">Status</p>
-                    <div class="filter_column">
-                        <div class="filter">
-                            <input class="checkbox" type="checkbox" id="filter_by_date">
-                            <p class="information_headerv2">Pending</p>
-                        </div>
-                        <div class="filter">
-                            <input class="checkbox" type="checkbox" id="filter_by_priority">
-                            <p class="information_headerv2">Comfirmed</p>
-                        </div>
-                        <div class="filter">
-                            <input class="checkbox" type="checkbox" id="filter_by_ticket-number">
-                            <p class="information_headerv2">Completed</p>
-                        </div>
+                <div class="filter-column">
+                    <p class="filter_header">Status</p>
+                    <div class="filter-column-row">
+                        <button class="filter_button" id="status_PENDING">Pending</button>
+                        <button class="filter_button" id="status_CONFIRMED">Confirmed</button>
+                        <button class="filter_button" id="status_COMPLETED">Completed</button>
                     </div>
-
+                </div>
+                <div class="filter-column">
+                    <p class="filter_header">Order by</p>
+                    <div class="filter-column-row">
+                        <button class="filter_button" id="order_ASC">Ascending</button>
+                        <button class="filter_button" id="order_DESC">Descending</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,36 +69,24 @@ $conn = Database::getInstance();
             <div class="appointment-table">
                 <?php
                 try {
-                    // Fetch relevant appointment details
-                    $query = "
-                    SELECT
-                        appointment.id as Ticket_Number, 
-                        customer.name AS Customer_Name, 
-                        appointment.date AS Appointment_Date, 
-                        customer.address AS Address, 
-                        appointment.category AS Category, 
-                        appointment.priority AS Priority, 
-                        appointment.status AS Status
-                    FROM appointment
-                    JOIN customer ON appointment.customer_id = customer.id
-                    ORDER BY appointment.id ASC";
-
                     $stmt = $conn->prepare($query);
+                
+                    if ($filterType === "filter" || $filterType === "status") {
+                        $stmt->bindParam(":filterValue", $filterValue);
+                    }
+                
                     $stmt->execute();
                     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                
                     if (count($results) > 0) {
-                        echo "<table border='1'>";
-                        echo "<tr>";
-
-                        // Fetch column names dynamically
+                        echo "<table border='1'><tr>";
+                
                         foreach (array_keys($results[0]) as $columnName) {
                             echo "<th>" . htmlspecialchars(str_replace("_", " ", $columnName)) . "</th>";
                         }
-
+                
                         echo "</tr>";
-
-                        // Fetch rows
+                
                         foreach ($results as $row) {
                             echo "<tr>";
                             foreach ($row as $value) {
@@ -104,7 +94,7 @@ $conn = Database::getInstance();
                             }
                             echo "</tr>";
                         }
-
+                
                         echo "</table>";
                     } else {
                         echo "No records found.";
@@ -148,10 +138,7 @@ $conn = Database::getInstance();
                         <p class="information_header">Status</p>
                         <p class="highlighted_information" id="appointment_status">Pending</p>
                         <p class="information_header">Assign</p>
-                        <button class="assign_button" id="assign_button" type="button">Assign</button>
                     </div>
-
-
                 </div>
             </div>
         </div>
