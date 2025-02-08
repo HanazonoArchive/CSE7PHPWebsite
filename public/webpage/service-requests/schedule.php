@@ -13,7 +13,7 @@ $default_order = "ORDER BY appointment.id ASC";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sql_query'])) {
     $query = trim($_POST['sql_query']);
 
-    // Extract column and order (Optional)
+    // Extract sorting and filtering options
     $orderPattern = '/ORDER BY (appointment\.(?:id|date|priority)) (ASC|DESC)/i';
     $wherePattern = "/WHERE appointment\.status = '(Pending|Confirmed|Completed)'/i";
 
@@ -21,60 +21,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sql_query'])) {
     $whereClause = "";
 
     if (preg_match($orderPattern, $query, $matches)) {
-        $column = $matches[1]; // Extract column name
-        $direction = strtoupper($matches[2]); // Extract order (ASC/DESC)
-        $orderClause = "ORDER BY $column $direction"; // Construct ORDER BY
+        $column = $matches[1];
+        $direction = strtoupper($matches[2]);
+        $orderClause = "ORDER BY $column $direction";
     }
 
     if (preg_match($wherePattern, $query, $matches)) {
-        $status = $matches[1]; // Extract status
-        $whereClause = "WHERE appointment.status = '$status'"; // Construct WHERE
+        $status = $matches[1];
+        $whereClause = "WHERE appointment.status = '$status'";
     }
 
-    // Combine WHERE and ORDER BY correctly
     $queryString = $whereClause;
     if (!empty($orderClause)) {
         $queryString .= " " . $orderClause;
     }
 
-    // Fetch filtered data and return response (for AJAX)
+    // Fetch filtered data and return as a response
     fetchAppointments($conn, $queryString);
     exit;
 }
 
-
-// Function to fetch appointment data
+// Function to fetch and display appointment data
 function fetchAppointments($conn, $order)
 {
     try {
-        $stmt = $conn->prepare("
-            SELECT 
+        $stmt = $conn->prepare("SELECT 
                 appointment.id AS Ticket_Number, 
                 customer.name AS Customer_Name, 
                 appointment.date AS Appointment_Date, 
                 customer.address AS Address, 
                 appointment.category AS Category, 
                 appointment.priority AS Priority, 
-                appointment.status AS Status
+                appointment.status AS Status,
+                customer.id AS Customer_ID,
+                customer.contact_number AS Contact_Number
             FROM appointment
             JOIN customer ON appointment.customer_id = customer.id
-            $order
-        ");
+            $order");
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($results) > 0) {
             echo "<table border='1' class='appointment-table'>";
             echo "<tr>";
-            foreach (array_keys($results[0]) as $columnName) {
+            $headers = ['Ticket_Number', 'Customer_Name', 'Appointment_Date', 'Address', 'Category', 'Priority', 'Status'];
+            foreach ($headers as $columnName) {
                 echo "<th>" . htmlspecialchars(str_replace("_", " ", $columnName)) . "</th>";
             }
             echo "</tr>";
 
             foreach ($results as $row) {
-                echo "<tr>";
-                foreach ($row as $value) {
-                    echo "<td>" . htmlspecialchars($value) . "</td>";
+                // Convert row data into a JSON string for JS handling
+                $rowData = htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8');
+                echo "<tr onclick='updateDetails($rowData)'>";
+                foreach ($headers as $column) {
+                    echo "<td>" . htmlspecialchars($row[$column]) . "</td>";
                 }
                 echo "</tr>";
             }
@@ -93,7 +94,6 @@ fetchAppointments($conn, $default_order);
 $table_content = ob_get_clean();
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,7 +105,8 @@ $table_content = ob_get_clean();
 </head>
 
 <body>
-    <script src="<?= JUST_URL ?>/js/schedule.js"></script>
+    <script src="<?= JUST_URL ?>/js/schedule/schedule-filter.js"></script>
+    <script src="<?= JUST_URL ?>/js/schedule/schedule-details.js"></script>
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
 
@@ -148,32 +149,31 @@ $table_content = ob_get_clean();
                 <div class="information-column">
                     <div class="column">
                         <p class="information_header">Customer ID</p>
-                        <p class="highlighted_information" id="customer_id">1</p>
+                        <p class="highlighted_information" id="customer_id">-</p>
                         <p class="information_header">Customer Name</p>
-                        <p class="highlighted_information" id="customer_name"> Yurine Rose Hanazono</p>
+                        <p class="highlighted_information" id="customer_name">-</p>
                     </div>
                     <div class="column">
                         <p class="information_header">Contact Number</p>
-                        <p class="highlighted_information" id="customer_contact-number">09551004950 </p>
+                        <p class="highlighted_information" id="customer_contact-number">-</p>
                         <p class="information_header">Address</p>
-                        <p class="highlighted_information" id="customer_address">Davao City</p>
+                        <p class="highlighted_information" id="customer_address">-</p>
                     </div>
                     <div class="column">
                         <p class="information_header">Appointment ID</p>
-                        <p class="highlighted_information" id="appointment_id">1</p>
+                        <p class="highlighted_information" id="appointment_id">-</p>
                         <p class="information_header">Date</p>
-                        <p class="highlighted_information" id="appointment_date">2025-01-7</p>
+                        <p class="highlighted_information" id="appointment_date">-</p>
                     </div>
                     <div class="column">
                         <p class="information_header">Category</p>
-                        <p class="highlighted_information" id="appointment_category">Installation</p>
+                        <p class="highlighted_information" id="appointment_category">-</p>
                         <p class="information_header">Priority</p>
-                        <p class="highlighted_information" id="appointment_priority">High</p>
+                        <p class="highlighted_information" id="appointment_priority">-</p>
                     </div>
-
                     <div class="column">
                         <p class="information_header">Status</p>
-                        <p class="highlighted_information" id="appointment_status">Pending</p>
+                        <p class="highlighted_information" id="appointment_status">-</p>
                     </div>
                 </div>
             </div>
