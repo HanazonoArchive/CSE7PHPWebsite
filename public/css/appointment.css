@@ -1,0 +1,156 @@
+@import url('../fonts/inter.css');
+
+:root {
+    --background-color: #F2EAD3;
+    --navbar-color: #F5F5F5;
+    --text-color: #000000;
+    --optional-color: #FF6F61;
+    --highlighted-color: #ED7D31;
+    --afuckingcolorthatnotblack: #535353;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    display: flex;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.client-holder {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    background-color: var(--navbar-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 49.5%;
+    height: 100%;
+    margin-right: 0.5%;
+    margin-bottom: 0.5%;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.client-holder1 {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    background-color: var(--navbar-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 49.5%;
+    height: 100%;
+    margin-left: 0.5%;
+    margin-bottom: 0.5%;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+.client-holder2 {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    background-color: var(--navbar-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 49.5%;
+    height: 100%;
+    margin-right: 0.5%;
+    margin-top: 0.5%;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+
+.form-title {
+    font-size: 22px;
+    font-weight: 600;
+    padding: 10px;
+    margin: 0px;
+}
+
+.form-title_whitespace {
+    font-size: 22px;
+    font-weight: 600;
+    padding: 10px;
+    margin: 0px;
+    color: var(--navbar-color);
+}
+
+
+.client-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0px 10px;
+}
+
+.client-header {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 0px;
+    color: var(--afuckingcolorthatnotblack);
+}
+
+.textfield {
+    width: 100%;
+    height: 35px;
+    font-size: 20px;
+    border-radius: 5px;
+    background-color: var(--navbar-color);
+    border: 1px solid var(--highlighted-color);
+    color: var(--text-color);
+    padding: 0px 10px;
+    margin-bottom: 10px;
+}
+
+.category_input {
+    width: 100%;
+    height: 35px;
+    font-size: 20px;
+    border-radius: 5px;
+    background-color: var(--navbar-color);
+    border: 1px solid var(--highlighted-color);
+    color: var(--text-color);
+    padding: 0px 10px;
+    margin-bottom: 10px;
+}
+
+.send_buttons {
+    width: auto;
+    height: auto;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--highlighted-color);
+    border: 1px solid var(--optional-color);
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.send_buttons:hover {
+    background-color: var(--optional-color);
+    border: 1px solid var(--optional-color);
+}

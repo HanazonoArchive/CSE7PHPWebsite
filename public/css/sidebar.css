@@ -156,12 +156,16 @@ body {
 
 /* Main Content */
 .content {
+    display: flex;
+    flex-wrap: wrap;
     z-index: 98;
     margin-top: 70px;
     margin-left: 80px;
     padding: 10px;
     flex-grow: 1;
     transition: margin-left 0.3s ease-in-out;
+    flex-direction: row;
+    align-items: stretch;
 }
 
 .sidebar.expanded~.content {
