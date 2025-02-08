@@ -156,7 +156,6 @@ body {
 
 /* Main Content */
 .content {
-    display: flex;
     flex-wrap: wrap;
     z-index: 98;
     margin-top: 70px;
