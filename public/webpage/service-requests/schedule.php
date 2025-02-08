@@ -114,7 +114,7 @@ $table_content = ob_get_clean();
         <div class="appointment-holderv3">
             <div class="appointment_filter">
                 <div class="filter-column">
-                    <p class="filter_header">Filter by</p>
+                    <p class="filter_header">Order by</p>
                     <div class="filter-column-row">
                         <button class="filter_button" data-filter="appointment.date">Date</button>
                         <button class="filter_button" data-filter="appointment.priority">Priority</button>
@@ -122,7 +122,7 @@ $table_content = ob_get_clean();
                     </div>
                 </div>
                 <div class="filter-column">
-                    <p class="filter_header">Status</p>
+                    <p class="filter_header">Filter by</p>
                     <div class="filter-column-row">
                         <button class="filter_button" data-status="Pending">Pending</button>
                         <button class="filter_button" data-status="Confirmed">Confirmed</button>
@@ -130,7 +130,7 @@ $table_content = ob_get_clean();
                     </div>
                 </div>
                 <div class="filter-column">
-                    <p class="filter_header">Order by</p>
+                    <p class="filter_header">Sort by</p>
                     <div class="filter-column-row">
                         <button class="filter_button active" data-order="ASC">Ascending</button>
                         <button class="filter_button" data-order="DESC">Descending</button>
