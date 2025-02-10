@@ -18,21 +18,23 @@ define('JUST_URL', '/CSE7PHPWebsite/public');
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="<?= JUST_URL ?>/js/schedule/appointment-addcustomer.js"></script>
     <div class="content">
         <div class="client-holder">
             <div class="add-client">
                 <p class="form-title">Customer</p>
                 <div class="client-form">
                     <label class="client-header">Name </label>
-                    <input class="textfield" type="text" id="name" name="name" required>
+                    <input class="textfield" type="text" id="customer_name" name="name" required>
 
                     <label class="client-header">Contact Number </label>
-                    <input class="textfield" type="tel" id="contact_number" name="contact_number" pattern="[0-9]{4}[0-9]{3}[0-9]{4}" required>
+                    <input class="textfield" type="tel" id="customer_number" name="contact_number"
+                        pattern="[0-9]{4}[0-9]{3}[0-9]{4}" required>
 
                     <label class="client-header">Address </label>
-                    <input class="textfield" type="address" id="address" name="address" required>
+                    <input class="textfield" type="address" id="customer_address" name="address" required>
 
-                    <button class="send_buttons" type="submit">Create</button>
+                    <button class="send_buttons"  id="submit_customer" type="button">Create</button>
                 </div>
             </div>
             <div class="add-client">
@@ -59,12 +61,10 @@ define('JUST_URL', '/CSE7PHPWebsite/public');
         </div>
         <div class="client-holder1">
             <div class="add-client">
-                <p class="form-title">Edit Appointment</p>
+                <p class="form-title">Update Information</p>
                 <div class="client-form">
-                    <label class="client-header">Select Customer</label>
-                    <select class="category_input" name="category" id="category">
-                        <option value="customer1">customer1</option>
-                    </select>
+                    <label class="client-header">Customer ID </label>
+                    <input class="textfield" type="text" id="text" name="text" required>
 
                     <label class="client-header">Select Category</label>
                     <select class="category_input" name="category" id="category">
@@ -92,12 +92,13 @@ define('JUST_URL', '/CSE7PHPWebsite/public');
                     <input class="textfield" type="text" id="name" name="name" required>
 
                     <label class="client-header">Update Number </label>
-                    <input class="textfield" type="tel" id="contact_number" name="contact_number" pattern="[0-9]{4}[0-9]{3}[0-9]{4}" required>
+                    <input class="textfield" type="tel" id="contact_number" name="contact_number"
+                        pattern="[0-9]{4}[0-9]{3}[0-9]{4}" required>
 
                     <label class="client-header">Update Address </label>
                     <input class="textfield" type="address" id="address" name="address" required>
 
-                    <button class="send_buttons" type="submit">Confirm Edit</button>
+                    <button class="send_buttons" type="submit">Update</button>
                 </div>
             </div>
 
@@ -106,16 +107,12 @@ define('JUST_URL', '/CSE7PHPWebsite/public');
             <div class="add-client">
                 <p class="form-title">Delete</p>
                 <div class="client-form">
-                    <label class="client-header">Delete Customer </label>
-                    <select class="category_input" name="category" id="category">
-                        <option value="customer1">customer1</option>
-                    </select>
+                    <label class="client-header">Customer ID </label>
+                    <input class="textfield" type="text" id="text" name="text" required>
                     <button class="send_buttons" type="submit">Delete</button>
 
-                    <label class="client-header">Delete Appointment </label>
-                    <select class="category_input" name="category" id="category">
-                        <option value="appointment1">appointment1</option>
-                    </select>
+                    <label class="client-header">Appointment ID </label>
+                    <input class="textfield" type="text" id="text" name="text" required>
                     <button class="send_buttons" type="submit">Delete</button>
                 </div>
             </div>
