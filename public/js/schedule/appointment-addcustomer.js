@@ -4,37 +4,37 @@ document.addEventListener('DOMContentLoaded', function() {
         let customerNumber = document.getElementById('customer_number').value;
         let customerAddress = document.getElementById('customer_address').value;
 
-        // Construct the SQL query
-        let query = `INSERT INTO customer (name, contact_number, address) VALUES ('${customerName}', '${customerNumber}', '${customerAddress}')`;
+        let appointmentDate = document.getElementById('appointment_date').value;
+        let appointmentCategory = document.getElementById('appointment_category').value;
+        let appointmentPriority = document.getElementById('appointment_priority').value;
+        let appointmentStatus = "Pending"; // Default
 
         // Check if all fields have content
-        if (customerName && customerNumber && customerAddress) {
-            console.log("Form has content!");
-        } else {
-            console.log("No content in one or more fields");
-            return; // Exit if any field is empty
+        if (!customerName || !customerNumber || !customerAddress || !appointmentDate || !appointmentCategory || !appointmentPriority) {
+            console.log("One or more fields are empty");
+            return;
         }
 
-        console.log(query); // Log the query to check
+        // Prepare data to send
+        let formData = new URLSearchParams();
+        formData.append("customer_name", customerName);
+        formData.append("customer_number", customerNumber);
+        formData.append("customer_address", customerAddress);
+        formData.append("appointment_date", appointmentDate);
+        formData.append("appointment_category", appointmentCategory);
+        formData.append("appointment_priority", appointmentPriority);
+        formData.append("appointment_status", appointmentStatus);
 
-        // Function to send the query to the server
-        function fetchDataCreation() {
-            console.log("Query Sent:", query);
-
-            fetch("appointment.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: "sql_query=" + encodeURIComponent(query) // Send the correct variable 'query'
-            })
-            .then(response => response.text())
-            .then(data => {
-                // Assuming you want to update the DOM with the returned data
-                document.querySelector(".appointment-table").innerHTML = data;
-            })
-            .catch(error => console.error("Error fetching data:", error));
-        }
-
-        // Call the fetchDataCreation function to send the query
-        fetchDataCreation();
+        // Send the request to the backend
+        fetch("appointment.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: formData.toString()
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("Server Response:", data);
+        })
+        .catch(error => console.error("Error:", error));
     });
 });
