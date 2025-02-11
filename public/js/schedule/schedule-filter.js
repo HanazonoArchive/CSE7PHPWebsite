@@ -1,92 +1,100 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const filterButtons = document.querySelectorAll(".filter_button[data-filter]"); // Column filters
-    const orderButtons = document.querySelectorAll(".filter_button[data-order]"); // ASC/DESC buttons
-    const statusButtons = document.querySelectorAll(".filter_button[data-status]"); // Status filters
+class AppointmentFilter {
+    constructor() {
+        this.filterButtons = document.querySelectorAll(".filter_button[data-filter]"); // Column filters
+        this.orderButtons = document.querySelectorAll(".filter_button[data-order]"); // ASC/DESC buttons
+        this.statusButtons = document.querySelectorAll(".filter_button[data-status]"); // Status filters
 
-    let currentOrder = "ASC"; // Default order
-    let currentFilter = ""; // Default column (none selected initially)
-    let currentStatus = ""; // Default status (none selected)
-    let queryStorage = buildQuery(); // Initial query
+        this.currentOrder = "ASC"; // Default order
+        this.currentFilter = ""; // Default column (none selected initially)
+        this.currentStatus = ""; // Default status (none selected)
+        this.queryStorage = this.buildQuery(); // Initial query
 
-    // Function to update and fetch data
-    function updateQueryAndFetch() {
-        queryStorage = buildQuery();
-        fetchFilteredData();
+        this.initialize();
     }
 
-    // Function to build SQL query with restrictions
-    function buildQuery() {
+    initialize() {
+        this.filterButtons.forEach(btn => {
+            btn.addEventListener("click", () => this.handleFilterClick("filter", btn.getAttribute("data-filter"), this.filterButtons));
+        });
+
+        this.orderButtons.forEach(btn => {
+            btn.addEventListener("click", () => this.handleFilterClick("order", btn.getAttribute("data-order"), this.orderButtons));
+        });
+
+        this.statusButtons.forEach(btn => {
+            btn.addEventListener("click", () => this.handleFilterClick("status", btn.getAttribute("data-status"), this.statusButtons));
+        });
+
+        this.fetchFilteredData(); // Initial data fetch
+    }
+
+    buildQuery() {
         let query = "";
 
-        if (currentStatus) {
-            query = `WHERE appointment.status = '${currentStatus}' ORDER BY appointment.id ${currentOrder}`;
-        } else if (currentFilter) {
-            query = `ORDER BY ${currentFilter} ${currentOrder}`;
+        if (this.currentStatus) {
+            query = `WHERE appointment.status = '${this.currentStatus}' ORDER BY appointment.id ${this.currentOrder}`;
+        } else if (this.currentFilter) {
+            query = `ORDER BY ${this.currentFilter} ${this.currentOrder}`;
         } else {
-            query = `ORDER BY appointment.id ${currentOrder}`;
+            query = `ORDER BY appointment.id ${this.currentOrder}`;
         }
 
         return query;
     }
 
-    // Function to handle button clicks and auto-deactivate conflicting filters
-    function handleFilterClick(type, value, buttons) {
+    handleFilterClick(type, value, buttons) {
         if (type === "filter") {
             // If switching from status to filter, deactivate status
-            if (currentStatus) {
-                currentStatus = "";
-                statusButtons.forEach(btn => btn.classList.remove("active"));
+            if (this.currentStatus) {
+                this.currentStatus = "";
+                this.deactivateButtons(this.statusButtons);
             }
-            currentFilter = value;
+            this.currentFilter = value;
         } else if (type === "order") {
-            currentOrder = value;
+            this.currentOrder = value;
         } else if (type === "status") {
             // If switching from filter to status, deactivate filter
-            if (currentFilter) {
-                currentFilter = "";
-                filterButtons.forEach(btn => btn.classList.remove("active"));
+            if (this.currentFilter) {
+                this.currentFilter = "";
+                this.deactivateButtons(this.filterButtons);
             }
-            currentStatus = value;
+            this.currentStatus = value;
         }
 
-        // Remove 'active' class from all buttons of the same type
+        this.activateButton(type, value, buttons);
+        this.updateQueryAndFetch();
+    }
+
+    deactivateButtons(buttons) {
         buttons.forEach(btn => btn.classList.remove("active"));
+    }
+
+    activateButton(type, value, buttons) {
+        this.deactivateButtons(buttons);
         document.querySelector(`[data-${type}="${value}"]`).classList.add("active");
-
-        updateQueryAndFetch(); // Update and fetch data
     }
 
-    // Attach event listeners
-    filterButtons.forEach(btn => {
-        btn.addEventListener("click", function () {
-            handleFilterClick("filter", this.getAttribute("data-filter"), filterButtons);
-        });
-    });
+    updateQueryAndFetch() {
+        this.queryStorage = this.buildQuery();
+        this.fetchFilteredData();
+    }
 
-    orderButtons.forEach(btn => {
-        btn.addEventListener("click", function () {
-            handleFilterClick("order", this.getAttribute("data-order"), orderButtons);
-        });
-    });
+    async fetchFilteredData() {
+        console.log("Query Sent:", this.queryStorage);
+        try {
+            const response = await fetch("schedule.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "sql_query=" + encodeURIComponent(this.queryStorage)
+            });
 
-    statusButtons.forEach(btn => {
-        btn.addEventListener("click", function () {
-            handleFilterClick("status", this.getAttribute("data-status"), statusButtons);
-        });
-    });
-
-    // Function to fetch sorted/filtered data
-    function fetchFilteredData() {
-        console.log("Query Sent:", queryStorage);
-        fetch("schedule.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "sql_query=" + encodeURIComponent(queryStorage)
-        })
-        .then(response => response.text())
-        .then(data => {
+            const data = await response.text();
             document.querySelector(".appointment-table").innerHTML = data;
-        })
-        .catch(error => console.error("Error fetching data:", error));
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     }
-});
+}
+
+// Initialize the filter system when the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => new AppointmentFilter());

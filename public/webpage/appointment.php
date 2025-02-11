@@ -1,81 +1,9 @@
 <?php
 // Define project root and URL paths
-define('PROJECT_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public');
-define('JUST_URL', '/CSE7PHPWebsite/public');
+define('PROJECT_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public/');
+define('JUST_URL', '/CSE7PHPWebsite/public/');
 
-include PROJECT_ROOT . "/db/DBConnection.php"; // Include the PDO connection
-
-try {
-    $conn = Database::getInstance(); // This will return the PDO connection
-} catch (Exception $e) {
-    die(json_encode(["status" => "error", "message" => "Database connection failed: " . $e->getMessage()]));
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and sanitize input data
-    $customer_name = trim($_POST["customer_name"] ?? "");
-    $customer_number = trim($_POST["customer_number"] ?? "");
-    $customer_address = trim($_POST["customer_address"] ?? "");
-    $appointment_date = trim($_POST["appointment_date"] ?? "");
-    $appointment_category = trim($_POST["appointment_category"] ?? "");
-    $appointment_priority = trim($_POST["appointment_priority"] ?? "");
-    $appointment_status = "Confirmed"; // Default status
-
-    // Check if all required fields are filled
-    if (!$customer_name || !$customer_number || !$customer_address || !$appointment_date || !$appointment_category || !$appointment_priority) {
-        echo json_encode(["status" => "error", "message" => "All fields are required"]);
-        exit;
-    }
-
-    try {
-        // Start a transaction
-        $conn->beginTransaction();
-
-        // 1. Check if customer already exists
-        $stmt = $conn->prepare("SELECT id FROM customer WHERE name = :name AND address = :address LIMIT 1");
-        $stmt->execute([
-            'name' => $customer_name,
-            'address' => $customer_address
-        ]);
-        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($customer) {
-            // Customer already exists, use existing ID
-            $customer_id = $customer['id'];
-
-        } else {
-            // 2. Insert new customer
-            $stmt = $conn->prepare("INSERT INTO customer (name, contact_number, address) VALUES (:name, :contact_number, :address)");
-            $stmt->execute([
-                'name' => $customer_name,
-                'contact_number' => $customer_number,
-                'address' => $customer_address
-            ]);
-
-            // Get the last inserted customer ID
-            $customer_id = $conn->lastInsertId();
-        }
-
-        // 3. Insert appointment using the customer ID
-        $stmt = $conn->prepare("INSERT INTO appointment (customer_id, date, category, priority, status) 
-                                VALUES (:customer_id, :date, :category, :priority, :status)");
-        $stmt->execute([
-            'customer_id' => $customer_id,
-            'date' => $appointment_date,
-            'category' => $appointment_category,
-            'priority' => $appointment_priority,
-            'status' => $appointment_status
-        ]);
-
-        // Commit transaction
-        $conn->commit();
-
-        echo json_encode(["status" => "success", "message" => "Appointment created successfully", "customer_id" => $customer_id]);
-    } catch (Exception $e) {
-        $conn->rollBack(); // Rollback transaction on error
-        echo json_encode(["status" => "error", "message" => "Error: " . $e->getMessage()]);
-    }
-}
+include PROJECT_ROOT . "/controller/appointment-controller.php";
 ?>
 
 <!DOCTYPE html>
@@ -93,12 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="<?= JUST_URL ?>/js/schedule/appointment-addcustomer.js"></script>
+    <script src="<?= JUST_URL ?>js/schedule/appointment-addcustomer.js"></script>
     <div class="content">
         <div class="client-holder">
             <div class="add-client">
                 <p class="form-title">Customer</p>
-                <div class="client-form">
+                <div class="client-form" id="appointment_form">
                     <label class="client-header">Name </label>
                     <input class="textfield" type="text" id="customer_name" name="name" required>
 

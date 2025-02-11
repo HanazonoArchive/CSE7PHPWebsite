@@ -9,17 +9,13 @@ $currentPage = end($pathParts); // Get the file name (e.g., "Sub1.php")
 
 // Define paths based on directory and file
 $paths = [
-    'service-requests' => [
+    'webpage' => [
         'dashboard.php' => " | Service Requests > Dashboard",
         'schedule.php' => " | Service Requests > Schedule",
         'appointment.php' => " | Service Requests > Appointment",
-    ],
-    'payments' => [
         'quotation.php' => " | Payments > Quotation",
         'services-report.php' => " | Payments > Services Report",
         'billing-statement.php' => " | Payments > Billing Statement",
-    ],
-    'reports' => [
         'employee-log.php' => " | Reports > Employee Log",
         'employee-pay.php' => " | Reports > Employee Pay",
         'customer-feedback.php' => " | Reports > Customer Feedback",

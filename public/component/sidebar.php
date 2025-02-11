@@ -19,27 +19,27 @@ define('SPECIFIC_URL', '/CSE7PHPWebsite')
             <span class="menu-text">Service Requests</span>
         </div>
         <div class="submenu" id="submenu-1">
-            <a href="<?= BASE_URL ?>/webpage/service-requests/dashboard.php">Dashboard</a>
-            <a href="<?= BASE_URL ?>/webpage/service-requests/schedule.php">Schedule</a>
-            <a href="<?= BASE_URL ?>/webpage/service-requests/appointment.php">Appointment</a>
+            <a href="<?= BASE_URL ?>/webpage/dashboard.php">Dashboard</a>
+            <a href="<?= BASE_URL ?>/webpage/schedule.php">Schedule</a>
+            <a href="<?= BASE_URL ?>/webpage/appointment.php">Appointment</a>
         </div>
         <div class="menu-item" onclick="toggleSubmenu(2)">
             <img src="<?= BASE_URL ?>/assets/billing-and-invoice.svg">
             <span class="menu-text">Payments</span>
         </div>
         <div class="submenu" id="submenu-2">
-            <a href="<?= BASE_URL ?>/webpage/payments/quotation.php">Quotation</a>
-            <a href="<?= BASE_URL ?>/webpage/payments/services-report.php">Services Report</a>
-            <a href="<?= BASE_URL ?>/webpage/payments/billing-statement.php">Billing Statement</a>
+            <a href="<?= BASE_URL ?>/webpage/quotation.php">Quotation</a>
+            <a href="<?= BASE_URL ?>/webpage/services-report.php">Services Report</a>
+            <a href="<?= BASE_URL ?>/webpage/billing-statement.php">Billing Statement</a>
         </div>
         <div class="menu-item" onclick="toggleSubmenu(3)">
             <img src="<?= BASE_URL ?>/assets/tracking-and-report.svg">
             <span class="menu-text">Reports</span>
         </div>
         <div class="submenu" id="submenu-3">
-            <a href="<?= BASE_URL ?>/webpage/reports/employee-log.php">Employee Log</a>
-            <a href="<?= BASE_URL ?>/webpage/reports/employee-pay.php">Employee Pay</a>
-            <a href="<?= BASE_URL ?>/webpage/reports/customer-feedback.php">Customer Feedback</a>
+            <a href="<?= BASE_URL ?>/webpage/employee-log.php">Employee Log</a>
+            <a href="<?= BASE_URL ?>/webpage/employee-pay.php">Employee Pay</a>
+            <a href="<?= BASE_URL ?>/webpage/customer-feedback.php">Customer Feedback</a>
         </div>
     </div>
 </div>

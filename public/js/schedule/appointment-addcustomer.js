@@ -1,43 +1,73 @@
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('submit_customer').addEventListener('click', function() {
-        let customerName = document.getElementById('customer_name').value.trim();
-        let customerNumber = document.getElementById('customer_number').value.trim();
-        let customerAddress = document.getElementById('customer_address').value.trim();
+class AppointmentForm {
+    constructor(formId, submitButtonId) {
+        this.form = document.getElementById(formId);
+        this.submitButton = document.getElementById(submitButtonId);
 
-        let appointmentDate = document.getElementById('appointment_date').value.trim();
-        let appointmentCategory = document.getElementById('appointment_category').value.trim();
-        let appointmentPriority = document.getElementById('appointment_priority').value.trim();
-        let appointmentStatus = "Confirmed"; // Default
-
-        // Check if all fields have content
-        if (!customerName || !customerNumber || !customerAddress || !appointmentDate || !appointmentCategory || !appointmentPriority) {
-            console.log("One or more fields are empty");
+        if (!this.form || !this.submitButton) {
+            console.error("Form or submit button not found.");
             return;
         }
 
-        // Prepare data to send
-        let formData = new URLSearchParams();
-        formData.append("customer_name", customerName);
-        formData.append("customer_number", customerNumber);
-        formData.append("customer_address", customerAddress);
-        formData.append("appointment_date", appointmentDate);
-        formData.append("appointment_category", appointmentCategory);
-        formData.append("appointment_priority", appointmentPriority);
-        formData.append("appointment_status", appointmentStatus);
+        this.initialize();
+    }
 
-        // Send the request to the backend
-        fetch("appointment.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: formData.toString()
-        })
-        .then(response => response.text())
-        .then(data => {
+    initialize() {
+        this.submitButton.addEventListener("click", () => this.handleSubmit());
+    }
+
+    getFormData() {
+        return {
+            customer_name: this.getValue("customer_name"),
+            customer_number: this.getValue("customer_number"),
+            customer_address: this.getValue("customer_address"),
+            appointment_date: this.getValue("appointment_date"),
+            appointment_category: this.getValue("appointment_category"),
+            appointment_priority: this.getValue("appointment_priority"),
+            appointment_status: "Pending", // Default status
+        };
+    }
+
+    getValue(id) {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : "";
+    }
+
+    validateFormData(formData) {
+        return Object.values(formData).every(value => value !== "");
+    }
+
+    async sendFormData(formData) {
+        try {
+            const response = await fetch("appointment.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString(),
+            });
+
+            const data = await response.text();
             console.log("Server Response:", data);
-            if (data.includes("success")) { // Adjust this condition based on your server response
-                window.location.href = "appointment.php"; // Reload the page
+
+            if (data.includes("success")) {
+                window.location.href = "appointment.php"; // Reload the page on success
             }
-        })
-        .catch(error => console.error("Error:", error));
-    });
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    handleSubmit() {
+        const formData = this.getFormData();
+
+        if (!this.validateFormData(formData)) {
+            console.log("One or more fields are empty.");
+            return;
+        }
+
+        this.sendFormData(formData);
+    }
+}
+
+// Initialize the form handling when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    new AppointmentForm("appointment_form", "submit_customer");
 });
