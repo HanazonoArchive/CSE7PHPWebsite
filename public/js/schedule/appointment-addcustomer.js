@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('submit_customer').addEventListener('click', function() {
-        let customerName = document.getElementById('customer_name').value;
-        let customerNumber = document.getElementById('customer_number').value;
-        let customerAddress = document.getElementById('customer_address').value;
+        let customerName = document.getElementById('customer_name').value.trim();
+        let customerNumber = document.getElementById('customer_number').value.trim();
+        let customerAddress = document.getElementById('customer_address').value.trim();
 
-        let appointmentDate = document.getElementById('appointment_date').value;
-        let appointmentCategory = document.getElementById('appointment_category').value;
-        let appointmentPriority = document.getElementById('appointment_priority').value;
-        let appointmentStatus = "Pending"; // Default
+        let appointmentDate = document.getElementById('appointment_date').value.trim();
+        let appointmentCategory = document.getElementById('appointment_category').value.trim();
+        let appointmentPriority = document.getElementById('appointment_priority').value.trim();
+        let appointmentStatus = "Confirmed"; // Default
 
         // Check if all fields have content
         if (!customerName || !customerNumber || !customerAddress || !appointmentDate || !appointmentCategory || !appointmentPriority) {
@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.text())
         .then(data => {
             console.log("Server Response:", data);
+            if (data.includes("success")) { // Adjust this condition based on your server response
+                window.location.href = "appointment.php"; // Reload the page
+            }
         })
         .catch(error => console.error("Error:", error));
     });

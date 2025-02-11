@@ -1,63 +1,80 @@
 <?php
+// Define project root and URL paths
 define('PROJECT_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public');
 define('JUST_URL', '/CSE7PHPWebsite/public');
 
-include PROJECT_ROOT . "/db/DBConnection.php"; // Assuming this initializes a PDO connection
+include PROJECT_ROOT . "/db/DBConnection.php"; // Include the PDO connection
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { // Only process if it's a POST request
-    try {
-        $conn = Database::getInstance();
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Enable error handling
+try {
+    $conn = Database::getInstance(); // This will return the PDO connection
+} catch (Exception $e) {
+    die(json_encode(["status" => "error", "message" => "Database connection failed: " . $e->getMessage()]));
+}
 
-        // Check if all required fields are provided
-        if (
-            !empty($_POST['customer_name']) &&
-            !empty($_POST['customer_number']) &&
-            !empty($_POST['customer_address']) &&
-            !empty($_POST['appointment_date']) &&
-            !empty($_POST['appointment_category']) &&
-            !empty($_POST['appointment_priority']) &&
-            !empty($_POST['appointment_status'])
-        ) {
-            // Start a transaction
-            $conn->beginTransaction();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve and sanitize input data
+    $customer_name = trim($_POST["customer_name"] ?? "");
+    $customer_number = trim($_POST["customer_number"] ?? "");
+    $customer_address = trim($_POST["customer_address"] ?? "");
+    $appointment_date = trim($_POST["appointment_date"] ?? "");
+    $appointment_category = trim($_POST["appointment_category"] ?? "");
+    $appointment_priority = trim($_POST["appointment_priority"] ?? "");
+    $appointment_status = "Confirmed"; // Default status
 
-            // Insert customer first
-            $customer_query = "INSERT INTO customer (name, contact_number, address) VALUES (:name, :contact_number, :address)";
-            $stmt = $conn->prepare($customer_query);
-            $stmt->execute([
-                ':name' => $_POST['customer_name'],
-                ':contact_number' => $_POST['customer_number'],
-                ':address' => $_POST['customer_address']
-            ]);
-            $customer_id = $conn->lastInsertId(); // Get the last inserted ID
-
-            // Insert appointment with the retrieved customer ID
-            $appointment_query = "INSERT INTO appointment (date, category, priority, status, customer_id) 
-                                  VALUES (:date, :category, :priority, :status, :customer_id)";
-            $stmt = $conn->prepare($appointment_query);
-            $stmt->execute([
-                ':date' => $_POST['appointment_date'],
-                ':category' => $_POST['appointment_category'],
-                ':priority' => $_POST['appointment_priority'],
-                ':status' => $_POST['appointment_status'],
-                ':customer_id' => $customer_id
-            ]);
-
-            // Commit the transaction
-            $conn->commit();
-
-            echo json_encode(["success" => true, "message" => "Appointment added successfully!"]);
-        } else {
-            echo json_encode(["success" => false, "message" => "Invalid request: missing required fields."]);
-        }
-    } catch (PDOException $e) {
-        // Rollback the transaction in case of an error
-        $conn->rollBack();
-        echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
+    // Check if all required fields are filled
+    if (!$customer_name || !$customer_number || !$customer_address || !$appointment_date || !$appointment_category || !$appointment_priority) {
+        echo json_encode(["status" => "error", "message" => "All fields are required"]);
+        exit;
     }
 
-    $conn = null; // Close connection
+    try {
+        // Start a transaction
+        $conn->beginTransaction();
+
+        // 1. Check if customer already exists
+        $stmt = $conn->prepare("SELECT id FROM customer WHERE name = :name AND address = :address LIMIT 1");
+        $stmt->execute([
+            'name' => $customer_name,
+            'address' => $customer_address
+        ]);
+        $customer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($customer) {
+            // Customer already exists, use existing ID
+            $customer_id = $customer['id'];
+
+        } else {
+            // 2. Insert new customer
+            $stmt = $conn->prepare("INSERT INTO customer (name, contact_number, address) VALUES (:name, :contact_number, :address)");
+            $stmt->execute([
+                'name' => $customer_name,
+                'contact_number' => $customer_number,
+                'address' => $customer_address
+            ]);
+
+            // Get the last inserted customer ID
+            $customer_id = $conn->lastInsertId();
+        }
+
+        // 3. Insert appointment using the customer ID
+        $stmt = $conn->prepare("INSERT INTO appointment (customer_id, date, category, priority, status) 
+                                VALUES (:customer_id, :date, :category, :priority, :status)");
+        $stmt->execute([
+            'customer_id' => $customer_id,
+            'date' => $appointment_date,
+            'category' => $appointment_category,
+            'priority' => $appointment_priority,
+            'status' => $appointment_status
+        ]);
+
+        // Commit transaction
+        $conn->commit();
+
+        echo json_encode(["status" => "success", "message" => "Appointment created successfully", "customer_id" => $customer_id]);
+    } catch (Exception $e) {
+        $conn->rollBack(); // Rollback transaction on error
+        echo json_encode(["status" => "error", "message" => "Error: " . $e->getMessage()]);
+    }
 }
 ?>
 
@@ -110,9 +127,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { // Only process if it's a POST reque
 
                     <label class="client-header">Priority </label>
                     <select class="category_input" name="priority" id="appointment_priority">
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
                         <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
                     </select>
                 </div>
             </div>

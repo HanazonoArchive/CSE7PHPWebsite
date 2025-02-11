@@ -5,7 +5,7 @@ class Database {
 
     private $host = "HoyoWorld.serv.gs";
     private $port = "3306"; // Change this if your MySQL server runs on a different port
-    private $dbname = "AirconService"; // Change this to your database name
+    private $dbname = "Coolant"; // Change this to your database name
     private $username = "root"; // Change this if needed
     private $password = "aaa12345"; // Change this if needed
 

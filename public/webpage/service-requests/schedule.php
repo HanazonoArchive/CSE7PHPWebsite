@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sql_query'])) {
 
     // Extract sorting and filtering options
     $orderPattern = '/ORDER BY (appointment\.(?:id|date|priority)) (ASC|DESC)/i';
-    $wherePattern = "/WHERE appointment\.status = '(Pending|Confirmed|Completed)'/i";
+    $wherePattern = "/WHERE appointment\.status = '(Pending|Working|Completed|Cancelled)'/i";
 
     $orderClause = "";
     $whereClause = "";
@@ -125,8 +125,9 @@ $table_content = ob_get_clean();
                     <p class="filter_header">Filter by</p>
                     <div class="filter-column-row">
                         <button class="filter_button" data-status="Pending">Pending</button>
-                        <button class="filter_button" data-status="Confirmed">Confirmed</button>
+                        <button class="filter_button" data-status="Working">Working</button>
                         <button class="filter_button" data-status="Completed">Completed</button>
+                        <button class="filter_button" data-status="Cancelled">Cancelled</button>
                     </div>
                 </div>
                 <div class="filter-column">
