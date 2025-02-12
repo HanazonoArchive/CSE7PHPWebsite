@@ -21,21 +21,24 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="<?= JUST_URL ?>js/schedule/appointment-addcustomer.js"></script>
+    <script src="<?= JUST_URL ?>js/schedule/appointmentAddCustomer.js"></script>
+    <script src="<?= JUST_URL ?>js/schedule/appointmentUpdateInformation.js"></script>
     <div class="content">
         <div class="client-holder">
             <div class="add-client">
                 <p class="form-title">Customer</p>
                 <div class="client-form" id="appointment_form">
                     <label class="client-header">Name </label>
-                    <input class="textfield" type="text" id="customer_name" name="name" required>
+                    <input class="textfield" type="text" id="customer_name" name="name" placeholder="Customer Name"
+                        required>
 
                     <label class="client-header">Contact Number </label>
                     <input class="textfield" type="tel" id="customer_number" name="contact_number"
-                        pattern="[0-9]{4}[0-9]{3}[0-9]{4}" required>
+                        pattern="[0-9]{4}[0-9]{3}[0-9]{4}" placeholder="XXXXXXXXXXX" required>
 
                     <label class="client-header">Address </label>
-                    <input class="textfield" type="address" id="customer_address" name="address" required>
+                    <input class="textfield" type="address" id="customer_address" name="address"
+                        placeholder="Customer Address" required>
 
                     <button class="send_buttons" id="submit_customer" type="button">Create</button>
                 </div>
@@ -44,7 +47,7 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
                 <p class="form-title">Appointment</p>
                 <div class="client-form">
                     <label class="client-header">Date </label>
-                    <input class="textfield" type="text" id="appointment_date" config-id="date" name="date" required>
+                    <input class="textfield" type="text" id="appointment_date" config-id="date" name="date" placeholder="YYYY-MM-DD" required>
 
                     <label class="client-header">Category </label>
                     <select class="category_input" name="category" id="appointment_category">
@@ -67,42 +70,46 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
             <div class="add-client">
                 <p class="form-title">Update Information</p>
                 <div class="client-form">
-                    <label class="client-header">Customer ID </label>
-                    <input class="textfield" type="text" id="text" name="text" required>
+                    <label class="client-header">Appointment ID </label>
+                    <input class="textfield" type="text" id="update_appointmentID" name="text" placeholder="00" required>
 
-                    <label class="client-header">Select Category</label>
-                    <select class="category_input" name="category" id="category">
-                        <option value="installation">Installation</option>
-                        <option value="repair">Repair</option>
-                        <option value="maintenance">Maintenance</option>
+                    <label class="client-header">Update Category</label>
+                    <select class="category_input" name="category" id="update_category">
+                        <option value="Installation">Installation</option>
+                        <option value="Repair">Repair</option>
+                        <option value="Maintenance">Maintenance</option>
                     </select>
 
-                    <label class="client-header">Select Priority</label>
-                    <select class="category_input" name="priority" id="priority">
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
+                    <label class="client-header">Update Priority</label>
+                    <select class="category_input" name="priority" id="update_priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
                     </select>
 
                     <label class="client-header">Update Date </label>
-                    <input class="textfield" type="text" id="date" name="date" required>
+                    <input class="textfield" type="text" id="update_date" config-id="date" name="date" placeholder="YYYY-MM-DD" required>
+
+                    <button class="send_buttons" id="update_information" type="button">Update</button>
                 </div>
             </div>
 
             <div class="add-client">
-                <p class="form-title_whitespace">-</p>
+                <p class="form-title-Note">When only Update Appointment,<br>Leave the Customer Blank</p>
                 <div class="client-form">
+                    <label class="client-header">Customer ID</label>
+                    <input class="textfield" type="text" id="update_customerID" name="name" placeholder="00" required>
+
                     <label class="client-header">Update Name</label>
-                    <input class="textfield" type="text" id="name" name="name" required>
+                    <input class="textfield" type="text" id="update_name" name="name" placeholder="Customer Name" required>
 
                     <label class="client-header">Update Number </label>
-                    <input class="textfield" type="tel" id="contact_number" name="contact_number"
-                        pattern="[0-9]{4}[0-9]{3}[0-9]{4}" required>
+                    <input class="textfield" type="tel" id="update_contactNumber" name="contact_number"
+                        pattern="[0-9]{4}[0-9]{3}[0-9]{4}" placeholder="XXXXXXXXXXX" required>
 
                     <label class="client-header">Update Address </label>
-                    <input class="textfield" type="address" id="address" name="address" required>
-
-                    <button class="send_buttons" type="submit">Update</button>
+                    <input class="textfield" type="address" id="update_address" name="address" placeholder="Customer Address" required>
                 </div>
             </div>
 
@@ -123,11 +130,11 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
         </div>
     </div>
     <script>
-        let appointmentInput = document.querySelector('[config-id="date"]');
-        config = {
-            minDate: "today"
-        };
-        flatpickr(appointmentInput, config);
+        document.querySelectorAll('[config-id="date"]').forEach((datePicker) => {
+            flatpickr(datePicker, {
+                minDate: "today"
+            });
+        });
     </script>
 </body>
 

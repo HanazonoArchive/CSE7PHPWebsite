@@ -37,6 +37,8 @@ class AppointmentForm {
     }
 
     async sendFormData(formData) {
+        formData["action"] = "create";
+        
         try {
             const response = await fetch("appointment.php", {
                 method: "POST",
