@@ -193,6 +193,7 @@ body {
 .toggle-btn-container p {
     font-weight: 500;
     font-size: 18px;
+    margin: 0px;
 }
 
 .sidebar.expanded~.toggle-btn-container {

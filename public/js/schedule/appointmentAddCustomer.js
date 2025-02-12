@@ -45,12 +45,10 @@ class AppointmentForm {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams(formData).toString(),
             });
-
             const data = await response.text();
-            console.log("Server Response:", data);
-
             if (data.includes("success")) {
-                window.location.href = "appointment.php"; // Reload the page on success
+                console.log("Successfully Created");
+                window.location.href = "appointment.php";
             }
         } catch (error) {
             console.error("Error:", error);
