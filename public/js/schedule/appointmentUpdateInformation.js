@@ -35,26 +35,26 @@ class UpdateForm {
     return element ? element.value.trim() : ""; // If empty, return empty string
   }
 
-  async sendFormData(formData) {
-    formData["action"] = "update";
+    async sendFormData(formData) {
+      formData["action"] = "update";
 
-    try {
-      const response = await fetch("appointment.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData).toString(),
-      });
+      try {
+        const response = await fetch("appointment.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(formData).toString(),
+        });
 
-      const data = await response.text();
+        const data = await response.text();
 
-      if (data.includes("success")) {
-        console.log("Successfully Updated");
-        window.location.href = "appointment.php"; // Reload on success
+        if (data.includes("success")) {
+          console.log("Successfully Updated");
+          window.location.href = "appointment.php"; // Reload on success
+        }
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
     }
-  }
 
   handleSubmit(event) {
     event.preventDefault(); // Prevent default form submission

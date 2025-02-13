@@ -50,46 +50,50 @@ include PROJECT_ROOT . "/controller/schedule-controller.php";
                 </div>
             </div>
         </div>
-        <div class="appointment-holder">
-            <div class="appointment-table">
-                <?= $table_content; ?>
+
+        <div class="revised_holder">
+            <div class="appointment-holder">
+                <div class="appointment-table">
+                    <?= $table_content; ?>
+                </div>
             </div>
-        </div>
-        <div class="appointment-holderv2">
-            <div class="appointment_details">
-                <p class="appointment_header">Schedule Details</p>
-                <div class="information-column">
-                    <div class="column">
-                        <p class="information_header">Customer ID</p>
-                        <p class="highlighted_information" id="customer_id">-</p>
-                        <p class="information_header">Customer Name</p>
-                        <p class="highlighted_information" id="customer_name">-</p>
-                    </div>
-                    <div class="column">
-                        <p class="information_header">Contact Number</p>
-                        <p class="highlighted_information" id="customer_contact-number">-</p>
-                        <p class="information_header">Address</p>
-                        <p class="highlighted_information" id="customer_address">-</p>
-                    </div>
-                    <div class="column">
-                        <p class="information_header">Appointment ID</p>
-                        <p class="highlighted_information" id="appointment_id">-</p>
-                        <p class="information_header">Date</p>
-                        <p class="highlighted_information" id="appointment_date">-</p>
-                    </div>
-                    <div class="column">
-                        <p class="information_header">Category</p>
-                        <p class="highlighted_information" id="appointment_category">-</p>
-                        <p class="information_header">Priority</p>
-                        <p class="highlighted_information" id="appointment_priority">-</p>
-                    </div>
-                    <div class="column">
-                        <p class="information_header">Status</p>
-                        <p class="highlighted_information" id="appointment_status">-</p>
+            <div class="appointment-holderv2">
+                <div class="appointment_details">
+                    <p class="appointment_header">Schedule Details</p>
+                    <div class="information-column">
+                        <div class="column">
+                            <p class="information_header">Customer ID</p>
+                            <p class="highlighted_information" id="customer_id">-</p>
+                            <p class="information_header">Customer Name</p>
+                            <p class="highlighted_information" id="customer_name">-</p>
+                        </div>
+                        <div class="column">
+                            <p class="information_header">Contact Number</p>
+                            <p class="highlighted_information" id="customer_contact-number">-</p>
+                            <p class="information_header">Address</p>
+                            <p class="highlighted_information" id="customer_address">-</p>
+                        </div>
+                        <div class="column">
+                            <p class="information_header">Appointment ID</p>
+                            <p class="highlighted_information" id="appointment_id">-</p>
+                            <p class="information_header">Date</p>
+                            <p class="highlighted_information" id="appointment_date">-</p>
+                        </div>
+                        <div class="column">
+                            <p class="information_header">Category</p>
+                            <p class="highlighted_information" id="appointment_category">-</p>
+                            <p class="information_header">Priority</p>
+                            <p class="highlighted_information" id="appointment_priority">-</p>
+                        </div>
+                        <div class="column">
+                            <p class="information_header">Status</p>
+                            <p class="highlighted_information" id="appointment_status">-</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </body>
 
