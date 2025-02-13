@@ -22,78 +22,80 @@ include PROJECT_ROOT . "/controller/schedule-controller.php";
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
 
     <div class="content">
-        <div class="appointment-holderv3">
-            <div class="appointment_filter">
-                <div class="filter-column">
-                    <p class="filter_header">Order by</p>
-                    <div class="filter-column-row">
-                        <button class="filter_button" data-filter="appointment.date">Date</button>
-                        <button class="filter_button" data-filter="appointment.priority">Priority</button>
-                        <button class="filter_button" data-filter="appointment.id">Ticket #</button>
-                    </div>
+        <div class="filterBar">
+            <div class="Column">
+                <p class="filterTitle">Order by</p>
+                <select class="dropdown" name="OrderBy" id="dropdownOrderBy">
+                    <option value="appointment.id">Ticket</option>
+                    <option value="Priority">Priority</option>
+                    <option value="Date">Date</option>
+                </select>
+            </div>
+            <div class="Column">
+                <p class="filterTitle">Filter by</p>
+                <select class="dropdown" name="FilterBy" id="dropdownFilterBy">
+                    <option value="Pending">Pending</option>
+                    <option value="Working">Working</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="Column">
+                <p class="filterTitle">Sort by</p>
+                <select class="dropdown" name="SortBy" id="dropdownSortBy">
+                    <option value="ASC">Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+            </div>
+            <button class="filterApplyButton" type="button">Apply</button>
+            <p class="filterStatus" id="QueryStatus"></p>
+        </div>
+        <div class="scheduleBar">
+            <div class="scheduleTable">
+                <?= $table_content; ?>
+            </div>
+            <div class="scheduleDetails">
+                <p class="detailsHeader">Customer Information</p>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Customer ID</p>
+                    <p class="detialsContent" id="customer_id">-</p>
                 </div>
-                <div class="filter-column">
-                    <p class="filter_header">Filter by</p>
-                    <div class="filter-column-row">
-                        <button class="filter_button" data-status="Pending">Pending</button>
-                        <button class="filter_button" data-status="Working">Working</button>
-                        <button class="filter_button" data-status="Completed">Completed</button>
-                        <button class="filter_button" data-status="Cancelled">Cancelled</button>
-                    </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Customer Name</p>
+                    <p class="detialsContent" id="customer_name">-</p>
                 </div>
-                <div class="filter-column">
-                    <p class="filter_header">Sort by</p>
-                    <div class="filter-column-row">
-                        <button class="filter_button active" data-order="ASC">Ascending</button>
-                        <button class="filter_button" data-order="DESC">Descending</button>
-                    </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Contact Number</p>
+                    <p class="detialsContent" id="customer_contact-number">-</p>
+                </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Address</p>
+                    <p class="detialsContent" id="customer_address">-</p>
+                </div>
+                <hr>
+                <p class="detailsHeader">Appoinment Information</p>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Appointment ID</p>
+                    <p class="detialsContent" id="appointment_id">-</p>
+                </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Date</p>
+                    <p class="detialsContent" id="appointment_date">-</p>
+                </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Category</p>
+                    <p class="detialsContent" id="appointment_category">-</p>
+                </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Priority</p>
+                    <p class="detialsContent" id="appointment_priority">-</p>
+                </div>
+                <div class="detailsRow">
+                    <p class=detailsTitle>Status</p>
+                    <p class="detialsContent" id="appointment_status">-</p>
                 </div>
             </div>
         </div>
-
-        <div class="revised_holder">
-            <div class="appointment-holder">
-                <div class="appointment-table">
-                    <?= $table_content; ?>
-                </div>
-            </div>
-            <div class="appointment-holderv2">
-                <div class="appointment_details">
-                    <p class="appointment_header">Schedule Details</p>
-                    <div class="information-column">
-                        <div class="column">
-                            <p class="information_header">Customer ID</p>
-                            <p class="highlighted_information" id="customer_id">-</p>
-                            <p class="information_header">Customer Name</p>
-                            <p class="highlighted_information" id="customer_name">-</p>
-                        </div>
-                        <div class="column">
-                            <p class="information_header">Contact Number</p>
-                            <p class="highlighted_information" id="customer_contact-number">-</p>
-                            <p class="information_header">Address</p>
-                            <p class="highlighted_information" id="customer_address">-</p>
-                        </div>
-                        <div class="column">
-                            <p class="information_header">Appointment ID</p>
-                            <p class="highlighted_information" id="appointment_id">-</p>
-                            <p class="information_header">Date</p>
-                            <p class="highlighted_information" id="appointment_date">-</p>
-                        </div>
-                        <div class="column">
-                            <p class="information_header">Category</p>
-                            <p class="highlighted_information" id="appointment_category">-</p>
-                            <p class="information_header">Priority</p>
-                            <p class="highlighted_information" id="appointment_priority">-</p>
-                        </div>
-                        <div class="column">
-                            <p class="information_header">Status</p>
-                            <p class="highlighted_information" id="appointment_status">-</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </body>
 

@@ -2,18 +2,21 @@
 define('PROJECT_ROOT_DB', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public');
 include PROJECT_ROOT_DB . "/db/DBConnection.php";
 
-class AppointmentManager {
+class AppointmentManager
+{
     private $conn;
     private $default_order = "ORDER BY appointment.id ASC"; // Define as a class property
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function fetchAppointments($order = null) {
+    public function fetchAppointments($order = null)
+    {
         try {
             $order = $order ?? $this->default_order; // Use default order if not provided
-            
+
             $stmt = $this->conn->prepare("SELECT 
                     appointment.id AS Ticket_Number, 
                     customer.name AS Customer_Name, 
@@ -60,34 +63,16 @@ class AppointmentManager {
     public function handlePostRequest() {
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sql_query'])) {
             $query = trim($_POST['sql_query']);
-
-            // Extract sorting and filtering options
-            $orderPattern = '/ORDER BY (appointment\.(?:id|date|priority)) (ASC|DESC)/i';
-            $wherePattern = "/WHERE appointment\.status = '(Pending|Working|Completed|Cancelled)'/i";
-
-            $orderClause = "";
-            $whereClause = "";
-
-            if (preg_match($orderPattern, $query, $matches)) {
-                $column = $matches[1];
-                $direction = strtoupper($matches[2]);
-                $orderClause = "ORDER BY $column $direction";
+    
+            // Ensure the query always has a valid ORDER BY
+            if (!str_contains($query, "ORDER BY")) {
+                $query .= " ORDER BY appointment.id ASC";
             }
-
-            if (preg_match($wherePattern, $query, $matches)) {
-                $status = $matches[1];
-                $whereClause = "WHERE appointment.status = '$status'";
-            }
-
-            $queryString = $whereClause;
-            if (!empty($orderClause)) {
-                $queryString .= " " . $orderClause;
-            }
-
-            $this->fetchAppointments($queryString);
+    
+            $this->fetchAppointments($query);
             exit;
         }
-    }
+    }  
 }
 
 // Initialize the database connection

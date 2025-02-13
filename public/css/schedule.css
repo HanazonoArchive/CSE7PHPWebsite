@@ -1,248 +1,208 @@
-@import url('./fonts/inter.css');
+@import url("./fonts/inter.css");
 
 :root {
-    --background-color: #F2EAD3;
-    --navbar-color: #F5F5F5;
-    --text-color: #000000;
-    --optional-color: #FF6F61;
-    --highlighted-color: #ED7D31;
-    --afuckingcolor: #EDb459;
-    --afuckingtextcolor: #424242;
+  --background-color: #e3f2fd; /* Light Blue */
+  --navbar-color: #f5f5f5; /* Soft Blue */
+  --text-color: #000000; /* Deep Blue */
+  --optional-color: #42a5f5; /* Vibrant Blue */
+  --highlighted-color: #1e88e5; /* Medium Blue */
+  --afuckingcolor: #64b5f6; /* Sky Blue */
+  --afuckingtextcolor: #102027; /* Dark Blue-Grey */
 }
 
-.appointment-table {
-    width: 100%;
-    max-height: 450px;
-    background-color: var(--background-color);
-    overflow: auto;
-
+.filterBar {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 10px 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  justify-content: flex-start;
 }
 
-.appointment-holder {
-    background-color: var(--navbar-color);
-    padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    z-index: 50;
-    height: 470px;
+.filterTitle {
+  padding: 0px;
+  margin: 0px;
+  color: var(--afuckingtextcolor);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0px 5px;
+}
+
+.Column {
+  margin: 0px;
+  padding: 0px 10px;
+}
+
+.dropdown {
+  height: auto;
+  width: 200px;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  padding: 5px 10px;
+  font-weight: 500;
+}
+
+.scheduleBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.scheduleTable {
+  width: 74.5%;
+  background-color: var(--navbar-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-right: 1%;
+}
+
+.scheduleDetails {
+  width: 24.5%;
+  background-color: var(--navbar-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.scheduleDetails hr {
+  margin: 5px 0px;
+}
+
+.filterApplyButton {
+  width: 100px;
+  height: auto;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 5px;
+  margin-top: 15px;
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
+  border: 2px solid var(--optional-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.filterApplyButton:hover {
+  background-color: var(--optional-color);
+  color: var(--text-color);
+}
+
+.scheduleTable {
+  padding: 10px 0px 10px 10px;
+  width: 100%;
+  height: 550px;
+  overflow: auto;
+}
+
+.scheduleDetails {
+  padding: 10px;
+  height: 550px;
+}
+
+.detailsHeader {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-color);
+  margin: 0px;
+  padding-bottom: 5px;
+}
+
+.detailsTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--afuckingtextcolor);
+  margin: 0px;
+  padding: 5px 0px;
+}
+
+.detialsContent {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0px;
+  padding: 0px;
 }
 
 /* Custom scrollbar */
-.appointment-table::-webkit-scrollbar {
-    width: 10px;
+.scheduleTable::-webkit-scrollbar {
+  width: 10px;
 }
 
-.appointment-table::-webkit-scrollbar-track {
-    background: var(--background-color);
-    border-radius: 10px;
+.scheduleTable::-webkit-scrollbar-track {
+  background: var(--navbar-color);
+  border-radius: 10px;
 }
 
-.appointment-table::-webkit-scrollbar-thumb {
-    background: var(--optional-color);
-    border-radius: 10px;
-    transition: background 0.3s ease-in-out;
+.scheduleTable::-webkit-scrollbar-thumb {
+  background: var(--optional-color);
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
 }
 
-/* Table Styling */
-.appointment-table table {
-    width: 100%;
-    border-collapse: collapse;
-    border: none;
+.scheduleTable table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  height: 100px;
+  border-radius: 5px;
 }
 
-/* Table Headers */
-.appointment-table th {
-    background: var(--navbar-color);
-    color: var(--text-color);
-    font-weight: 600;
-    font-size: 18px;
-    padding: 5px 10px;
-    text-align: left;
-    border-bottom: 1px solid var(--optional-color);
+.scheduleTable th {
+  color: white;
+  background: var(--highlighted-color);
+  font-weight: 400;
+  font-size: 16px;
+  padding: 4px 0px;
 }
 
-/* Row Styles */
-.appointment-table tr:nth-child(even) td {
-    background-color: var(--navbar-color);
-    color: var(--text-color);
-    border-bottom: 1px solid var(--optional-color);
+.scheduleTable tr:nth-child(even) td {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
 }
 
-.appointment-table tr:nth-child(odd) td {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border-bottom: 1px solid var(--optional-color);
+.scheduleTable tr:nth-child(odd) td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
 }
 
-/* Table Cells */
-.appointment-table td {
-    padding: 10px;
-    transition: background 0.3s ease-in-out;
-    cursor: pointer;
+.scheduleTable td {
+  padding: 10px 4px;
+  transition: 0.3s ease-in-out;
+  cursor: pointer;
 }
 
-.appointment-holderv2 {
-    padding-top: 10px;
-    padding-bottom: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    margin-top: 10px;
-    z-index: 50;
-    background-color: var(--navbar-color);
+.scheduleTable td:hover {
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
 }
 
-.appointment_details {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    flex-direction: column;
-}
-
-.appointment_header {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0px;
-    padding: 10px;
-
-}
-
-.information-column {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.column {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    padding: 0px 30px;
-}
-
-.information_header {
-    color: var(--afuckingtextcolor);
-    font-size: 16px;
-    font-weight: 500;
-    padding: 10px 0px;
-    margin: 0px;
-}
-
-.highlighted_information {
-    color: var(--text-color);
-    font-size: 20px;
-    font-weight: 600;
-    padding: 0px;
-    margin: 0px;
-}
-
-.filter {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    padding-right: 20px;
-}
-
-.assign_button {
-    width: 100px;
-    height: auto;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: var(--afuckingcolor);
-    border: 1px solid var(--optional-color);
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.assign_button:hover {
-    background-color: var(--optional-color);
-    border: 1px solid var(--optional-color);
-}
-
-.appointment-holderv3 {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    margin-bottom: 10px;
-    z-index: 50;
-    background-color: var(--navbar-color);
-}
-
-.appointment_filter {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.filter-column {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
-    padding: 0px 0px;
-}
-
-.filter-column-row {
-    display: flex;
-    flex-direction: row;
-    padding: 10px 10px;
-}
-
-.filter_header {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0px;
-    padding: 10px;
-}
-
-.filter_button {
-    margin-right: 10px;
-    width: 100px;
-    height: auto;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 5px 5px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: var(--afuckingcolor);
-    border: 1px solid var(--optional-color);
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.filter_button:hover {
-    background-color: var(--optional-color);
-    border: 1px solid var(--optional-color);
-}
-
-.filter_button.active {
-    border: 1px solid var(--optional-color);
-    background-color: var(--optional-color);
-    color: var(--text-color);
-    border-radius: 5px;
-}
-
-
-/* Responsive Behavior */
-@media (max-width: 600px) {
-    .appointment-table {
-        width: 100%;
-    }
+.filterStatus {
+  border: 1px solid transparent;
+  background-color: transparent;
+  padding: 0px 5px;
+  color: transparent;
+  width: auto;
+  height: auto;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-right: 0px;
+  margin-bottom: 0px;
 }
