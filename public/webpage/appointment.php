@@ -15,7 +15,6 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
     <title>Appointment</title>
     <link rel="stylesheet" href="<?= JUST_URL ?>/css/appointment.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body>
@@ -26,125 +25,96 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
     <script src="<?= JUST_URL ?>js/schedule/appointmentUpdateInformation.js"></script>
     <script src="<?= JUST_URL ?>js/schedule/appointmentDelete.js"></script>
     <div class="content">
-        <div class="content_notification">
+        <div class="appointmentCreate">
+            <p class="titleHeader">Create Appointment</p>
+            <div class="titleContent">
+                <div class="column">
+                    <input class="inputField" id="appointmentCreateCustomer_Name" type="text"
+                        placeholder="Customer Name">
+                    <input class="inputField" id="appointmentCreateCustomer_ContactNumber" type="text"
+                        placeholder="Contact Number">
+                </div>
+                <div class="column">
+                    <input class="inputField" id="appointmentCreateCustomer_Address" type="text" placeholder="Address">
+                    <input class="inputField" id="appointmentCreate_Date" config-id="date" type="text"
+                        placeholder="YYYY-MM-DD">
+                </div>
+                <div class="column">
+                    <select name="selection" class="dropdown" id="appointmentCreate_Category">
+                        <option value="Installation">Installation</option>
+                        <option value="Repair">Repair</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
+                    <select name="selection" class="dropdown" id="appointmentCreate_Priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <button class="submitButton" id="submitCreateAppointment" type="button">Create</button>
+                    <p class="statusNotifier" id="statusCreateNotifier"></p>
+                </div>
+            </div>
+        </div>
+        <div class="appointmentUpdate">
+            <p class="titleHeader">Update Information</p>
+            <div class="titleContent">
+                <div class="column">
+                    <input class="inputField" id="appointmentUpdate_ID" type="text" placeholder="Appointment ID">
+                    <select name="selection" class="dropdown" id="appointmentUpdate_Category">
+                        <option value="Installation">Installation</option>
+                        <option value="Repair">Repair</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <select name="selection" class="dropdown" id="appointmentUpdate_Priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
+                    </select>
+                    <input class="inputField" id="appointmentUpdate_Date" config-id="date" type="text"
+                        placeholder="YYYY-MM-DD">
+                </div>
+                <div class="vl"></div>
+                <div class="column">
+                    <input class="inputField" id="appointmentUpdateCustomer_ID" type="text" placeholder="Customer ID">
+                    <input class="inputField" id="appointmentUpdateCustomer_Name" type="text" placeholder="Name">
+                </div>
+                <div class="column">
+                    <input class="inputField" id="appointmentUpdateCustomer_ContactNumber" type="text"
+                        placeholder="Contact Number">
+                    <input class="inputField" id="appointmentUpdateCustomer_Address" type="text" placeholder="Address">
+                </div>
+                <div class="column">
+                    <button class="submitButton" id="submitUpdateAppointment" type="button">Update</button>
+                    <p class="statusNotifier" id="statusUpdateNotifier"></p>
+                </div>
+            </div>
+        </div>
+        <div class="appointmentDelete">
+            <p class="titleHeader">Delete Information</p>
+            <div class="titleContent">
+                <div class="column">
+                    <input class="inputField" id="appointmentDelete_CustomerID" type="text" placeholder="Customer ID">
+                    <input class="inputField" id="appointmentDelete_AppointmentID" type="text"
+                        placeholder="Appointment ID">
+                </div>
+                <div class="column">
+                    <button class="submitButton" id="submitDeleteAppointment" type="button">Delete</button>
+                    <p class="statusNotifier" id="statusDeleteNotifier"></p>
+                </div>
+            </div>
+        </div>
+        <div class="appointmentTable">
+            <p class="titleHeader">Customer Table</p>
             <?php
-            if (!empty($_SESSION['notification'])) {
-                echo "<span id='notif'>" . $_SESSION['notification'] . "</span>";
-                echo "<script>
-                setTimeout(function() {
-                    fetch('../component/unset_notification.php');
-                }, 3000); // 3 seconds delay
-              </script>";
-            }
+            $appointmentManager->fetchAppointments();
             ?>
         </div>
-
-        <div class="content-main">
-            <div class="client-holder">
-                <div class="add-client">
-                    <p class="form-title">Customer</p>
-                    <div class="client-form" id="appointment_form">
-                        <label class="client-header">Name </label>
-                        <input class="textfield" type="text" id="customer_name" name="name" placeholder="Customer Name"
-                            required>
-
-                        <label class="client-header">Contact Number </label>
-                        <input class="textfield" type="tel" id="customer_number" name="contact_number"
-                            pattern="[0-9]{4}[0-9]{3}[0-9]{4}" placeholder="XXXXXXXXXXX" required>
-
-                        <label class="client-header">Address </label>
-                        <input class="textfield" type="address" id="customer_address" name="address"
-                            placeholder="Customer Address" required>
-
-                        <button class="send_buttons" id="submit_customer" type="button">Create</button>
-                    </div>
-                </div>
-                <div class="add-client">
-                    <p class="form-title">Appointment</p>
-                    <div class="client-form">
-                        <label class="client-header">Date </label>
-                        <input class="textfield" type="text" id="appointment_date" config-id="date" name="date" placeholder="YYYY-MM-DD" required>
-
-                        <label class="client-header">Category </label>
-                        <select class="category_input" name="category" id="appointment_category">
-                            <option value="Installation">Installation</option>
-                            <option value="Repair">Repair</option>
-                            <option value="Maintenance">Maintenance</option>
-                        </select>
-
-                        <label class="client-header">Priority </label>
-                        <select class="category_input" name="priority" id="appointment_priority">
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                            <option value="Urgent">Urgent</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="client-holder1">
-                <div class="add-client">
-                    <p class="form-title">Update Information</p>
-                    <div class="client-form">
-                        <label class="client-header">Appointment ID </label>
-                        <input class="textfield" type="text" id="update_appointmentID" name="text" placeholder="00" required>
-
-                        <label class="client-header">Update Category</label>
-                        <select class="category_input" name="category" id="update_category">
-                            <option value="Installation">Installation</option>
-                            <option value="Repair">Repair</option>
-                            <option value="Maintenance">Maintenance</option>
-                        </select>
-
-                        <label class="client-header">Update Priority</label>
-                        <select class="category_input" name="priority" id="update_priority">
-                            <option value="Low">Low</option>
-                            <option value="Medium">Medium</option>
-                            <option value="High">High</option>
-                            <option value="Urgent">Urgent</option>
-                        </select>
-
-                        <label class="client-header">Update Date </label>
-                        <input class="textfield" type="text" id="update_date" config-id="date" name="date" placeholder="YYYY-MM-DD" required>
-
-                        <button class="send_buttons" id="update_information" type="button">Update</button>
-                    </div>
-                </div>
-
-                <div class="add-client">
-                    <p class="form-title-Note">When only Update Appointment,<br>Leave the Customer Blank</p>
-                    <div class="client-form">
-                        <label class="client-header">Customer ID</label>
-                        <input class="textfield" type="text" id="update_customerID" name="name" placeholder="00" required>
-
-                        <label class="client-header">Update Name</label>
-                        <input class="textfield" type="text" id="update_name" name="name" placeholder="Customer Name" required>
-
-                        <label class="client-header">Update Number </label>
-                        <input class="textfield" type="tel" id="update_contactNumber" name="contact_number"
-                            pattern="[0-9]{4}[0-9]{3}[0-9]{4}" placeholder="XXXXXXXXXXX" required>
-
-                        <label class="client-header">Update Address </label>
-                        <input class="textfield" type="address" id="update_address" name="address" placeholder="Customer Address" required>
-                    </div>
-                </div>
-
-            </div>
-            <div class="client-holder2">
-                <div class="add-client">
-                    <p class="form-title">Delete</p>
-                    <div class="client-form">
-                        <label class="client-header">Customer ID </label>
-                        <input class="textfield" type="text" id="delete_customer" name="text" required>
-
-                        <label class="client-header">Appointment ID </label>
-                        <input class="textfield" type="text" id="delete_appointment" name="text" required>
-                        <button class="send_buttons" id="deleteInformation" type="button">Delete</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
     <script>
         document.querySelectorAll('[config-id="date"]').forEach((datePicker) => {

@@ -185,11 +185,6 @@
   cursor: pointer;
 }
 
-.scheduleTable td:hover {
-  background-color: var(--highlighted-color);
-  color: var(--text-color);
-}
-
 .filterStatus {
   border: 1px solid transparent;
   background-color: transparent;

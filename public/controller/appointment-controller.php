@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 define('PROJECT_DB', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public/');
 include_once PROJECT_DB . "db/DBConnection.php";
 
@@ -154,7 +152,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!$customer_name || !$customer_number || !$customer_address || !$appointment_date || !$appointment_category || !$appointment_priority) {
                 header('Content-Type: application/json');
                 echo json_encode(["status" => "error", "message" => "All fields are required"]);
-                $_SESSION['notification'] = '<div class="alert alert-warning" role="alert">All fields are required</div>';
                 exit;
             }
 
@@ -166,14 +163,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $conn->commit();
             header('Content-Type: application/json');
-            $_SESSION['notification'] = '<div class="alert alert-success" role="alert">Appointment created successfully</div>';
             echo json_encode(["status" => "success", "message" => "Appointment created successfully", "customer_id" => $customer_id]);
         } catch (Exception $e) {
             $conn->rollBack();
             error_log("Transaction failed: " . $e->getMessage());
             header('Content-Type: application/json');
             echo json_encode(["status" => "error", "message" => "Failed to process the request. Please try again later."]);
-            $_SESSION['notification'] = '<div class="alert alert-warning" role="alert">Failed to process the request. Please try again.</div>';
         }
     } elseif ($action === "update") {
         try {
@@ -194,12 +189,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (!empty($appointmentID) && !empty($appointment_date) && !empty($appointment_category) && !empty($appointment_priority)) {
                 $appointmentHandler->updateAppointment($appointmentID, $appointment_date, $appointment_category, $appointment_priority);
-                $_SESSION['notification'] = '<div class="alert alert-success" role="alert">Appointment updated successfully</div>';
             }
 
             if (!empty($customerID) && !empty($customer_name) && !empty($customer_number) && !empty($customer_address)) {
                 $customerHandler->updateCustomer($customerID, $customer_name, $customer_number, $customer_address);
-                $_SESSION['notification'] = '<div class="alert alert-success" role="alert">Customer updated successfully</div>';
             }
 
             $conn->commit();
@@ -210,7 +203,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             error_log("Transaction failed: " . $e->getMessage());
             header('Content-Type: application/json');
             echo json_encode(["status" => "error", "message" => "Failed to update. Please try again."]);
-            $_SESSION['notification'] = '<div class="alert alert-warning" role="alert">Failed to update. Please try again.</div>';
         }
     } elseif ($action === "delete") {
         try {
@@ -220,17 +212,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $customerHandler = new Customer($conn);
             $appointmentHandler = new Appointment($conn);
 
-            $appointmentID = trim($_POST["Delete_AppointmentID"] ?? "");
-            $customerID = trim($_POST["Delete_CustomerID"] ?? "");
+            $appointmentID = trim($_POST["appointment_ID"] ?? "");
+            $customerID = trim($_POST["customer_ID"] ?? "");
 
             if (!empty($appointmentID)) {
                 $appointmentHandler->deleteAppointment($appointmentID);
-                $_SESSION['notification'] = '<div class="alert alert-success" role="alert">Appointment deleted successfully</div>';
             }
 
             if (!empty($customerID)) {
                 $customerHandler->deleteCustomer($customerID);
-                $_SESSION['notification'] = '<div class="alert alert-success" role="alert">Customer deleted successfully</div>';
             }
 
             $conn->commit();
@@ -241,7 +231,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             error_log("Transaction failed: " . $e->getMessage());
             header('Content-Type: application/json');
             echo json_encode(["status" => "error", "message" => "Failed to Delete. Please try again."]);
-            $_SESSION['notification'] = '<div class="alert alert-warning" role="alert">Failed to Delete. Please try again.</div>';
         }
     }
 }
+
+class AppointmentManager
+{
+    private $conn;
+    private $default_order = "ORDER BY appointment.id ASC";
+
+    public function __construct($db)
+    {
+        $this->conn = $db;
+    }
+
+    public function fetchAppointments($order = null)
+    {
+        try {
+            $order = $order ?? $this->default_order;
+
+            $stmt = $this->conn->prepare("SELECT
+                    customer.id AS Customer_ID,
+                    customer.name AS Customer_Name,
+                    appointment.id AS Appointment_ID,
+                    appointment.category AS Appointment_Category
+                FROM appointment
+                JOIN customer ON appointment.customer_id = customer.id
+                $order");
+
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($results) {
+                echo "<table border='1' class='appointment-table'>";
+                echo "<tr><th>Customer ID</th><th>Customer Name</th><th>Appointment ID</th><th>Category</th></tr>";
+
+                foreach ($results as $row) {
+                    echo "<tr onclick='updateDetails(" . htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') . ")'>";
+                    echo "<td>{$row['Customer_ID']}</td><td>{$row['Customer_Name']}</td><td>{$row['Appointment_ID']}</td><td>{$row['Appointment_Category']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "No records found.";
+            }
+        } catch (PDOException $e) {
+            echo "Error fetching data: " . $e->getMessage();
+        }
+    }
+}
+
+// Initialize database connection
+$conn = Database::getInstance();
+$appointmentManager = new AppointmentManager($conn);
+?>

@@ -1,73 +1,75 @@
-class AppointmentForm {
-    constructor(formId, submitButtonId) {
-        this.form = document.getElementById(formId);
+class CreateAppointmentForm {
+    constructor(submitButtonId, queryStatusId) {
         this.submitButton = document.getElementById(submitButtonId);
+        this.queryStatus = document.getElementById(queryStatusId);
 
-        if (!this.form || !this.submitButton) {
-            console.error("Form or submit button not found.");
+        if (!this.submitButton) {
+            console.error("Submit button not found.");
             return;
         }
 
-        this.initialize();
-    }
-
-    initialize() {
         this.submitButton.addEventListener("click", () => this.handleSubmit());
     }
 
     getFormData() {
-        return {
-            customer_name: this.getValue("customer_name"),
-            customer_number: this.getValue("customer_number"),
-            customer_address: this.getValue("customer_address"),
-            appointment_date: this.getValue("appointment_date"),
-            appointment_category: this.getValue("appointment_category"),
-            appointment_priority: this.getValue("appointment_priority"),
-            appointment_status: "Pending", // Default status
+        let formData = {
+            customer_name: this.getValue("appointmentCreateCustomer_Name"),
+            customer_number: this.getValue("appointmentCreateCustomer_ContactNumber"),
+            customer_address: this.getValue("appointmentCreateCustomer_Address"),
+            appointment_date: this.getValue("appointmentCreate_Date"),
+            appointment_category: this.getValue("appointmentCreate_Category"),
+            appointment_priority: this.getValue("appointmentCreate_Priority"),
+            appointment_status: "Pending",
+            action: "create"
         };
+
+        // Check for empty fields
+        if (Object.values(formData).some(value => !value.trim())) {
+            this.updateQueryStatus("Please fill all fields!", "red", "lightcoral");
+            return null;
+        }
+
+        return formData;
     }
 
     getValue(id) {
-        const element = document.getElementById(id);
-        return element ? element.value.trim() : "";
-    }
-
-    validateFormData(formData) {
-        return Object.values(formData).every(value => value !== "");
+        return document.getElementById(id)?.value.trim() || "";
     }
 
     async sendFormData(formData) {
-        formData["action"] = "create";
-        
         try {
             const response = await fetch("appointment.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams(formData).toString(),
             });
+
             const data = await response.text();
-            if (data.includes("success")) {
-                console.log("Successfully Created");
-                window.location.href = "appointment.php";
-            }
+            this.updateQueryStatus(data.includes("success") ? "Query Sent Successfully!" : "Unexpected server response", "green", "lightgreen");
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error fetching data:", error);
+            this.updateQueryStatus("Query Sent Failed!", "red", "lightcoral");
+        }
+    }
+
+    updateQueryStatus(message, textColor, bgColor) {
+        if (this.queryStatus) {
+            Object.assign(this.queryStatus.style, { color: textColor, backgroundColor: bgColor, border: `1px solid ${textColor}` });
+            this.queryStatus.textContent = message;
         }
     }
 
     handleSubmit() {
+        console.log("Submit button clicked.");
+        this.updateQueryStatus("Query Sending...", "gray", "lightgray");
+
         const formData = this.getFormData();
-
-        if (!this.validateFormData(formData)) {
-            console.log("One or more fields are empty.");
-            return;
-        }
-
-        this.sendFormData(formData);
+        if (formData) this.sendFormData(formData);
     }
 }
 
-// Initialize the form handling when the page loads
+// Initialize when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-    new AppointmentForm("appointment_form", "submit_customer");
+    new CreateAppointmentForm("submitCreateAppointment", "statusCreateNotifier");
+    console.log("Appointment Create JS Loaded!");
 });

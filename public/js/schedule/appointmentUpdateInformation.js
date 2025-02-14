@@ -1,70 +1,106 @@
-class UpdateForm {
-  constructor(formId, updateButtonID) {
-    this.form = document.getElementById(formId);
-    this.updateButton = document.getElementById(updateButtonID);
+class UpdateAppointmentForm {
+  constructor(submitButtonId, queryStatusId) {
+    this.submitButton = document.getElementById(submitButtonId);
+    this.queryStatus = document.getElementById(queryStatusId);
 
-    if (!this.form || !this.updateButton) {
-      console.error("Form or update button not found.");
+    if (!this.submitButton) {
+      console.error("Submit button not found.");
       return;
     }
 
-    this.initialize();
-  }
-
-  initialize() {
-    this.updateButton.addEventListener("click", (event) =>
-      this.handleSubmit(event)
-    );
+    this.submitButton.addEventListener("click", () => this.handleSubmit());
   }
 
   getFormData() {
-    return {
-      update_AppointmentID: this.getValue("update_appointmentID"),
-      update_CustomerID: this.getValue("update_customerID"),
-      update_Name: this.getValue("update_name"),
-      update_ContactNumber: this.getValue("update_contactNumber"),
-      update_Address: this.getValue("update_address"),
-      update_Category: this.getValue("update_category"),
-      update_Priority: this.getValue("update_priority"),
-      update_Date: this.getValue("update_date"),
+    let formData = {
+      update_AppointmentID: this.getValue("appointmentUpdate_ID"),
+      update_CustomerID: this.getValue("appointmentUpdateCustomer_ID"),
+      update_Name: this.getValue("appointmentUpdateCustomer_Name"),
+      update_ContactNumber: this.getValue("appointmentUpdateCustomer_ContactNumber"),
+      update_Address: this.getValue("appointmentUpdateCustomer_Address"),
+      update_Category: this.getValue("appointmentUpdate_Category"),
+      update_Priority: this.getValue("appointmentUpdate_Priority"),
+      update_Date: this.getValue("appointmentUpdate_Date"),
+      action: "update",
     };
+
+    const customerFields = [
+      formData.update_CustomerID,
+      formData.update_Name,
+      formData.update_ContactNumber,
+      formData.update_Address,
+    ];
+    
+    const appointmentFields = [
+      formData.update_AppointmentID,
+      formData.update_Category,
+      formData.update_Priority,
+      formData.update_Date,
+    ];
+
+    const isCustomerFilled = customerFields.some((value) => value.trim());
+    const isAppointmentFilled = appointmentFields.some((value) => value.trim());
+
+    if (!isCustomerFilled && !isAppointmentFilled) {
+      this.updateQueryStatus("Fill at least One!", "red", "lightcoral");
+      return null;
+    }
+
+    if (!isCustomerFilled && isAppointmentFilled) {
+      this.updateQueryStatus("1 Entry is filled!", "orange", "lightyellow");
+    }
+    
+    return formData;
   }
 
   getValue(id) {
-    const element = document.getElementById(id);
-    return element ? element.value.trim() : ""; // If empty, return empty string
+    return document.getElementById(id)?.value.trim() || "";
   }
 
-    async sendFormData(formData) {
-      formData["action"] = "update";
+  async sendFormData(formData) {
+    try {
+      const response = await fetch("appointment.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData).toString(),
+      });
 
-      try {
-        const response = await fetch("appointment.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(formData).toString(),
-        });
-
-        const data = await response.text();
-
-        if (data.includes("success")) {
-          console.log("Successfully Updated");
-          window.location.href = "appointment.php"; // Reload on success
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
+      const data = await response.text();
+      this.updateQueryStatus(
+        data.includes("success")
+          ? "Query Sent Successfully!"
+          : "Unexpected server response",
+        "green",
+        "lightgreen"
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      this.updateQueryStatus("Query Sent Failed!", "red", "lightcoral");
     }
+  }
 
-  handleSubmit(event) {
-    event.preventDefault(); // Prevent default form submission
+  updateQueryStatus(message, textColor, bgColor) {
+    if (this.queryStatus) {
+      Object.assign(this.queryStatus.style, {
+        color: textColor,
+        backgroundColor: bgColor,
+        border: `1px solid ${textColor}`,
+      });
+      this.queryStatus.textContent = message;
+    }
+  }
+
+  handleSubmit() {
+    console.log("Submit button clicked.");
+    this.updateQueryStatus("Query Sending...", "gray", "lightgray");
 
     const formData = this.getFormData();
-    this.sendFormData(formData); // Send data directly
+    if (formData) this.sendFormData(formData);
   }
 }
 
-// Initialize the form handling when the page loads
+// Initialize when the page loads
 document.addEventListener("DOMContentLoaded", () => {
-  new UpdateForm("appointment_form", "update_information");
+  new UpdateAppointmentForm("submitUpdateAppointment", "statusUpdateNotifier");
+  console.log("Appointment Update JS Loaded!");
 });
