@@ -1,7 +1,7 @@
 <?php
 define('BASE_URL', '/CSE7PHPWebsite/public');
 define('SPECIFIC_URL', '/CSE7PHPWebsite')
-?>
+    ?>
 
 <link rel="stylesheet" href="<?= BASE_URL ?>/css/sidebar.css">
 <script src="<?= BASE_URL ?>/js/sidebar.js" defer></script>
@@ -37,9 +37,9 @@ define('SPECIFIC_URL', '/CSE7PHPWebsite')
             <span class="menu-text">Reports</span>
         </div>
         <div class="submenu" id="submenu-3">
+            <a href="<?= BASE_URL ?>/webpage/customer.php">Customer</a>
+            <a href="<?= BASE_URL ?>/webpage/employee.php">Employee</a>
             <a href="<?= BASE_URL ?>/webpage/employee-log.php">Employee Log</a>
-            <a href="<?= BASE_URL ?>/webpage/employee-pay.php">Employee Pay</a>
-            <a href="<?= BASE_URL ?>/webpage/customer-feedback.php">Customer Feedback</a>
         </div>
     </div>
 </div>
