@@ -17,8 +17,8 @@ $paths = [
         'services-report.php' => " | Payments > Services Report",
         'billing-statement.php' => " | Payments > Billing Statement",
         'employee-log.php' => " | Reports > Employee Log",
-        'employee-pay.php' => " | Reports > Employee Pay",
-        'customer-feedback.php' => " | Reports > Customer Feedback",
+        'employee.php' => " | Reports > Employee",
+        'customer.php' => " | Reports > Customer",
     ]
 ];
 
