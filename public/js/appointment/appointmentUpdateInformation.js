@@ -68,7 +68,7 @@ class UpdateAppointmentForm {
       const data = await response.text();
       this.updateQueryStatus(
         data.includes("success")
-          ? "Query Sent Successfully!"
+          ? "Query Success!"
           : "Unexpected server response",
         "green",
         "lightgreen"

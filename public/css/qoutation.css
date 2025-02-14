@@ -10,7 +10,7 @@
   --afuckingtextcolor: #102027; /* Dark Blue-Grey */
 }
 
-.appointmentCreate {
+.qoutationDetials {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 0px 10px;
@@ -23,22 +23,7 @@
   width: 100%;
 }
 
-.appointmentUpdate {
-  background-color: var(--navbar-color);
-  border-radius: 10px;
-  padding: 0px 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  margin: 0px;
-  margin-top: 10px;
-}
-
-.appointmentDelete {
+.qoutationHeader {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 0px 10px;
@@ -53,21 +38,82 @@
   margin-top: 10px;
 }
 
-.appointmentTable {
+.qoutationSubmitFooter {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  flex-wrap: nowrap;
   align-items: flex-start;
+  justify-content: center;
   width: 100%;
   margin: 0px;
   margin-top: 10px;
-  height: 200px;
-  overflow-y: auto;
-  justify-content: flex-start;
+}
+
+.qoutationUpperBody {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
   flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.qoutationLowerBody {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.qoutationUpperFooter {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.qoutationLowerFooter {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
 }
 
 .titleHeader {
@@ -95,7 +141,7 @@
 
 .inputField {
   height: 40px;
-  width: 230px;
+  width: 475px;
   font-weight: 500;
   font-size: 18px;
   border-radius: 5px;
@@ -103,8 +149,8 @@
   padding: 5px 10px;
   font-weight: 500;
   margin: 0px;
-  margin-right: 10px;
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .dropdown {
@@ -122,20 +168,32 @@
 }
 
 .submitButton {
-  width: 120px;
-  height: 40px;
+  width: 100px;
+  height: 29px;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   border-radius: 5px;
   padding: 5px 10px;
-  margin: 0px;
-  margin-bottom: 10px;
-  margin-right: 10px;
   background-color: var(--highlighted-color);
   color: var(--text-color);
-  border: 2px solid var(--optional-color);
+  border: 1px solid var(--optional-color);
   cursor: pointer;
   transition: 0.3s ease-in-out;
+  margin-left: 10px;
+}
+
+.submitButton_Generate {
+    width: 120px;
+    height: 40px;
+    font-weight: 400;
+    font-size: 18px;
+    border-radius: 5px;
+    margin-right: 10px;
+    background-color: var(--highlighted-color);
+    color: var(--text-color);
+    border: 2px solid var(--optional-color);
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
 
 .statusNotifier {
@@ -151,30 +209,23 @@
   margin: 0px;
 }
 
-.vl {
-  border-left: 3px solid var(--highlighted-color);
-  height: 90px;
-  margin: 0px;
-  margin-right: 10px;
-}
-
 /* Custom scrollbar */
-.appointmentTable::-webkit-scrollbar {
+.titleContent::-webkit-scrollbar {
   width: 10px;
 }
 
-.appointmentTable::-webkit-scrollbar-track {
+.titleContent::-webkit-scrollbar-track {
   background: var(--navbar-color);
   border-radius: 10px;
 }
 
-.appointmentTable::-webkit-scrollbar-thumb {
+.titleContent::-webkit-scrollbar-thumb {
   background: var(--optional-color);
   border-radius: 10px;
   transition: background 0.3s ease-in-out;
 }
 
-.appointmentTable table {
+.titleContent table {
   width: 100%;
   border-collapse: collapse;
   border: none;
@@ -184,27 +235,40 @@
   word-wrap: break-word;
 }
 
-.appointmentTable th {
+.titleContent th {
   color: white;
   background: var(--highlighted-color);
   font-weight: 400;
   font-size: 16px;
   padding: 4px 0px;
+  width: 145px;
 }
 
-.appointmentTable tr:nth-child(even) td {
+.titleContent tr:nth-child(even) td {
   background-color: var(--navbar-color);
   color: var(--text-color);
   border-bottom: 1px solid var(--optional-color);
 }
 
-.appointmentTable tr:nth-child(odd) td {
+.titleContent tr:nth-child(odd) td {
   background-color: var(--background-color);
   color: var(--text-color);
   border-bottom: 1px solid var(--optional-color);
 }
 
-.appointmentTable td {
-  padding: 10px 4px;
+.titleContent td {
+  padding: 5px 5px;
   transition: 0.3s ease-in-out;
+}
+
+.titleContent_InputField {
+  height: 30px;
+  width: 135px;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  font-weight: 500;
+  margin: 0px;
+  padding: 0px 5px;
 }

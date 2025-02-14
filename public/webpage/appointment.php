@@ -21,9 +21,9 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="<?= JUST_URL ?>js/schedule/appointmentAddCustomer.js"></script>
-    <script src="<?= JUST_URL ?>js/schedule/appointmentUpdateInformation.js"></script>
-    <script src="<?= JUST_URL ?>js/schedule/appointmentDelete.js"></script>
+    <script src="<?= JUST_URL ?>js/appointment/appointmentAddCustomer.js"></script>
+    <script src="<?= JUST_URL ?>js/appointment/appointmentUpdateInformation.js"></script>
+    <script src="<?= JUST_URL ?>js/appointment/appointmentDelete.js"></script>
     <div class="content">
         <div class="appointmentCreate">
             <p class="titleHeader">Create Appointment</p>
