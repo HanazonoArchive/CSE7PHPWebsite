@@ -1,8 +1,8 @@
 <?php
 define('PROJECT_ROOT', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public/');
-define('JUST_URL', '/CSE7PHPWebsite/public/');
+define('JUST_URL', '/CSE7PHPWebsite/public');
 
-include PROJECT_ROOT . "/controller/qoutation-controller.php";
+include PROJECT_ROOT . "/controller/quotation-controller.php";
 ?>
 
 <!DOCTYPE html>
@@ -11,8 +11,8 @@ include PROJECT_ROOT . "/controller/qoutation-controller.php";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qoutation</title>
-    <link rel="stylesheet" href="<?= JUST_URL ?>/css/qoutation.css">
+    <title>Quotation</title>
+    <link rel="stylesheet" href="<?= JUST_URL ?>/css/quotation.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 
@@ -20,18 +20,19 @@ include PROJECT_ROOT . "/controller/qoutation-controller.php";
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="<?= JUST_URL ?>js/qoutation/qoutationTableFunctions.js"></script>
+    <script src="<?= JUST_URL ?>/js/quotation/quotationTableFunctions.js"></script>
+    <script src="<?= JUST_URL ?>/js/quotation/quotationFunctions.js"></script>
     <div class="content">
         <div class="qoutationDetials">
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationDetails_EmployeeID1" type="text" placeholder="Employee ID 1 (can be blank)">
-                    <input class="inputField" id="qoutationDetails_EmployeeID2" type="text" placeholder="Employee ID 2 (can be blank)">
+                    <input class="inputField" id="quotationDetails_EmployeeID1" type="text" placeholder="Employee ID 1 (can be blank)">
+                    <input class="inputField" id="quotationDetails_EmployeeID2" type="text" placeholder="Employee ID 2 (can be blank)">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationDetails_EmployeeID3" type="text" placeholder="Employee ID 3 (can be blank)">
-                    <input class="inputField" id="qoutationDetails_AppointmentID" type="text" placeholder="Appointment ID">
+                    <input class="inputField" id="quotationDetails_EmployeeID3" type="text" placeholder="Employee ID 3 (can be blank)">
+                    <input class="inputField" id="quotationDetails_AppointmentID" type="text" placeholder="Appointment ID">
                 </div>
             </div>
         </div>
