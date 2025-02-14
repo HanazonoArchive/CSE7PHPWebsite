@@ -125,6 +125,9 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                 <div class="column">
                     <p class="statusNotifier" id="statusGenerateNotifier"></p>
                 </div>
+                <div class="column">
+                    <a href="<?= JUST_URL ?>/printablepage/print-quotation.php">Visit Print</a>
+                </div>
             </div>
         </div>
     </div>
