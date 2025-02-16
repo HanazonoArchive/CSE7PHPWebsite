@@ -27,12 +27,12 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="quotationDetails_EmployeeID1" type="text" placeholder="Employee ID 1 (can be blank)">
-                    <input class="inputField" id="quotationDetails_EmployeeID2" type="text" placeholder="Employee ID 2 (can be blank)">
+                    <input class="inputField" id="quotationDetails_EmployeeID1" type="number" placeholder="Employee ID 1 (can be blank)">
+                    <input class="inputField" id="quotationDetails_EmployeeID2" type="number" placeholder="Employee ID 2 (can be blank)">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="quotationDetails_EmployeeID3" type="text" placeholder="Employee ID 3 (can be blank)">
-                    <input class="inputField" id="quotationDetails_AppointmentID" type="text" placeholder="Appointment ID">
+                    <input class="inputField" id="quotationDetails_EmployeeID3" type="number" placeholder="Employee ID 3 (can be blank)">
+                    <input class="inputField" id="quotationDetails_AppointmentID" type="number" placeholder="Appointment ID">
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                     <input class="inputField" id="qoutationHeader_CompanyAddress" type="text" placeholder="Company Address">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationHeader_CompanyNumber" type="text" placeholder="Company Contact #">
+                    <input class="inputField" id="qoutationHeader_CompanyNumber" type="number" placeholder="Company Contact #">
                     <input class="inputField" id="qoutationHeader_CompanyEmail" type="text" placeholder="Company Email (can be blank)">
                 </div>
             </div>
@@ -71,7 +71,7 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                             <th>Item</th>
                             <th>Description</th>
                             <th>Quantity</th>
-                            <th>Total</th>
+                            <th>Price</th>
                             <th>Total Amount</th>
                             <th>Actions</th>
                         </tr>

@@ -49,15 +49,17 @@ function deleteRow(button) {
 
 function sendData() {
     const tableRows = document.querySelectorAll("#quotationTable tbody tr");
-    const formData = new FormData();
+    const items = [];
     let hasError = false;
 
     tableRows.forEach((row, index) => {
-        const item = row.cells[0].querySelector("input").value.trim();
-        const description = row.cells[1].querySelector("input").value.trim();
-        const quantity = row.cells[2].querySelector("input").value.trim();
-        const price = row.cells[3].querySelector("input").value.trim();
-        const total = row.cells[4].querySelector("span").innerText.trim();
+        let item = row.cells[0].querySelector("input").value.trim();
+        let description = row.cells[1].querySelector("input").value.trim();        
+        let quantity = row.cells[2].querySelector("input").value.trim();
+        let price = row.cells[3].querySelector("input").value.trim();
+        let total = row.cells[4].querySelector("span").innerText.trim();
+
+        console.log(`Row ${index + 1}:`, { item, description, quantity, price, total });
 
         if (!item || !description || !quantity || !price) {
             hasError = true;
@@ -65,11 +67,13 @@ function sendData() {
             return;
         }
 
-        formData.append(`items[${index}][item]`, item);
-        formData.append(`items[${index}][description]`, description);
-        formData.append(`items[${index}][quantity]`, quantity);
-        formData.append(`items[${index}][price]`, price);
-        formData.append(`items[${index}][total]`, total);
+        items.push({
+            item,
+            description,
+            quantity: Number(quantity),
+            price: Number(price),
+            total: Number(total),
+        });
     });
 
     if (hasError) {
@@ -77,13 +81,25 @@ function sendData() {
         return;
     }
 
-    formData.append("action", "insertQuotationItems");
+    const payload = {
+        action: "quotationTABLE",
+        items,
+    };
+
+    console.log("Sending data:", JSON.stringify(payload, null, 2));
 
     fetch("quotation.php", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
     })
-    .then(response => response.text())
-    .then(data => console.log("Success:", data))
+    .then(response => response.text()) // Get raw response first
+    .then(text => {
+        console.log("Raw Response:", text); // Debugging step
+        return JSON.parse(text.trim()); // Trim whitespace and parse
+    })
+    .then(data => {
+        console.log("Parsed JSON:", data);
+    })
+    .catch(error => console.error("Fetch Error:", error));    
 }
-
