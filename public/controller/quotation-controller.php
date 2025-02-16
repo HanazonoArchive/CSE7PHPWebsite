@@ -125,3 +125,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+
+class AppointmentManager
+{
+    private $conn;
+    private $default_order = "ORDER BY appointment.id ASC";
+
+    public function __construct($db)
+    {
+        $this->conn = $db;
+    }
+
+    public function fetchAppointments($order = null)
+    {
+        try {
+            $order = $order ?? $this->default_order;
+
+            $stmt = $this->conn->prepare("SELECT
+                    customer.name AS Customer_Name,
+                    customer.address AS Customer_Address,
+                    appointment.id AS Appointment_ID,
+                    appointment.category AS Appointment_Category,
+                    appointment.date AS Appointment_Date,
+                    appointment.status AS Appointment_Status
+                FROM appointment
+                JOIN customer ON appointment.customer_id = customer.id
+                $order");
+
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($results) {
+                echo "<table border='1' class='appointment-table'>";
+                echo "<th>Customer Name</th><th>Address</th><th>Appointment ID</th><th>Category</th><th>Date</th><th>Status</th></tr>";
+
+                foreach ($results as $row) {
+                    echo "<tr onclick='updateDetails(" . htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') . ")'>";
+                    echo "<td>{$row['Customer_Name']}</td><td>{$row['Customer_Address']}</td><td>{$row['Appointment_ID']}</td><td>{$row['Appointment_Category']}</td><td>{$row['Appointment_Date']}</td><td>{$row['Appointment_Status']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "No records found.";
+            }
+        } catch (PDOException $e) {
+            echo "Error fetching data: " . $e->getMessage();
+        }
+    }
+}
+
+// Initialize database connection
+$conn = Database::getInstance();
+$appointmentManager = new AppointmentManager($conn);

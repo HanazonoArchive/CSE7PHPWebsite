@@ -70,9 +70,9 @@ function sendData() {
         items.push({
             item,
             description,
-            quantity: Number(quantity),
-            price: Number(price),
-            total: Number(total),
+            quantity: parseFloat(quantity),
+            price: parseFloat(price),
+            total: parseFloat(total),
         });
     });
 

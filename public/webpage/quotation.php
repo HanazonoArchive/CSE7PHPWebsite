@@ -27,7 +27,7 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="quotationDetails_EmployeeID1" type="number" placeholder="Employee ID 1 (can be blank)">
+                    <input class="inputField" id="quotationDetails_EmployeeID1" type="number" placeholder="Employee ID 1">
                     <input class="inputField" id="quotationDetails_EmployeeID2" type="number" placeholder="Employee ID 2 (can be blank)">
                 </div>
                 <div class="column">
@@ -35,6 +35,12 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                     <input class="inputField" id="quotationDetails_AppointmentID" type="number" placeholder="Appointment ID">
                 </div>
             </div>
+        </div>
+        <div class="appointmentTable">
+            <p class="titleHeader">Customer Table</p>
+            <?php
+            $appointmentManager->fetchAppointments();
+            ?>
         </div>
         <div class="qoutationHeader">
             <p class="titleHeader">Document Header</p>
@@ -45,7 +51,7 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                 </div>
                 <div class="column">
                     <input class="inputField" id="qoutationHeader_CompanyNumber" type="number" placeholder="Company Contact #">
-                    <input class="inputField" id="qoutationHeader_CompanyEmail" type="text" placeholder="Company Email (can be blank)">
+                    <input class="inputField" id="qoutationHeader_CompanyEmail" type="text" placeholder="Company Email">
                 </div>
             </div>
         </div>
@@ -57,8 +63,8 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                     <input class="inputField" id="qoutationBody_CustomerName" type="text" placeholder="Customer Name">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationBody_Location" type="text" placeholder="Location">
-                    <input class="inputField" id="qoutationBody_Details" type="text" placeholder="Details">
+                    <input class="inputField" id="qoutationBody_Location" type="text" placeholder="Customer Location">
+                    <input class="inputField" id="qoutationBody_Details" type="text" placeholder="Quotation for: ">
                 </div>
             </div>
         </div>
@@ -95,12 +101,12 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
             <p class="titleHeader">Document Footer Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_Details1" type="text" placeholder="Details 1 (can be blank)">
-                    <input class="inputField" id="qoutationFooter_Details2" type="text" placeholder="Details 2 (can be blank)">
+                    <input class="inputField" id="qoutationFooter_Details1" type="text" placeholder="Warranty Details">
+                    <input class="inputField" id="qoutationFooter_Details2" type="text" placeholder="Warranty Duration">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_Details3" type="text" placeholder="Details 3 (can be blank)">
-                    <input class="inputField" id="qoutationFooter_Details4" type="text" placeholder="Details 4 (can be blank)">
+                    <input class="inputField" id="qoutationFooter_Details3" type="text" placeholder="Information and Details">
+                    <input class="inputField" id="qoutationFooter_Details4" type="text" placeholder="Information and Details">
                 </div>
             </div>
         </div>
@@ -108,12 +114,12 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
             <p class="titleHeader">Document Technician Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_TechnicianNamePreparer" type="text" placeholder="Technician Name">
-                    <input class="inputField" id="qoutationFooter_TechnicianPositionPreparer" type="text" placeholder="Technician Position">
+                    <input class="inputField" id="qoutationFooter_TechnicianNamePreparer" type="text" placeholder="Preparer Name">
+                    <input class="inputField" id="qoutationFooter_TechnicianPositionPreparer" type="text" placeholder="Preparer Position">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_TechnicianNameManager" type="text" placeholder="Technician Manager Name">
-                    <input class="inputField" id="qoutationFooter_TechnicianPositionManager" type="text" placeholder="Technician Manager Position">
+                    <input class="inputField" id="qoutationFooter_TechnicianNameManager" type="text" placeholder="Manager Name">
+                    <input class="inputField" id="qoutationFooter_TechnicianPositionManager" type="text" placeholder="Manager Position">
                 </div>
             </div>
         </div>
@@ -121,12 +127,10 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
             <div class="titleContent">
                 <div class="column">
                     <button class="submitButton_Generate" id="generateQoutation">Generate</button>
+                    <a class="visitPrint" href="<?= JUST_URL ?>/printablepage/print-quotation.php">Visit Print</a>
                 </div>
                 <div class="column">
                     <p class="statusNotifier" id="statusGenerateNotifier"></p>
-                </div>
-                <div class="column">
-                    <a href="<?= JUST_URL ?>/printablepage/print-quotation.php">Visit Print</a>
                 </div>
             </div>
         </div>
