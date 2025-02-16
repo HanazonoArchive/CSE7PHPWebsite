@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         customerName: document.getElementById("qoutationBody_CustomerName")?.value,
         customerLocation: document.getElementById("qoutationBody_Location")?.value,
         customerDetails: document.getElementById("qoutationBody_Details")?.value,
+        tableTotalAmmount: document.getElementById("grandTotalInput")?.innerText || "0",
       };
 
       // Document Footer Information

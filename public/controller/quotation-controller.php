@@ -37,15 +37,10 @@ class Quotation
             throw new Exception("An error occurred while creating the quotation.");
         }
     }
-
-    public function createPrintableQuotation($header, $body, $footer, $techInfo, $table) {
-        if (empty($table) && empty($header) && empty($body) && empty($footer) && empty($techInfo)) {
-            throw new Exception("No items to process.");
-        }
-    }
 }
 
-// Process requests
+
+// Process the request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents("php://input");
     $data = json_decode($json, true);
@@ -63,18 +58,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $totalAmount = trim($data["totalAmount"] ?? "");
             $newStatus = trim($data["status"] ?? "");
 
-            $dHeader = $data["dHeader"] ?? [];
-            $dBody = $data["dBody"] ?? [];
-            $dFooter = $data["dFooter"] ?? [];
-            $dTechnicianInfo = $data["dTechnicianInfo"] ?? [];
-
-            // Store in session
-            $_SESSION['quotationData'] = [
-                "dHeader" => $dHeader,
-                "dBody" => $dBody,
-                "dFooter" => $dFooter,
-                "dTechnicianInfo" => $dTechnicianInfo
-            ];
+            $documentData = $data["document"] ?? []; // Get the document data safely
+            $_SESSION['dHeader'] = $documentData["header"] ?? [];
+            $_SESSION['dBody'] = $documentData["body"] ?? [];
+            $_SESSION['dFooter'] = $documentData["footer"] ?? [];
+            $_SESSION['dTechnicianInfo'] = $documentData["technicianInfo"] ?? [];
 
             // Ensure at least one employee ID is provided
             if (empty($employees)) {
@@ -106,45 +94,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } elseif (isset($data["action"]) && $data["action"] === "quotationTABLE") {
         try {
-            $conn = Database::getInstance();  // Ensure database connection
-            $quotationHandler = new Quotation($conn);  // Initialize Quotation class
-    
+            $conn = Database::getInstance();
+            $quotationHandler = new Quotation($conn);
+
             $items = $data["items"] ?? [];
-    
+
             // Ensure clean buffer before output
             if (ob_get_length()) ob_clean();
-    
-            // Retrieve stored data
-            $quotationData = $_SESSION['quotationData'] ?? [];
-    
-            if (empty($quotationData)) {
-                throw new Exception("Missing quotation data. Ensure 'quotationDATA' is sent first.");
-            }
-    
-            // Merge items into the stored session data
-            $quotationData["items"] = $items;
-    
-            // Call the function to create the printable quotation
-            $quotationHandler->createPrintableQuotation(
-                $quotationData["dHeader"],
-                $quotationData["dBody"],
-                $quotationData["dFooter"],
-                $quotationData["dTechnicianInfo"],
-                $quotationData["items"]
-            );
-    
-            unset($_SESSION['quotationData']);
-    
+
+            // Store items separately
+            $_SESSION['items'] = $items;
+
             header('Content-Type: application/json');
             echo json_encode([
                 "status" => "success",
                 "message" => "Quotation items processed successfully",
                 "items" => $items
             ]);
-            exit; // Ensure no further output
+            exit;
         } catch (Exception $e) {
             if (ob_get_length()) ob_clean();
-    
+
             header('Content-Type: application/json');
             echo json_encode([
                 "status" => "error",
@@ -153,5 +123,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
             exit;
         }
-    }    
+    }
 }
