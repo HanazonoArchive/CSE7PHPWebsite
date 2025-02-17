@@ -1,46 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("quotationFunctions script loaded");
   
-    document.getElementById("generateQoutation").addEventListener("click", async function () {
+    document.getElementById("generateServiceReport").addEventListener("click", async function () {
         updateQueryStatus("Sending Query...", "gray", "lightgray");
   
-        let appointmentID = document.getElementById("quotationDetails_AppointmentID")?.value;
-        let employeeID1 = document.getElementById("quotationDetails_EmployeeID1")?.value;
-        let employeeID2 = document.getElementById("quotationDetails_EmployeeID2")?.value;
-        let employeeID3 = document.getElementById("quotationDetails_EmployeeID3")?.value;
+        let appointmentID = document.getElementById("serviceReportDetails_AppointmentID")?.value;
         let totalAmount = document.getElementById("grandTotalInput")?.innerText || "0";
   
         // Document Header
         let dHeader = {
-          companyName: document.getElementById("qoutationHeader_CompanyName")?.value,
-          companyAddress: document.getElementById("qoutationHeader_CompanyAddress")?.value,
-          companyNumber: document.getElementById("qoutationHeader_CompanyNumber")?.value,
-          companyEmail: document.getElementById("qoutationHeader_CompanyEmail")?.value,
+          companyName: document.getElementById("serviceReportHeader_CompanyName")?.value,
+          companyAddress: document.getElementById("serviceReportHeader_CompanyAddress")?.value,
+          companyNumber: document.getElementById("serviceReportHeader_CompanyNumber")?.value,
+          companyEmail: document.getElementById("serviceReportHeader_CompanyEmail")?.value,
         };
   
         // Document Body Information
         let dBodyInfo = {
-          quotationDate: document.getElementById("qoutationBody_Date")?.value,
-          customerName: document.getElementById("qoutationBody_CustomerName")?.value,
-          customerLocation: document.getElementById("qoutationBody_Location")?.value,
-          customerDetails: document.getElementById("qoutationBody_Details")?.value,
-          tableTotalAmmount: document.getElementById("grandTotalInput")?.innerText || "0",
+          serviceReportDate: document.getElementById("serviceReportBody_Date")?.value,
+          customerName: document.getElementById("serviceReportBody_CustomerName")?.value,
+          customerLocation: document.getElementById("serviceReportBody_Location")?.value,
+          tableTotalAmount: document.getElementById("grandTotalInput")?.innerText || "0",
         };
   
         // Document Footer Information
         let dFooterInfo = {
-          details1: document.getElementById("qoutationFooter_Details1")?.value,
-          details2: document.getElementById("qoutationFooter_Details2")?.value,
-          details3: document.getElementById("qoutationFooter_Details3")?.value,
-          details4: document.getElementById("qoutationFooter_Details4")?.value,
+          complaint: document.getElementById("serviceReportFooter_Complaint")?.value,
+          diagnosed: document.getElementById("serviceReportFooter_Diagnosed")?.value,
+          activityPerformed: document.getElementById("serviceReportFooter_ActivityPerformed")?.value,
+          recommendation: document.getElementById("serviceReportFooter_Recommendation")?.value,
         };
   
         // Document Technician Information
         let dTechnicianInfo = {
-          namePreparer: document.getElementById("qoutationFooter_TechnicianNamePreparer")?.value,
-          positionPreparer: document.getElementById("qoutationFooter_TechnicianPositionPreparer")?.value,
-          nameManager: document.getElementById("qoutationFooter_TechnicianNameManager")?.value,
-          positionManager: document.getElementById("qoutationFooter_TechnicianPositionManager")?.value,
+          preparerName: document.getElementById("serviceReportFooter_PreparerName")?.value,
+          preparerPosition: document.getElementById("serviceReportFooter_PreparerPosition")?.value,
+          managerName: document.getElementById("serviceReportFooter_ManagerName")?.value,
         };
   
         if (!appointmentID) {
@@ -48,17 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
   
-        if (!employeeID1 && !employeeID2 && !employeeID3) {
-          updateQueryStatus("Error: At least one employee ID is required.", "red", "pink");
-          return;
-        }
-  
         let formData = {
           appointmentID: appointmentID,
-          employees: [employeeID1, employeeID2, employeeID3].filter(Boolean),
           totalAmount: totalAmount,
-          status: "Working",
-          action: "quotationDATA",
+          status: "Completed",
+          action: "serviceReportDATA",
           document: {
             header: dHeader,
             body: dBodyInfo,
@@ -78,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   async function sendFormData(formData) {
     try {
-      const response = await fetch("quotation.php", {
+      const response = await fetch("services-report.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

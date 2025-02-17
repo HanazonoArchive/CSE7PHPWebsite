@@ -3,7 +3,7 @@ session_start();
 define('PROJECT_DB', $_SERVER['DOCUMENT_ROOT'] . '/CSE7PHPWebsite/public/');
 include_once PROJECT_DB . "db/DBConnection.php";
 
-class Quotation
+class ServiceReport
 {
     private $conn;
 
@@ -12,25 +12,28 @@ class Quotation
         $this->conn = $db;
     }
 
-    public function createQuotation($employeeID1, $employeeID2, $employeeID3, $appointmentID, $totalAmount, $newStatus)
+    public function createServiceReport($appointmentID, $totalAmount, $newStatus)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :id LIMIT 1");
-            $stmt->execute(['id' => $appointmentID]);
-            $quotation = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :appointmentID LIMIT 1");
+            $stmt->execute(['appointmentID' => $appointmentID]);
+            $quotationID = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($quotation) {
-                error_log("Quotation ID $appointmentID already exists.");
-            } else {
-                $stmt = $this->conn->prepare("INSERT INTO quotation (appointment_id, amount) VALUES (:appointment_id, :totalAmount)");
-                $stmt->execute(['appointment_id' => $appointmentID, 'totalAmount' => $totalAmount]);
+            if ($quotationID) {
+                $quotationID = $quotationID['id'];
+                $stmt = $this->conn->prepare("INSERT INTO service_report (appointment_id, quotation_id) VALUES (:appointmentID, :quotationID)");
+                $stmt->execute(['appointmentID' => $appointmentID, 'quotationID' => $quotationID]);            
 
                 if ($stmt->rowCount() > 0) {
                     $stmt = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
                     $stmt->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID]);
                 } else {
-                    error_log("Failed to insert quotation.");
+                    error_log("Failed to create service report for appointment ID: $appointmentID");
+                    throw new Exception("Failed to create service report for appointment ID: $appointmentID");
                 }
+
+            } else {
+                error_log("Quotation not found for appointment ID: $appointmentID");
             }
         } catch (Exception $e) {
             error_log("Error creating quotation: " . $e->getMessage());
@@ -45,35 +48,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents("php://input");
     $data = json_decode($json, true);
 
-    if (isset($data["action"]) && $data["action"] === "quotationDATA") {
+    if (isset($data["action"]) && $data["action"] === "serviceReportDATA") {
         try {
             $conn = Database::getInstance();
             $conn->beginTransaction();
 
-            $quotationHandler = new Quotation($conn);
+            $serviceReportHandler = new ServiceReport($conn);
 
             // Database DATA INFORMATION
             $appointmentID = trim($data["appointmentID"] ?? "");
-            $employees = $data["employees"] ?? [];
             $totalAmount = trim($data["totalAmount"] ?? "");
             $newStatus = trim($data["status"] ?? "");
 
             $documentData = $data["document"] ?? []; // Get the document data safely
-            $_SESSION['dHeader'] = $documentData["header"] ?? [];
-            $_SESSION['dBody'] = $documentData["body"] ?? [];
-            $_SESSION['dFooter'] = $documentData["footer"] ?? [];
-            $_SESSION['dTechnicianInfo'] = $documentData["technicianInfo"] ?? [];
-
-            // Ensure at least one employee ID is provided
-            if (empty($employees)) {
-                throw new Exception("At least one employee ID is required.");
-            }
+            $_SESSION['dHeader_SR'] = $documentData["header"] ?? [];
+            $_SESSION['dBody_SR'] = $documentData["body"] ?? [];
+            $_SESSION['dFooter_SR'] = $documentData["footer"] ?? [];
+            $_SESSION['dTechnicianInfo_SR'] = $documentData["technicianInfo"] ?? [];
 
             // Call the method with employee IDs dynamically
-            $quotationHandler->createQuotation(
-                $employees[0] ?? "",
-                $employees[1] ?? "",
-                $employees[2] ?? "",
+            $serviceReportHandler->createServiceReport(
                 $appointmentID,
                 $totalAmount,
                 $newStatus
@@ -95,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (isset($data["action"]) && $data["action"] === "serviceReportTABLE") {
         try {
             $conn = Database::getInstance();
-            $quotationHandler = new Quotation($conn);
+            $serviceReportHandler = new ServiceReport($conn);
 
             $items = $data["items"] ?? [];
 
@@ -103,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (ob_get_length()) ob_clean();
 
             // Store items separately
-            $_SESSION['items'] = $items;
+            $_SESSION['itemsSR'] = $items;
 
             header('Content-Type: application/json');
             echo json_encode([

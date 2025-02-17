@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Table script loaded");
-    document.getElementById("generateQoutation").addEventListener("click", async function () {
+    document.getElementById("generateServiceReport").addEventListener("click", async function () {
         console.log("Generating quotation...");
         sendData();
     });
@@ -88,7 +88,7 @@ function sendData() {
 
     console.log("Sending data:", JSON.stringify(payload, null, 2));
 
-    fetch("service-report.php", {
+    fetch("services-report.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

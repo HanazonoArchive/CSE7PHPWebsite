@@ -20,6 +20,7 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
 <body>
     <?php require PROJECT_ROOT . "/component/sidebar.php"; ?>
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="<?= JUST_URL ?>/js/serviceReport/serviceReportTableFunctions.js"></script>
     <script src="<?= JUST_URL ?>/js/serviceReport/serviceReportFunctions.js"></script>
     <div class="content">
@@ -27,7 +28,7 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="quotationDetails_AppointmentID" type="number" placeholder="Appointment ID">
+                    <input class="inputField" id="serviceReportDetails_AppointmentID" type="number" placeholder="Appointment ID">
                 </div>
             </div>
         </div>
@@ -41,12 +42,12 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <p class="titleHeader">Document Header</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationHeader_CompanyName" type="text" placeholder="Company Name">
-                    <input class="inputField" id="qoutationHeader_CompanyAddress" type="text" placeholder="Company Address">
+                    <input class="inputField" id="serviceReportHeader_CompanyName" type="text" placeholder="Company Name">
+                    <input class="inputField" id="serviceReportHeader_CompanyAddress" type="text" placeholder="Company Address">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationHeader_CompanyNumber" type="number" placeholder="Company Contact #">
-                    <input class="inputField" id="qoutationHeader_CompanyEmail" type="text" placeholder="Company Email">
+                    <input class="inputField" id="serviceReportHeader_CompanyNumber" type="number" placeholder="Company Contact #">
+                    <input class="inputField" id="serviceReportHeader_CompanyEmail" type="text" placeholder="Company Email">
                 </div>
             </div>
         </div>
@@ -54,11 +55,11 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <p class="titleHeader">Document Body Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationBody_Date" type="text" placeholder="YYYY-MM-DD" config-id="date">
-                    <input class="inputField" id="qoutationBody_CustomerName" type="text" placeholder="Customer Name">
+                    <input class="inputField" id="serviceReportBody_Date" type="text" placeholder="YYYY-MM-DD" config-id="date">
+                    <input class="inputField" id="serviceReportBody_CustomerName" type="text" placeholder="Customer Name">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationBody_Location" type="text" placeholder="Customer Location">
+                    <input class="inputField" id="serviceReportBody_Location" type="text" placeholder="Customer Location">
                 </div>
             </div>
         </div>
@@ -66,12 +67,12 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <p class="titleHeader">Document Service Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_Details1" type="text" placeholder="Complaint">
-                    <input class="inputField" id="qoutationFooter_Details2" type="text" placeholder="Diagnosed">
+                    <input class="inputField" id="serviceReportFooter_Complaint" type="text" placeholder="Complaint">
+                    <input class="inputField" id="serviceReportFooter_Diagnosed" type="text" placeholder="Diagnosed">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_Details3" type="text" placeholder="Activity Performed">
-                    <input class="inputField" id="qoutationFooter_Details4" type="text" placeholder="Recommendation">
+                    <input class="inputField" id="serviceReportFooter_ActivityPerformed" type="text" placeholder="Activity Performed">
+                    <input class="inputField" id="serviceReportFooter_Recommendation" type="text" placeholder="Recommendation">
                 </div>
             </div>
         </div>
@@ -109,12 +110,11 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <p class="titleHeader">Document Technician Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_TechnicianNamePreparer" type="text" placeholder="Preparer Name">
-                    <input class="inputField" id="qoutationFooter_TechnicianPositionPreparer" type="text" placeholder="Preparer Position">
+                    <input class="inputField" id="serviceReportFooter_PreparerName" type="text" placeholder="Technician Name">
+                    <input class="inputField" id="serviceReportFooter_PreparerPosition" type="text" placeholder="Position">
                 </div>
                 <div class="column">
-                    <input class="inputField" id="qoutationFooter_TechnicianNameManager" type="text" placeholder="Manager Name">
-                    <input class="inputField" id="qoutationFooter_TechnicianPositionManager" type="text" placeholder="Manager Position">
+                    <input class="inputField" id="serviceReportFooter_ManagerName" type="text" placeholder="Customer Name">
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <div class="titleContent">
                 <div class="column">
                     <button class="submitButton_Generate" id="generateServiceReport">Generate</button>
-                    <a class="visitPrint" href="<?= JUST_URL ?>/printablepage/print-quotation.php">Visit Print</a>
+                    <a class="visitPrint" href="<?= JUST_URL ?>/printablepage/print-serviceReport.php">Visit Print</a>
                 </div>
                 <div class="column">
                     <p class="statusNotifier" id="statusGenerateNotifier"></p>
