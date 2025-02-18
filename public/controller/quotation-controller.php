@@ -15,19 +15,41 @@ class Quotation
     public function createQuotation($employeeID1, $employeeID2, $employeeID3, $appointmentID, $totalAmount, $newStatus)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :id LIMIT 1");
-            $stmt->execute(['id' => $appointmentID]);
-            $quotation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // 1st: Check if the quotation already exists
+            $stmt1 = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :id LIMIT 1");
+            $stmt1->execute(['id' => $appointmentID]);
+            $quotation = $stmt1->fetch(PDO::FETCH_ASSOC);
 
             if ($quotation) {
+                // 2nd: Notify the existing quotation
                 error_log("Quotation ID $appointmentID already exists.");
             } else {
-                $stmt = $this->conn->prepare("INSERT INTO quotation (appointment_id, amount) VALUES (:appointment_id, :totalAmount)");
-                $stmt->execute(['appointment_id' => $appointmentID, 'totalAmount' => $totalAmount]);
+                // 2nd: Create a new quotation
+                error_log("Creating new quotation for appointment ID: $appointmentID");
+                $stmt2 = $this->conn->prepare("INSERT INTO quotation (appointment_id, amount) VALUES (:appointment_id, :totalAmount)");
+                $stmt2->execute(['appointment_id' => $appointmentID, 'totalAmount' => $totalAmount]);
+                $quotationID = $this->conn->lastInsertId();
 
-                if ($stmt->rowCount() > 0) {
-                    $stmt = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
-                    $stmt->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID]);
+                $_SESSION['quotationID_QUO'] = $quotationID; // Store the quotation ID in the session
+
+                if ($quotationID) {
+                    // 3rd: Update the appointment status to new status
+                    $stmt3 = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
+                    if ($stmt3->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID])) {
+                        error_log("Appointment ID $appointmentID updated successfully.");
+
+                        if (isset($_SESSION['data_QUO'])) {
+                            error_log("Data successfully stored in session.");
+                            $data = $_SESSION['data_QUO'];
+                            $this->createQuotationTableData($data);
+                        } else {
+                            error_log("Failed to store data in session.");
+                            throw new Exception("Failed to store data in session.");
+                        }
+                    } else {
+                        error_log("Failed to update appointment status.");
+                    }
                 } else {
                     error_log("Failed to insert quotation.");
                 }
@@ -35,6 +57,48 @@ class Quotation
         } catch (Exception $e) {
             error_log("Error creating quotation: " . $e->getMessage());
             throw new Exception("An error occurred while creating the quotation.");
+        }
+    }
+
+    public function createQuotationTableData($data)
+    {
+        try {
+            // 1st: Check if the Quotation ID exists
+            $quotationID = $_SESSION['quotationID_QUO'];
+            if (!$quotationID) {
+                error_log("Quotation ID is not found.");
+                throw new Exception("Quotation ID is required.");
+            } else {
+                error_log("Quotation ID found: $quotationID");
+
+                // 2nd: Check if the data for Quotation exists
+                $stmt1 = $this->conn->prepare("SELECT id FROM quotation_data WHERE quotation_id = :id LIMIT 1");
+                $stmt1->execute(['id' => $quotationID]);
+                $quotationdataID = $stmt1->fetch(PDO::FETCH_ASSOC);
+
+                if ($quotationdataID !== false) {
+                    error_log("Quotation data already exists.");
+                } else {
+                    // 3rd: Create a new quotation data
+                    error_log("Creating new quotation data for quotation ID: $quotationID");
+
+                    $data = json_encode($data); // Convert the data to JSON
+                    $stmt2 = $this->conn->prepare("INSERT INTO quotation_data (quotation_id, data) VALUES (:quotation_id, :jsonData)");
+                    if ($stmt2->execute(['quotation_id' => $quotationID, 'jsonData' => $data])) {
+                        error_log("Quotation data ID created successfully.");
+                    } else {
+                        error_log("Failed to insert quotation data.");
+                    }
+                    if ($stmt2->rowCount() > 0) {
+                        error_log("Quotation data ID $quotationdataID created successfully.");
+                    } else {
+                        error_log("Failed to insert quotation data.");
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            error_log("Error creating quotation table data: " . $e->getMessage());
+            throw new Exception("An error occurred while creating the quotation table data.");
         }
     }
 }
@@ -95,15 +159,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (isset($data["action"]) && $data["action"] === "quotationTABLE") {
         try {
             $conn = Database::getInstance();
-            $quotationHandler = new Quotation($conn);
 
             $items = $data["items"] ?? [];
 
-            // Ensure clean buffer before output
-            if (ob_get_length()) ob_clean();
+            if (ob_get_contents()) {
+                ob_end_clean();
+            }
 
             // Store items separately
             $_SESSION['items'] = $items;
+            $_SESSION['data_QUO'] = $data;
 
             header('Content-Type: application/json');
             echo json_encode([
@@ -113,7 +178,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
             exit;
         } catch (Exception $e) {
-            if (ob_get_length()) ob_clean();
+            if (ob_get_length()) {
+                ob_clean();
+            }
 
             header('Content-Type: application/json');
             echo json_encode([

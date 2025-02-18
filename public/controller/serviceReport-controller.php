@@ -15,33 +15,109 @@ class ServiceReport
     public function createServiceReport($appointmentID, $totalAmount, $newStatus)
     {
         try {
-            $stmt = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :appointmentID LIMIT 1");
-            $stmt->execute(['appointmentID' => $appointmentID]);
-            $quotationID = $stmt->fetch(PDO::FETCH_ASSOC);
+            // 1st: get the ID from quotation using appointment.id
+            $stmt1 = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :appointmentID LIMIT 1");
+            $stmt1->execute(['appointmentID' => $appointmentID]);
+            $quotation = $stmt1->fetch(PDO::FETCH_ASSOC);
 
-            if ($quotationID) {
-                $quotationID = $quotationID['id'];
-                $stmt = $this->conn->prepare("INSERT INTO service_report (appointment_id, quotation_id) VALUES (:appointmentID, :quotationID)");
-                $stmt->execute(['appointmentID' => $appointmentID, 'quotationID' => $quotationID]);            
+            // 2nd: put the quotation ID into a variable
+            $quotationID = $quotation['id']; // QUOTATION ID
 
-                if ($stmt->rowCount() > 0) {
-                    $stmt = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
-                    $stmt->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID]);
-                } else {
-                    error_log("Failed to create service report for appointment ID: $appointmentID");
-                    throw new Exception("Failed to create service report for appointment ID: $appointmentID");
-                }
+            // 3rd: Checking if the quotation ID already exists in service_report
+            $stmt2 = $this->conn->prepare("SELECT id FROM service_report WHERE quotation_id = :quotationID LIMIT 1");
+            $stmt2->execute(['quotationID' => $quotationID]);
+            $serviceReport = $stmt2->fetch(PDO::FETCH_ASSOC);
 
+            if ($serviceReport) {
+                // 4th: if the service report already exists, throw an exception
+                error_log("Service report already exists for appointment ID: $appointmentID");
+                throw new Exception("A service report already exists for this appointment.");
             } else {
-                error_log("Quotation not found for appointment ID: $appointmentID");
+                // 4th: if the service report does not exist, insert the service report
+                $stmt3 = $this->conn->prepare("INSERT INTO service_report (quotation_id) VALUES (:quotationID)");
+                $stmt3->execute(['quotationID' => $quotationID]);
+                $serviceReportID = $this->conn->lastInsertId(); // SERVICE REPORT ID
+
+                $_SESSION['serviceReportID'] = $serviceReportID; // Store the service report ID in the session
+            }
+
+            //5th: quotation amount update
+            if ($serviceReportID) {
+                $stmt3 = $this->conn->prepare("SELECT amount FROM quotation WHERE id = :quotationID LIMIT 1");
+                $stmt3->execute(['quotationID' => $quotationID]);
+                $quotationAmount = $stmt3->fetch(PDO::FETCH_ASSOC);
+
+                if ($quotationAmount) {
+                    $newAmount = $quotationAmount['amount'] + $totalAmount;
+                    $stmt4 = $this->conn->prepare("UPDATE quotation SET amount = :newAmount WHERE id = :quotationID");
+
+                    if ($stmt4->execute(['newAmount' => $newAmount, 'quotationID' => $quotationID])) {
+                        $stmt5 = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
+                        if ($stmt5->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID])) {
+                            error_log("Service report created successfully for appointment ID: $appointmentID");
+
+                            if (isset($_SESSION['data_SR'])) {
+                                error_log("Data successfully stored in session.");
+                                $data = $_SESSION['data_SR'];
+                                $this->createServiceReportTableData($data);
+                            } else {
+                                error_log("Failed to store data in session.");
+                                throw new Exception("Failed to store data in session.");
+                            }
+                        } else {
+                            error_log("Failed to update appointment status for appointment ID: $appointmentID");
+                            throw new Exception("Failed to update appointment status for appointment ID: $appointmentID");
+                        }
+                    } else {
+                        error_log("Failed to update quotation amount for quotation ID: $quotationID");
+                        throw new Exception("Failed to update quotation amount for quotation ID: $quotationID");
+                    }
+                } else {
+                    error_log("Quotation amount not found for quotation ID: $quotationID");
+                    throw new Exception("Quotation amount not found for quotation ID: $quotationID");
+                }
             }
         } catch (Exception $e) {
-            error_log("Error creating quotation: " . $e->getMessage());
-            throw new Exception("An error occurred while creating the quotation.");
+            error_log("Error creating service report: " . $e->getMessage());
+            throw new Exception("An error occurred while creating the service report.");
+        }
+    }
+
+    public function createServiceReportTableData($data)
+    {
+        try {
+            sleep(1); // Simulate a delay
+            if (!isset($_SESSION['serviceReportID'])) {
+                error_log("Service report ID not found in the session.");
+                throw new Exception("Service report ID not found in the session.");
+            } else {
+                $serviceReportID = $_SESSION['serviceReportID'];
+            }
+
+            $jsonData = json_encode($data);
+
+            if ($jsonData) {
+                $stmt1 = $this->conn->prepare("SELECT id FROM service_report_data WHERE service_report_id = :serviceReportID LIMIT 1");
+                $stmt1->execute(['serviceReportID' => $serviceReportID]);
+                $serviceReportData = $stmt1->fetch(PDO::FETCH_ASSOC);
+
+                if ($serviceReportData) {
+                    $stmt2 = $this->conn->prepare("UPDATE service_report_data SET data = :data WHERE service_report_id = :serviceReportID");
+                    $stmt2->execute(['serviceReportID' => $serviceReportID, 'data' => $jsonData]);
+                } else {
+                    $stmt2 = $this->conn->prepare("INSERT INTO service_report_data (service_report_id, data) VALUES (:serviceReportID, :data)");
+                    $stmt2->execute(['serviceReportID' => $serviceReportID, 'data' => $jsonData]);
+                }
+            } else {
+                error_log("Failed to insert data for service report ID: $serviceReportID");
+                throw new Exception("Failed to insert data for service report ID: $serviceReportID");
+            }
+        } catch (Exception $e) {
+            error_log("Error creating service report table data: " . $e->getMessage());
+            throw new Exception("An error occurred while creating the service report table data.");
         }
     }
 }
-
 
 // Process the request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -56,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $serviceReportHandler = new ServiceReport($conn);
 
             // Database DATA INFORMATION
-            $appointmentID = trim($data["appointmentID"] ?? "");
+            $appointmentID = trim(string: $data["appointmentID"] ?? "");
             $totalAmount = trim($data["totalAmount"] ?? "");
             $newStatus = trim($data["status"] ?? "");
 
@@ -89,15 +165,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (isset($data["action"]) && $data["action"] === "serviceReportTABLE") {
         try {
             $conn = Database::getInstance();
-            $serviceReportHandler = new ServiceReport($conn);
 
             $items = $data["items"] ?? [];
 
-            // Ensure clean buffer before output
-            if (ob_get_length()) ob_clean();
+            if (ob_get_contents()) {
+                ob_end_clean();
+            }
 
             // Store items separately
             $_SESSION['itemsSR'] = $items;
+            $_SESSION['data_SR'] = $data;
 
             header('Content-Type: application/json');
             echo json_encode([
@@ -107,7 +184,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
             exit;
         } catch (Exception $e) {
-            if (ob_get_length()) ob_clean();
+            if (ob_get_length())
+                ob_clean();
 
             header('Content-Type: application/json');
             echo json_encode([
