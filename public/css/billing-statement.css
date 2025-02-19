@@ -1,0 +1,288 @@
+@import url("./fonts/inter.css");
+
+:root {
+  --background-color: #e3f2fd; /* Light Blue */
+  --navbar-color: #f5f5f5; /* Soft Blue */
+  --text-color: #000000; /* Deep Blue */
+  --optional-color: #42a5f5; /* Vibrant Blue */
+  --highlighted-color: #1e88e5; /* Medium Blue */
+  --afuckingcolor: #64b5f6; /* Sky Blue */
+  --afuckingtextcolor: #102027; /* Dark Blue-Grey */
+}
+
+input[type="number"] {
+  appearance: textfield; /* Standard */
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge, Opera */
+  margin: 0;
+}
+
+.billingStatementDetails {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+
+.billingStatementSubmitFooter {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.submitButton_Generate {
+  width: 120px;
+  height: 40px;
+  font-weight: 400;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
+  border: 2px solid var(--optional-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.billingStatementUpperFooter {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  padding-bottom: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+
+.statusNotifier {
+  color: transparent;
+  font-weight: 400;
+  height: 40px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  border-radius: 5px;
+  padding: 5px 10px;
+  align-content: center;
+  margin: 0px;
+}
+
+.visitPrint {
+  width: 120px;
+  height: 40px;
+  font-weight: 400;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-right: 10px;
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
+  border: 2px solid var(--optional-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleHeader {
+  margin: 0px;
+  padding: 10px 5px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.titleContent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.column {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.inputField {
+  height: 40px;
+  width: 475px;
+  font-weight: 500;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  padding: 5px 10px;
+  font-weight: 500;
+  margin: 0px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.dropdown {
+  height: 40px;
+  width: 230px;
+  font-weight: 500;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  padding: 5px 10px;
+  font-weight: 500;
+  margin: 0px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.submitButton {
+  width: 100px;
+  height: 29px;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
+  border: 1px solid var(--optional-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  margin-left: 10px;
+}
+
+
+.appointmentTable {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+  height: 120px;
+  overflow-y: auto;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+}
+
+/* Custom scrollbar */
+.appointmentTable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.appointmentTable::-webkit-scrollbar-track {
+  background: var(--navbar-color);
+  border-radius: 10px;
+}
+
+.appointmentTable::-webkit-scrollbar-thumb {
+  background: var(--optional-color);
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+.appointmentTable table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  height: 100px;
+  border-radius: 5px;
+  table-layout: auto;
+  word-wrap: break-word;
+}
+
+.appointmentTable th {
+  color: white;
+  background: var(--highlighted-color);
+  font-weight: 400;
+  font-size: 16px;
+  padding: 4px 0px;
+}
+
+.appointmentTable tr:nth-child(even) td {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.appointmentTable tr:nth-child(odd) td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.appointmentTable td {
+  padding: 2px 3px;
+  transition: 0.3s ease-in-out;
+}
+
+.billingStatementHeader {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+.billingStatementUpperBody {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin: 0px;
+  margin-top: 10px;
+}
+
+/* Hide the default dropdown arrow */
+input[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  appearance: none;
+}
+
+input[list] {
+  appearance: none;
+}
