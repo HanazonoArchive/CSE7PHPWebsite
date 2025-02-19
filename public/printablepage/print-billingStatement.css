@@ -22,6 +22,12 @@ body {
   color: var(--text-color);
 }
 
+.body1 {
+  padding: 0px;
+  margin: 0px 5%;
+  padding-top: 10px;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -86,8 +92,8 @@ body {
 
 .table {
   padding: 0px;
-  padding-top: 5px;
-  padding-bottom: 20px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   margin: 0px 5%;
 }
 
@@ -124,11 +130,60 @@ body {
   font-size: 14px;
 }
 
-.footer {
+.table1 {
   padding: 0px;
   padding-top: 20px;
-  padding-bottom: 5px;
+  padding-bottom: 0px;
   margin: 0px 5%;
+}
+
+.table1 table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid black;
+  height: auto;
+}
+
+.table1 th {
+  color: black;
+  background: white;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 0px;
+  border: 1px solid black;
+  align-items: flex-start;
+}
+
+.table1 tr:nth-child(even) td {
+  background-color: white;
+  border: 1px solid black;
+}
+
+.table1 tr:nth-child(odd) td {
+  background-color: white;
+  border: 1px solid black;
+}
+
+.table1 td {
+  padding: 5px 5px;
+  transition: 0.3s ease-in-out;
+  font-size: 14px;
+}
+
+.TD1 {
+  width: 50px;
+}
+
+.TD2 {
+  width: 350px;
+}
+
+.TD3 {
+  width: 50px;
+}
+
+.TD4 {
+  width: 120px;
 }
 
 .Details {
@@ -154,38 +209,6 @@ body {
   margin: 0px;
   font-size: 14px;
   font-weight: 500;
-}
-
-.footer table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid black;
-  height: auto;
-}
-
-.footer th {
-  color: black;
-  background: white;
-  font-weight: 700;
-  font-size: 14px;
-  padding: 4px 0px;
-  border: 1px solid black;
-}
-
-.footer tr:nth-child(even) td {
-  background-color: white;
-  border: 1px solid black;
-}
-
-.footer tr:nth-child(odd) td {
-  background-color: white;
-  border: 1px solid black;
-}
-
-.footer td {
-  padding: 5px 5px;
-  transition: 0.3s ease-in-out;
-  font-size: 14px;
 }
 
 @media print {

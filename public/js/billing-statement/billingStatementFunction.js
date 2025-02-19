@@ -120,6 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "green",
         "lightgreen"
       );
+
+      if (data.includes("success")) {
+        clearAllInputs();
+    }
     } catch (error) {
       console.error("Error fetching data:", error);
       updateQueryStatus("Query Sent Failed!", "red", "lightcoral");
