@@ -370,3 +370,13 @@ input[type="number"]::-webkit-outer-spin-button {
   justify-content: center;
   align-items: center;
 }
+
+/* Hide the default dropdown arrow */
+input[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  appearance: none;
+}
+
+input[list] {
+  appearance: none;
+}
