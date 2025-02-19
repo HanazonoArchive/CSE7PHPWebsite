@@ -34,8 +34,8 @@ class ServiceReport
                 throw new Exception("A service report already exists for this appointment.");
             } else {
                 // 4th: if the service report does not exist, insert the service report
-                $stmt3 = $this->conn->prepare("INSERT INTO service_report (quotation_id) VALUES (:quotationID)");
-                $stmt3->execute(['quotationID' => $quotationID]);
+                $stmt3 = $this->conn->prepare("INSERT INTO service_report (quotation_id, amount) VALUES (:quotationID, :totalAmount)");
+                $stmt3->execute(['quotationID' => $quotationID, 'totalAmount' => $totalAmount]);
                 $serviceReportID = $this->conn->lastInsertId(); // SERVICE REPORT ID
 
                 $_SESSION['serviceReportID'] = $serviceReportID; // Store the service report ID in the session
@@ -43,34 +43,26 @@ class ServiceReport
 
             //5th: quotation amount update
             if ($serviceReportID) {
-                $stmt3 = $this->conn->prepare("SELECT amount FROM quotation WHERE id = :quotationID LIMIT 1");
+                $stmt3 = $this->conn->prepare("SELECT amount FROM service_report WHERE id = :quotationID LIMIT 1");
                 $stmt3->execute(['quotationID' => $quotationID]);
-                $quotationAmount = $stmt3->fetch(PDO::FETCH_ASSOC);
+                $serviceReportAmount = $stmt3->fetch(PDO::FETCH_ASSOC);
 
-                if ($quotationAmount) {
-                    $newAmount = $quotationAmount['amount'] + $totalAmount;
-                    $stmt4 = $this->conn->prepare("UPDATE quotation SET amount = :newAmount WHERE id = :quotationID");
+                if ($serviceReportAmount) {
+                    $stmt5 = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
+                    if ($stmt5->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID])) {
+                        error_log("Service report created successfully for appointment ID: $appointmentID");
 
-                    if ($stmt4->execute(['newAmount' => $newAmount, 'quotationID' => $quotationID])) {
-                        $stmt5 = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
-                        if ($stmt5->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID])) {
-                            error_log("Service report created successfully for appointment ID: $appointmentID");
-
-                            if (isset($_SESSION['data_SR'])) {
-                                error_log("Data successfully stored in session.");
-                                $data = $_SESSION['data_SR'];
-                                $this->createServiceReportTableData($data);
-                            } else {
-                                error_log("Failed to store data in session.");
-                                throw new Exception("Failed to store data in session.");
-                            }
+                        if (isset($_SESSION['data_SR'])) {
+                            error_log("Data successfully stored in session.");
+                            $data = $_SESSION['data_SR'];
+                            $this->createServiceReportTableData($data);
                         } else {
-                            error_log("Failed to update appointment status for appointment ID: $appointmentID");
-                            throw new Exception("Failed to update appointment status for appointment ID: $appointmentID");
+                            error_log("Failed to store data in session.");
+                            throw new Exception("Failed to store data in session.");
                         }
                     } else {
-                        error_log("Failed to update quotation amount for quotation ID: $quotationID");
-                        throw new Exception("Failed to update quotation amount for quotation ID: $quotationID");
+                        error_log("Failed to update appointment status for appointment ID: $appointmentID");
+                        throw new Exception("Failed to update appointment status for appointment ID: $appointmentID");
                     }
                 } else {
                     error_log("Quotation amount not found for quotation ID: $quotationID");
