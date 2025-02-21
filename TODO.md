@@ -1,13 +1,6 @@
-<!-- 1. Fix the serviceCallReport with the following:
-- serviceCallReportFunctions.js (DONE) (id renamed functions)
-- serviceCall-controller.php (EDIT) (how data was handled)
-- print-serviceCall.php (RECONFIGURE) (change the layout)
-- print-serviceCall.css (RECONFIGURE) (change the theme)
-- services-report.php (DONE) (id renamed)
+ADDJUSTMENT!
+* Fix the empty space both the quotation, billing statement, and service report. Prevent an empty fields to happened
+* Fix the duplication of data in database billing statement table, make sure to know if the thing already exist or not.
 
-in serviceCallReportFunctions.js configured it for services-report.php
-
-Completed:
-services-report.css (finalize adjustment) -->
-
+Extensive Testing (REQUIRED)
 ALL COMPLETED
