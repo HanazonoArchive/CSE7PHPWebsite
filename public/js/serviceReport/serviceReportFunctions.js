@@ -6,6 +6,23 @@ document.addEventListener("DOMContentLoaded", () => {
     setupAutocomplete(input);
   });
 
+  fetch("/CSE7PHPWebsite/public/controller/serviceReport-controller.php?fetch_appointments=true")
+  .then((response) => response.json())
+  .then((data) => {
+    const dropdown = document.getElementById(
+      "serviceReportDetails_AppointmentID"
+    );
+    dropdown.innerHTML = "<option value=''>Select Appointment</option>";
+
+    data.forEach((appointment) => {
+      const option = document.createElement("option");
+      option.value = appointment.id;
+      option.textContent = `${appointment.id} - ${appointment.name}`;
+      dropdown.appendChild(option);
+    });
+  })
+  .catch((error) => console.error("Error fetching appointments:", error));
+
   document
     .getElementById("generateServiceReport")
     .addEventListener("click", async function () {
@@ -136,6 +153,10 @@ async function sendFormData(formData) {
       "green",
       "lightgreen"
     );
+
+    if (data.includes("success")) {
+      clearAllInputs();
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
     updateQueryStatus("Query Sent Failed!", "red", "lightcoral");

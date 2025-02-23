@@ -213,7 +213,7 @@ class AppointmentManager
                     appointment.date AS Appointment_Date,
                     appointment.status AS Appointment_Status
                 FROM appointment
-                JOIN customer ON appointment.customer_id = customer.id
+                JOIN customer ON appointment.customer_id = customer.id WHERE appointment.status = 'Working'
                 $order");
 
             $stmt->execute();
@@ -230,12 +230,39 @@ class AppointmentManager
                 }
                 echo "</table>";
             } else {
-                echo "No records found.";
+                echo "No Working Orders found.";
             }
         } catch (PDOException $e) {
             echo "Error fetching data: " . $e->getMessage();
         }
     }
+    public function fetchAppointmentIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT appointment.id, customer.name 
+            FROM appointment
+            JOIN customer ON appointment.customer_id = customer.id
+            WHERE appointment.status = 'Working'
+            ORDER BY appointment.id ASC
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
+        }
+    }
+}
+
+// Check if request is made to fetch appointment IDs
+if (isset($_GET['fetch_appointments'])) {
+    $conn = Database::getInstance();
+    $appointmentManager = new AppointmentManager($conn);
+    $appointmentManager->fetchAppointmentIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
 }
 
 // Initialize database connection

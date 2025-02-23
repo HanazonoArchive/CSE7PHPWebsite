@@ -26,8 +26,9 @@ include PROJECT_ROOT . "/controller/billingStatement-controller.php";
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="billingDetails_AppointmentID" type="text"
-                        placeholder="Appointment ID">
+                    <select class="dropdown" id="billingDetails_AppointmentID">
+                        <option value="">Loading...</option>
+                    </select>
                 </div>
             </div>
         </div>

@@ -28,7 +28,9 @@ include PROJECT_ROOT . "/controller/serviceReport-controller.php";
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="serviceReportDetails_AppointmentID" type="number" placeholder="Appointment ID">
+                    <select class="dropdown" id="serviceReportDetails_AppointmentID">
+                        <option value="">Loading...</option>
+                    </select>
                 </div>
             </div>
         </div>

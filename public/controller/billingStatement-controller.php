@@ -23,7 +23,7 @@ class BillingStatement
             // 2nd: put the quotation ID into a variable
             $quotationID = $quotation['id']; // QUOTATION ID
             $quotationAmount = $quotation['amount']; // QUOTATION AMOUNT
-            
+
             // 3rd: get the ID from service_report using quotation.id
             $stmt2 = $this->conn->prepare("SELECT id, amount FROM service_report WHERE quotation_id = :quotationID LIMIT 1");
             $stmt2->execute(['quotationID' => $quotationID]);
@@ -34,21 +34,31 @@ class BillingStatement
             $serviceReportAmount = $serviceReport['amount']; // SERVICE REPORT AMOUNT
 
             if ($quotationID && $serviceReportID && $quotationAmount && $serviceReportAmount) {
-                error_log("QuotationID, ServiceReportID, quotationAmount, and serviceReportAmount was found!");
 
-                $newTotalAmount = $quotationAmount + $serviceReportAmount;
+                // 5th: check if the billing statement already exist
+                $stmt3 = $this->conn->prepare("SELECT id FROM billing_statement WHERE quotation_id = :quotationID AND service_report_id = :serviceReportID LIMIT 1");
+                $stmt3->execute(['quotationID' => $quotationID, 'serviceReportID' => $serviceReportID]);
+                $billingStatement = $stmt3->fetch(PDO::FETCH_ASSOC);
 
-                $stmt3 = $this->conn->prepare("INSERT INTO billing_statement (quotation_id, service_report_id, amount) VALUES (:quotationID, :serviceReportID, :newAmount)");
-                $stmt3->execute(['quotationID' => $quotationID, 'serviceReportID' => $serviceReportID, 'newAmount' => $newTotalAmount]);
+                if ($billingStatement) {
+                    error_log("Billing Statement already exist!");
+                } else {
+                    error_log("QuotationID, ServiceReportID, quotationAmount, and serviceReportAmount was found!");
 
-                $_SESSION['BillingStatementID'] = $this->conn->lastInsertId();
-                $_SESSION['Amount_BS'] = $newTotalAmount;
-                $_SESSION['QuotationID_BS'] = $quotationID;
-                $_SESSION['QuotationAmount_BS'] = $quotationAmount;
-                $_SESSION['ServiceReportID_BS'] = $serviceReportID;
-                $_SESSION['ServiceReportAmount_BS'] = $serviceReportAmount;
+                    $newTotalAmount = $quotationAmount + $serviceReportAmount;
 
-                error_log("all the INFO has been SESSIONED! (Billing Statement)");
+                    $stmt4 = $this->conn->prepare("INSERT INTO billing_statement (quotation_id, service_report_id, amount) VALUES (:quotationID, :serviceReportID, :newAmount)");
+                    $stmt4->execute(['quotationID' => $quotationID, 'serviceReportID' => $serviceReportID, 'newAmount' => $newTotalAmount]);
+
+                    $_SESSION['BillingStatementID'] = $this->conn->lastInsertId();
+                    $_SESSION['Amount_BS'] = $newTotalAmount;
+                    $_SESSION['QuotationID_BS'] = $quotationID;
+                    $_SESSION['QuotationAmount_BS'] = $quotationAmount;
+                    $_SESSION['ServiceReportID_BS'] = $serviceReportID;
+                    $_SESSION['ServiceReportAmount_BS'] = $serviceReportAmount;
+
+                    error_log("all the INFO has been SESSIONED! (Billing Statement)");
+                }
             }
         } catch (Exception $e) {
             error_log("Error creating service report: " . $e->getMessage());
@@ -119,7 +129,7 @@ class AppointmentManager
                     appointment.date AS Appointment_Date,
                     appointment.status AS Appointment_Status
                 FROM appointment
-                JOIN customer ON appointment.customer_id = customer.id
+                JOIN customer ON appointment.customer_id = customer.id WHERE appointment.status = 'Completed'
                 $order");
 
             $stmt->execute();
@@ -136,12 +146,39 @@ class AppointmentManager
                 }
                 echo "</table>";
             } else {
-                echo "No records found.";
+                echo "No Completed Work Orders found.";
             }
         } catch (PDOException $e) {
             echo "Error fetching data: " . $e->getMessage();
         }
     }
+    public function fetchAppointmentIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT appointment.id, customer.name 
+            FROM appointment
+            JOIN customer ON appointment.customer_id = customer.id
+            WHERE appointment.status = 'Completed'
+            ORDER BY appointment.id ASC
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
+        }
+    }
+}
+
+// Check if request is made to fetch appointment IDs
+if (isset($_GET['fetch_appointments'])) {
+    $conn = Database::getInstance();
+    $appointmentManager = new AppointmentManager($conn);
+    $appointmentManager->fetchAppointmentIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
 }
 
 // Initialize database connection

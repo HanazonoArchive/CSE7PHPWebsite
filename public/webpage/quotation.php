@@ -32,7 +32,9 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
                 </div>
                 <div class="column">
                     <input class="inputField" id="quotationDetails_EmployeeID3" type="number" placeholder="Employee ID 3 (can be blank)">
-                    <input class="inputField" id="quotationDetails_AppointmentID" type="number" placeholder="Appointment ID">
+                    <select class="dropdown" id="quotationDetails_AppointmentID">
+                        <option value="">Loading...</option>
+                    </select>
                 </div>
             </div>
         </div>

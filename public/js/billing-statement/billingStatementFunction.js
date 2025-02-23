@@ -5,6 +5,23 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("input").forEach((input) => {
       setupAutocomplete(input);
     });
+
+    fetch("/CSE7PHPWebsite/public/controller/billingStatement-controller.php?fetch_appointments=true")
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = document.getElementById(
+        "billingDetails_AppointmentID"
+      );
+      dropdown.innerHTML = "<option value=''>Select Appointment</option>";
+
+      data.forEach((appointment) => {
+        const option = document.createElement("option");
+        option.value = appointment.id;
+        option.textContent = `${appointment.id} - ${appointment.name}`;
+        dropdown.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching appointments:", error));
   
     document
       .getElementById("generateBillingReport")
