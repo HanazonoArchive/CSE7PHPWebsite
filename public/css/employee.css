@@ -1,0 +1,273 @@
+@import url("./fonts/inter.css");
+
+:root {
+  --background-color: #e3f2fd; /* Light Blue */
+  --navbar-color: #f5f5f5; /* Soft Blue */
+  --text-color: #000000; /* Deep Blue */
+  --optional-color: #42a5f5; /* Vibrant Blue */
+  --highlighted-color: #1e88e5; /* Medium Blue */
+  --afuckingcolor: #64b5f6; /* Sky Blue */
+  --afuckingtextcolor: #102027; /* Dark Blue-Grey */
+}
+
+input[type="number"] {
+    appearance: textfield; /* Standard */
+    -moz-appearance: textfield; /* Firefox */
+  }
+  
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none; /* Chrome, Safari, Edge, Opera */
+    margin: 0;
+  }
+
+.employeeFilterBar {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 10px 0px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  justify-content: flex-start;
+}
+
+.column {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.column_filter {
+  margin: 0px;
+  padding: 0px 10px;
+}
+
+.filterTitle {
+  padding: 0px;
+  margin: 0px;
+  color: var(--afuckingtextcolor);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0px 5px;
+}
+
+.dropdown_filter {
+  height: auto;
+  width: 200px;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  padding: 5px 10px;
+  font-weight: 500;
+}
+
+.dropdown {
+  height: 40px;
+  width: 250px;
+  font-weight: 500;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  padding: 5px 10px;
+  font-weight: 500;
+  margin: 0px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.filterApplyButton {
+  width: 100px;
+  height: auto;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 5px;
+  margin-top: 15px;
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
+  border: 2px solid var(--optional-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.filterStatus {
+  border: 1px solid transparent;
+  background-color: transparent;
+  padding: 0px 5px;
+  color: transparent;
+  width: auto;
+  height: auto;
+  font-weight: 400;
+  font-size: 16px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+}
+
+.statusNotifier {
+  color: transparent;
+  font-weight: 400;
+  height: 40px;
+  font-size: 18px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  border-radius: 5px;
+  padding: 5px 10px;
+  align-content: center;
+  margin: 10px 0px;
+}
+
+.employeeTable {
+  background-color: var(--navbar-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-right: 1%;
+  padding: 10px 0px 10px 10px;
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+}
+
+.addEmployee {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.updateEmployee {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.deleteEmployee {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+
+.inputField {
+  height: 40px;
+  width: 250px;
+  font-weight: 500;
+  font-size: 18px;
+  border-radius: 5px;
+  border: 1px solid var(--optional-color);
+  padding: 5px 10px;
+  font-weight: 500;
+  margin: 0px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.submitButton {
+  width: 120px;
+  height: 40px;
+  font-weight: 400;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: var(--highlighted-color);
+  color: var(--text-color);
+  border: 2px solid var(--optional-color);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.titleHeader {
+  margin: 0px;
+  padding: 10px 5px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.titleContent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Custom scrollbar */
+.employeeTable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.employeeTable::-webkit-scrollbar-track {
+  background: var(--navbar-color);
+  border-radius: 10px;
+}
+
+.employeeTable::-webkit-scrollbar-thumb {
+  background: var(--optional-color);
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+.employeeTable table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  height: 100px;
+  border-radius: 5px;
+}
+
+.employeeTable th {
+  color: white;
+  background: var(--highlighted-color);
+  font-weight: 400;
+  font-size: 16px;
+  padding: 4px 0px;
+}
+
+.employeeTable tr:nth-child(even) td {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.employeeTable tr:nth-child(odd) td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.employeeTable td {
+  padding: 10px 4px;
+  transition: 0.3s ease-in-out;
+}

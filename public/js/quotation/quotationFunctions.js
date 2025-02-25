@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.json())
     .then((data) => {
       const dropdown = document.getElementById(
-        "billingDetails_AppointmentID"
+        "quotationDetails_AppointmentID"
       );
       dropdown.innerHTML = "<option value=''>Select Appointment</option>";
 
@@ -23,9 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching appointments:", error));
 
-  document
-    .getElementById("generateQoutation")
-    .addEventListener("click", async function () {
+  document.getElementById("generateQoutation").addEventListener("click", async function () {
+    
       updateQueryStatus("Sending Query...", "gray", "lightgray");
 
       let appointmentID = document.getElementById("quotationDetails_AppointmentID")?.value; // Important
