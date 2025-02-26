@@ -12,16 +12,15 @@ class DeleteAppointmentForm {
   }
 
   getFormData() {
-    let customer_ID = this.getValue("appointmentDelete_CustomerID");
+    let confirmation = this.getValue("appointmentDelete_Confirmation");
     let appointment_ID = this.getValue("appointmentDelete_AppointmentID");
 
-    if (!customer_ID && !appointment_ID) {
-      this.updateQueryStatus("Fill at least one field!", "red", "lightcoral");
+    if(confirmation !== "DELETE") {
+      this.updateQueryStatus("Confirmation is not correct!", "red", "lightcoral");
       return null;
     }
 
     return {
-      customer_ID: customer_ID,
       appointment_ID: appointment_ID,
       action: "delete",
     };
@@ -77,4 +76,21 @@ class DeleteAppointmentForm {
 document.addEventListener("DOMContentLoaded", () => {
   new DeleteAppointmentForm("submitDeleteAppointment", "statusDeleteNotifier");
   console.log("Appointment Delete JS Loaded!");
+
+  fetch("/CSE7PHPWebsite/public/controller/quotation-controller.php?fetch_appointments=true")
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = document.getElementById(
+        "appointmentDelete_AppointmentID"
+      );
+      dropdown.innerHTML = "<option value=''>Select Appointment</option>";
+
+      data.forEach((appointment) => {
+        const option = document.createElement("option");
+        option.value = appointment.id;
+        option.textContent = `${appointment.id} - ${appointment.name}`;
+        dropdown.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching appointments:", error));
 });

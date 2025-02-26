@@ -62,7 +62,9 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
             <p class="titleHeader">Update Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="appointmentUpdate_ID" type="text" placeholder="Appointment ID">
+                    <select class="dropdown" id="appointmentUpdate_ID">
+                        <option value="">Loading...</option>
+                    </select>
                     <select name="selection" class="dropdown" id="appointmentUpdate_Category">
                         <option value="Installation">Installation</option>
                         <option value="Repair">Repair</option>
@@ -79,16 +81,6 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
                     <input class="inputField" id="appointmentUpdate_Date" config-id="date" type="text"
                         placeholder="YYYY-MM-DD">
                 </div>
-                <div class="vl"></div>
-                <div class="column">
-                    <input class="inputField" id="appointmentUpdateCustomer_ID" type="text" placeholder="Customer ID">
-                    <input class="inputField" id="appointmentUpdateCustomer_Name" type="text" placeholder="Name">
-                </div>
-                <div class="column">
-                    <input class="inputField" id="appointmentUpdateCustomer_ContactNumber" type="text"
-                        placeholder="Contact Number">
-                    <input class="inputField" id="appointmentUpdateCustomer_Address" type="text" placeholder="Address">
-                </div>
                 <div class="column">
                     <button class="submitButton" id="submitUpdateAppointment" type="button">Update</button>
                     <p class="statusNotifier" id="statusUpdateNotifier"></p>
@@ -99,9 +91,11 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
             <p class="titleHeader">Delete Information</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="appointmentDelete_CustomerID" type="text" placeholder="Customer ID">
-                    <input class="inputField" id="appointmentDelete_AppointmentID" type="text"
-                        placeholder="Appointment ID">
+                    <select class="dropdown" id="appointmentDelete_AppointmentID">
+                        <option value="">Loading...</option>
+                    </select>
+                    <input class="inputField" id="appointmentDelete_Confirmation" type="text"
+                        placeholder='Type "DELETE" to confirm'>
                 </div>
                 <div class="column">
                     <button class="submitButton" id="submitDeleteAppointment" type="button">Delete</button>
@@ -114,7 +108,7 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
             <?php
             $appointmentManager->fetchAppointments();
             ?>
-        </div>
+        </div>  
     </div>
     <script>
         document.querySelectorAll('[config-id="date"]').forEach((datePicker) => {

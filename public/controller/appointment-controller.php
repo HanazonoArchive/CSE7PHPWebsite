@@ -30,44 +30,6 @@ class Customer
             throw new Exception("An error occurred while processing customer data.");
         }
     }
-
-    public function updateCustomer($customerID, $customer_name, $customer_contactNumber, $customer_address)
-    {
-        try {
-            $stmt = $this->conn->prepare("SELECT id FROM customer WHERE id = :id LIMIT 1");
-            $stmt->execute(['id' => $customerID]);
-            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($customer) {
-                $stmt = $this->conn->prepare("UPDATE customer SET name = :name, contact_number = :contact_number, address = :address WHERE id = :id");
-                $stmt->execute(['id' => $customerID, 'name' => $customer_name, 'contact_number' => $customer_contactNumber, 'address' => $customer_address]);
-            } else {
-                error_log("Customer ID $customerID doesn't exist in the database.");
-            }
-        } catch (Exception $e) {
-            error_log("Error updating customer: " . $e->getMessage());
-            throw new Exception("An error occurred while updating customer data.");
-        }
-    }
-
-    public function deleteCustomer($customerID)
-    {
-        try {
-            $stmt = $this->conn->prepare("SELECT id FROM appointment WHERE customer_id = :id LIMIT 1");
-            $stmt->execute(['id' => $customerID]);
-            $customer = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($customer) {
-                error_log("Can't delete appointment. Appointment ID is still associated with the appointment.");
-            } else {
-                $stmt = $this->conn->prepare("DELETE FROM customer WHERE id = :id");
-                $stmt->execute(['id' => $customerID]);
-            }
-        } catch (Exception $e) {
-            error_log("Error deleting customer: " . $e->getMessage());
-            throw new Exception("An error occurred while deleting customer data.");
-        }
-    }
 }
 
 class Appointment
@@ -179,20 +141,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $appointmentHandler = new Appointment($conn);
 
             $appointmentID = trim($_POST["update_AppointmentID"] ?? "");
-            $customerID = trim($_POST["update_CustomerID"] ?? "");
-            $customer_name = trim($_POST["update_Name"] ?? "");
-            $customer_number = trim($_POST["update_ContactNumber"] ?? "");
-            $customer_address = trim($_POST["update_Address"] ?? "");
             $appointment_date = trim($_POST["update_Date"] ?? "");
             $appointment_category = trim($_POST["update_Category"] ?? "");
             $appointment_priority = trim($_POST["update_Priority"] ?? "");
 
             if (!empty($appointmentID) && !empty($appointment_date) && !empty($appointment_category) && !empty($appointment_priority)) {
                 $appointmentHandler->updateAppointment($appointmentID, $appointment_date, $appointment_category, $appointment_priority);
-            }
-
-            if (!empty($customerID) && !empty($customer_name) && !empty($customer_number) && !empty($customer_address)) {
-                $customerHandler->updateCustomer($customerID, $customer_name, $customer_number, $customer_address);
             }
 
             $conn->commit();
@@ -213,16 +167,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $appointmentHandler = new Appointment($conn);
 
             $appointmentID = trim($_POST["appointment_ID"] ?? "");
-            $customerID = trim($_POST["customer_ID"] ?? "");
 
             if (!empty($appointmentID)) {
                 $appointmentHandler->deleteAppointment($appointmentID);
             }
-
-            if (!empty($customerID)) {
-                $customerHandler->deleteCustomer($customerID);
-            }
-
+            
             $conn->commit();
             header('Content-Type: application/json');
             echo json_encode(["status" => "success", "message" => "Update successful"]);
@@ -279,6 +228,34 @@ class AppointmentManager
             echo "Error fetching data: " . $e->getMessage();
         }
     }
+
+    public function fetchAppointmentIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT appointment.id, customer.name 
+            FROM appointment
+            JOIN customer ON appointment.customer_id = customer.id
+            WHERE appointment.status = 'Pending'
+            ORDER BY appointment.id ASC
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
+        }
+    }
+}
+
+// Check if request is made to fetch appointment IDs
+if (isset($_GET['fetch_appointments'])) {
+    $conn = Database::getInstance();
+    $appointmentManager = new AppointmentManager($conn);
+    $appointmentManager->fetchAppointmentIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
 }
 
 // Initialize database connection

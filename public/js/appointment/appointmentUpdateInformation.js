@@ -14,42 +14,22 @@ class UpdateAppointmentForm {
   getFormData() {
     let formData = {
       update_AppointmentID: this.getValue("appointmentUpdate_ID"),
-      update_CustomerID: this.getValue("appointmentUpdateCustomer_ID"),
-      update_Name: this.getValue("appointmentUpdateCustomer_Name"),
-      update_ContactNumber: this.getValue("appointmentUpdateCustomer_ContactNumber"),
-      update_Address: this.getValue("appointmentUpdateCustomer_Address"),
       update_Category: this.getValue("appointmentUpdate_Category"),
       update_Priority: this.getValue("appointmentUpdate_Priority"),
       update_Date: this.getValue("appointmentUpdate_Date"),
       action: "update",
     };
 
-    const customerFields = [
-      formData.update_CustomerID,
-      formData.update_Name,
-      formData.update_ContactNumber,
-      formData.update_Address,
-    ];
-    
-    const appointmentFields = [
-      formData.update_AppointmentID,
-      formData.update_Category,
-      formData.update_Priority,
-      formData.update_Date,
-    ];
+    if(!formData.update_AppointmentID) {
+      this.updateQueryStatus("Select an appointment to update!", "red", "lightcoral");
+      return null
+    }
 
-    const isCustomerFilled = customerFields.some((value) => value.trim());
-    const isAppointmentFilled = appointmentFields.some((value) => value.trim());
-
-    if (!isCustomerFilled && !isAppointmentFilled) {
-      this.updateQueryStatus("Fill at least One!", "red", "lightcoral");
+    if (!formData.update_Date) {
+      this.updateQueryStatus("Date is required!", "red", "lightcoral");
       return null;
     }
 
-    if (!isCustomerFilled && isAppointmentFilled) {
-      this.updateQueryStatus("1 Entry is filled!", "orange", "lightyellow");
-    }
-    
     return formData;
   }
 
@@ -103,4 +83,21 @@ class UpdateAppointmentForm {
 document.addEventListener("DOMContentLoaded", () => {
   new UpdateAppointmentForm("submitUpdateAppointment", "statusUpdateNotifier");
   console.log("Appointment Update JS Loaded!");
+
+  fetch("/CSE7PHPWebsite/public/controller/quotation-controller.php?fetch_appointments=true")
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = document.getElementById(
+        "appointmentUpdate_ID"
+      );
+      dropdown.innerHTML = "<option value=''>Select Appointment</option>";
+
+      data.forEach((appointment) => {
+        const option = document.createElement("option");
+        option.value = appointment.id;
+        option.textContent = `${appointment.id} - ${appointment.name}`;
+        dropdown.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching appointments:", error));
 });

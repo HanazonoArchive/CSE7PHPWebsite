@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.json())
     .then((data) => {
       const dropdown = document.getElementById("UpdateEmployee_ID");
-      dropdown.innerHTML = "<option value=''>Select Appointment</option>";
+      dropdown.innerHTML = "<option value=''>Select Employee</option>";
 
       data.forEach((appointment) => {
         const option = document.createElement("option");
