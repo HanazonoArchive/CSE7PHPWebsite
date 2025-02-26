@@ -1,6 +1,6 @@
-ADDJUSTMENT!
-* Fix the empty space both the quotation, billing statement, and service report. Prevent an empty fields to happened. (KINDA FIXED)
-* Fix the duplication of data in database billing statement table, make sure to know if the thing already exist or not. (FIXED)
+Things to do!
+1. Customer Page
+2. Employee Log Page
+3. Dashboard
 
-Extensive Testing (REQUIRED)
-ALL COMPLETED
+4. Home (Optional)

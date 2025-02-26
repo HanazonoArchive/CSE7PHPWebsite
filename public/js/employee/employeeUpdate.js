@@ -58,7 +58,7 @@ class UpdateEmployeeForm {
     }
 
     this.updateQueryStatus(
-      "Invalid input: Fill only Employee ID & Status OR fill all fields.",
+      "Error: Employee and Status are Empty, OR All Fields are Required!",
       "red",
       "lightcoral"
     );
