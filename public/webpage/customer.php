@@ -95,7 +95,7 @@ require PROJECT_ROOT . "/controller/customer-controller3.php";
                     </div>
                     <div class="column">
                         <button class="submitButton" id="submitFeedbackUpdate">Update</button>
-                        <p class="statusNotifier" id="QueryStatusUpdate"></p>
+                        <p class="statusNotifier" id="QueryStatusUpdateFeedback"></p>
                     </div>
                 </div>
             </div>
@@ -130,7 +130,7 @@ require PROJECT_ROOT . "/controller/customer-controller3.php";
                     </div>
                     <div class="column">
                         <button class="submitButton" id="submitFeedbackDelete">Delete</button>
-                        <p class="statusNotifier" id="QueryStatusDelete"></p>
+                        <p class="statusNotifier" id="QueryStatusDeleteFeedback"></p>
                     </div>
                 </div>
             </div>

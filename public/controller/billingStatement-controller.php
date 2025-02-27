@@ -15,50 +15,82 @@ class BillingStatement
     public function createServiceReport($appointmentID)
     {
         try {
-            // 1st: get the ID from quotation using appointment.id
+            // Get the ID and amount from the quotation using appointment ID
             $stmt1 = $this->conn->prepare("SELECT id, amount FROM quotation WHERE appointment_id = :appointmentID LIMIT 1");
             $stmt1->execute(['appointmentID' => $appointmentID]);
             $quotation = $stmt1->fetch(PDO::FETCH_ASSOC);
 
-            // 2nd: put the quotation ID into a variable
-            $quotationID = $quotation['id']; // QUOTATION ID
-            $quotationAmount = $quotation['amount']; // QUOTATION AMOUNT
+            if (!$quotation) {
+                throw new Exception("No quotation found for this appointment.");
+            }
 
-            // 3rd: get the ID from service_report using quotation.id
+            $quotationID = $quotation['id'];
+            $quotationAmount = $quotation['amount'] ?? 0;
+
+            // Get the ID and amount from the service report using quotation ID
             $stmt2 = $this->conn->prepare("SELECT id, amount FROM service_report WHERE quotation_id = :quotationID LIMIT 1");
             $stmt2->execute(['quotationID' => $quotationID]);
             $serviceReport = $stmt2->fetch(PDO::FETCH_ASSOC);
 
-            // 4th: put the serviceReport ID into a variable
-            $serviceReportID = $serviceReport['id']; // SERVICE REPORT ID
-            $serviceReportAmount = $serviceReport['amount']; // SERVICE REPORT AMOUNT
+            if (!$serviceReport) {
+                throw new Exception("No service report found for this quotation.");
+            }
 
-            if ($quotationID && $serviceReportID && $quotationAmount && $serviceReportAmount) {
+            $serviceReportID = $serviceReport['id'];
+            $serviceReportAmount = $serviceReport['amount'] ?? 0;
 
-                // 5th: check if the billing statement already exist
-                $stmt3 = $this->conn->prepare("SELECT id FROM billing_statement WHERE quotation_id = :quotationID AND service_report_id = :serviceReportID LIMIT 1");
-                $stmt3->execute(['quotationID' => $quotationID, 'serviceReportID' => $serviceReportID]);
-                $billingStatement = $stmt3->fetch(PDO::FETCH_ASSOC);
+            // Check if the billing statement already exists
+            $stmt3 = $this->conn->prepare("SELECT id, amount FROM billing_statement WHERE quotation_id = :quotationID AND service_report_id = :serviceReportID LIMIT 1");
+            $stmt3->execute(['quotationID' => $quotationID, 'serviceReportID' => $serviceReportID]);
+            $billingStatement = $stmt3->fetch(PDO::FETCH_ASSOC);
 
-                if ($billingStatement) {
-                    error_log("Billing Statement already exist!");
-                } else {
-                    error_log("QuotationID, ServiceReportID, quotationAmount, and serviceReportAmount was found!");
+            if ($billingStatement) {
+                error_log("Billing Statement already exists!");
 
-                    $newTotalAmount = $quotationAmount + $serviceReportAmount;
+                // Store existing billing statement details in session
+                $_SESSION['BillingStatementID'] = $billingStatement['id'];
+                $_SESSION['Amount_BS'] = $billingStatement['amount'];
+                $_SESSION['QuotationID_BS'] = $quotationID;
+                $_SESSION['QuotationAmount_BS'] = $quotationAmount;
+                $_SESSION['ServiceReportID_BS'] = $serviceReportID;
+                $_SESSION['ServiceReportAmount_BS'] = $serviceReportAmount;
 
-                    $stmt4 = $this->conn->prepare("INSERT INTO billing_statement (quotation_id, service_report_id, amount) VALUES (:quotationID, :serviceReportID, :newAmount)");
-                    $stmt4->execute(['quotationID' => $quotationID, 'serviceReportID' => $serviceReportID, 'newAmount' => $newTotalAmount]);
+                error_log("Existing billing statement info has been sessioned.");
+                return;
+            }
 
-                    $_SESSION['BillingStatementID'] = $this->conn->lastInsertId();
-                    $_SESSION['Amount_BS'] = $newTotalAmount;
-                    $_SESSION['QuotationID_BS'] = $quotationID;
-                    $_SESSION['QuotationAmount_BS'] = $quotationAmount;
-                    $_SESSION['ServiceReportID_BS'] = $serviceReportID;
-                    $_SESSION['ServiceReportAmount_BS'] = $serviceReportAmount;
+            // Calculate new total amount
+            $newTotalAmount = $quotationAmount + $serviceReportAmount;
 
-                    error_log("all the INFO has been SESSIONED! (Billing Statement)");
-                }
+            // Insert into billing statement
+            $stmt4 = $this->conn->prepare("INSERT INTO billing_statement (quotation_id, service_report_id, amount) VALUES (:quotationID, :serviceReportID, :newAmount)");
+            $stmt4->execute([
+                'quotationID' => $quotationID,
+                'serviceReportID' => $serviceReportID,
+                'newAmount' => $newTotalAmount
+            ]);
+
+            $billingStatementID = $this->conn->lastInsertId();
+            $defaultStatus = "Pending";
+
+            // Store new billing statement details in session
+            $_SESSION['BillingStatementID'] = $billingStatementID;
+            $_SESSION['Amount_BS'] = $newTotalAmount;
+            $_SESSION['QuotationID_BS'] = $quotationID;
+            $_SESSION['QuotationAmount_BS'] = $quotationAmount;
+            $_SESSION['ServiceReportID_BS'] = $serviceReportID;
+            $_SESSION['ServiceReportAmount_BS'] = $serviceReportAmount;
+
+            error_log("All the info has been sessioned! (New Billing Statement)");
+
+            // Insert into pending collection if amount is greater than 0
+            if ($newTotalAmount > 0) {
+                $stmt5 = $this->conn->prepare("INSERT INTO pending_collection (billing_statement_id, amount, status) VALUES (:billingStatementID, :newAmount, :newStatus)");
+                $stmt5->execute([
+                    'billingStatementID' => $billingStatementID,
+                    'newAmount' => $newTotalAmount,
+                    'newStatus' => $defaultStatus
+                ]);
             }
         } catch (Exception $e) {
             error_log("Error creating service report: " . $e->getMessage());
@@ -122,26 +154,36 @@ class AppointmentManager
             $order = $order ?? $this->default_order;
 
             $stmt = $this->conn->prepare("SELECT
-                    customer.name AS Customer_Name,
-                    customer.address AS Customer_Address,
-                    appointment.id AS Appointment_ID,
-                    appointment.category AS Appointment_Category,
-                    appointment.date AS Appointment_Date,
-                    appointment.status AS Appointment_Status
-                FROM appointment
-                JOIN customer ON appointment.customer_id = customer.id WHERE appointment.status = 'Completed'
-                $order");
+                customer.name AS Customer_Name,
+                customer.address AS Customer_Address,
+                appointment.id AS Appointment_ID,
+                appointment.category AS Appointment_Category,
+                appointment.date AS Appointment_Date,
+                appointment.status AS Appointment_Status,
+                (SELECT COUNT(*) FROM billing_statement 
+                 WHERE billing_statement.quotation_id IN 
+                      (SELECT id FROM quotation WHERE quotation.appointment_id = appointment.id) 
+                   OR billing_statement.service_report_id IN 
+                      (SELECT id FROM service_report WHERE service_report.quotation_id IN 
+                          (SELECT id FROM quotation WHERE quotation.appointment_id = appointment.id))
+                ) AS Billing_Statement_Count
+            FROM appointment
+            JOIN customer ON appointment.customer_id = customer.id 
+            WHERE appointment.status = 'Completed'
+            $order");
 
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if ($results) {
                 echo "<table border='1' class='appointment-table'>";
-                echo "<th>Customer Name</th><th>Address</th><th>Appointment ID</th><th>Category</th><th>Date</th><th>Status</th></tr>";
+                echo "<th>Customer Name</th><th>Address</th><th>Appointment ID</th><th>Category</th><th>Date</th><th>Status</th><th>Has Billing Statement</th></tr>";
 
                 foreach ($results as $row) {
+                    $hasBillingStatement = ($row['Billing_Statement_Count'] > 0) ? 'Yes' : 'No';
+
                     echo "<tr onclick='updateDetails(" . htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') . ")'>";
-                    echo "<td>{$row['Customer_Name']}</td><td>{$row['Customer_Address']}</td><td>{$row['Appointment_ID']}</td><td>{$row['Appointment_Category']}</td><td>{$row['Appointment_Date']}</td><td>{$row['Appointment_Status']}</td>";
+                    echo "<td>{$row['Customer_Name']}</td><td>{$row['Customer_Address']}</td><td>{$row['Appointment_ID']}</td><td>{$row['Appointment_Category']}</td><td>{$row['Appointment_Date']}</td><td>{$row['Appointment_Status']}</td><td>{$hasBillingStatement}</td>";
                     echo "</tr>";
                 }
                 echo "</table>";
@@ -152,6 +194,7 @@ class AppointmentManager
             echo "Error fetching data: " . $e->getMessage();
         }
     }
+
     public function fetchAppointmentIDs()
     {
         try {

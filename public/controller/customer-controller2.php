@@ -18,10 +18,14 @@ class CustomerFeedbackManager
             $order = $order ?? $this->default_order; // Use default order if not provided
 
             $stmt = $this->conn->prepare("SELECT 
-                    customer_feedback.id AS Feedback_ID, 
-                    customer_feedback.appointment_id AS Appointment_ID, 
-                    customer_feedback.feedback AS Feedback
-                FROM customer_feedback $order");
+                customer_feedback.id AS Feedback_ID,
+                customer.name AS Customer_Name,
+                customer_feedback.appointment_id AS Appointment_ID, 
+                customer_feedback.feedback AS Feedback
+                FROM customer_feedback
+                JOIN appointment ON customer_feedback.appointment_id = appointment.id
+                JOIN customer ON appointment.customer_id = customer.id
+                $order");
 
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,7 +33,7 @@ class CustomerFeedbackManager
             if (count($results) > 0) {
                 echo "<table border='1' class='appointment-table'>";
                 echo "<tr>";
-                $headers = ['Feedback_ID', 'Appointment_ID', 'Feedback'];
+                $headers = ['Feedback_ID', 'Customer_Name', 'Appointment_ID', 'Feedback'];
                 foreach ($headers as $columnName) {
                     echo "<th>" . htmlspecialchars(str_replace("_", " ", $columnName)) . "</th>";
                 }
@@ -64,56 +68,61 @@ class CustomerFeedbackManager
             exit;
         }
     }
+
     public function fetchCustomerIDs()
     {
         try {
-            // Enable error reporting
-            error_reporting(E_ALL);
-            ini_set('display_errors', 1);
-
-            // Ensure proper headers are set before any output
-            header('Content-Type: application/json');
-
-            // Debug: Check if database connection is valid
-            if (!$this->conn) {
-                echo json_encode(["error" => "Database connection is not initialized."]);
-                exit;
-            }
-
-            // Debug: Print SQL query before execution
-            $sql = "
+            $stmt = $this->conn->prepare("
             SELECT customer.id, customer.name 
             FROM customer
             ORDER BY customer.id ASC
-        ";
-            // Debug: Log the query
-            error_log("Executing SQL: " . $sql);
-
-            $stmt = $this->conn->prepare($sql);
-
-            if (!$stmt) {
-                echo json_encode(["error" => "SQL statement preparation failed."]);
-                exit;
-            }
-
-            // Debug: Execute and check for errors
-            if (!$stmt->execute()) {
-                echo json_encode(["error" => "SQL execution failed.", "info" => $stmt->errorInfo()]);
-                exit;
-            }
-
+        ");
+            $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Debug: Check if results are empty
-            if (empty($results)) {
-                echo json_encode(["message" => "No pending appointments found."]);
-                exit;
-            }
-
+            header('Content-Type: application/json');
             echo json_encode($results);
         } catch (PDOException $e) {
-            // Debug: Ensure error is JSON formatted
-            echo json_encode(["error" => "Exception occurred: " . $e->getMessage()]);
+            echo json_encode(["error" => "Error fetching Customer IDs: " . $e->getMessage()]);
+        }
+    }
+
+    public function fetchAppointmentsIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT appointment.id, customer.name 
+            FROM appointment
+            JOIN customer ON appointment.customer_id = customer.id
+            WHERE appointment.status = 'Completed'
+            ORDER BY appointment.id ASC
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching Customer IDs: " . $e->getMessage()]);
+        }
+    }
+
+    public function fetchFeedbackIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT customer_feedback.id, customer.name 
+            FROM customer_feedback
+            JOIN appointment ON customer_feedback.appointment_id = appointment.id
+            JOIN customer ON appointment.customer_id = customer.id
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching Customer IDs: " . $e->getMessage()]);
         }
     }
 }
@@ -124,6 +133,21 @@ if (isset($_GET['fetch_Customer'])) {
     $feedbackManager->fetchCustomerIDs(); // Calls the function to output JSON
     exit; // Stop further execution
 }
+
+if (isset($_GET['fetch_Appointment'])) {
+    $conn = Database::getInstance();
+    $feedbackManager = new CustomerFeedbackManager($conn);
+    $feedbackManager->fetchAppointmentsIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
+}
+
+if (isset($_GET['fetch_Feedback'])) {
+    $conn = Database::getInstance();
+    $feedbackManager = new CustomerFeedbackManager($conn);
+    $feedbackManager->fetchFeedbackIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
+}
+
 
 // Initialize the database connection
 $conn = Database::getInstance();

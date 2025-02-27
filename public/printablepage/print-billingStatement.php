@@ -79,46 +79,28 @@ if ($quotationID) {
         <hr class="HorizontalLine">
         <p class="documentTITLE">Billing Statement</p>
         <div class="body">
-            <p class="documentBody"><strong>Date:</strong> <?php echo $_SESSION['dBody_BS']['billingDate'] ?? "No data found"; ?></p>
-            <p class="documentBody"><strong>Customer Name:</strong> <?php echo $_SESSION['dBody_BS']['customerName'] ?? "No data found"; ?></p>
-            <p class="documentBody"><strong>Location:</strong> <?php echo $_SESSION['dBody_BS']['customerLocation'] ?? "No data found"; ?></p>
-            <p class="documentBody"><strong>Billing Statement #:</strong> <?php echo $_SESSION['BillingStatementID'] ?? "No data found"; ?></p>
-        </div>
-        <div class="table1">
-            <?php if (!empty($items_QUO) && is_array($items_QUO)) : ?>
-                <table border="1" cellspacing="0" cellpadding="5">
-                    <tr>
-                        <th>Item</th>
-                        <th>Description</th>
-                        <th>Qty.</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                    </tr>
-                    <?php foreach ($items_QUO as $item) : ?>
-                        <tr>
-                            <td class="TD1"><?= $item['item'] ?></td>
-                            <td class="TD2"><?= $item['description'] ?></td>
-                            <td class="TD3"><?= $item['quantity'] ?></td>
-                            <td class="TD4"><?= $item['price'] ?></td>
-                            <td><?= $item['total'] ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
-            <?php else : ?>
-                <p>No items found in session.</p>
-            <?php endif; ?>
+            <p class="documentBody"><strong>Date:</strong>
+                <?php echo $_SESSION['dBody_BS']['billingDate'] ?? "No data found"; ?></p>
+            <p class="documentBody"><strong>Customer Name:</strong>
+                <?php echo $_SESSION['dBody_BS']['customerName'] ?? "No data found"; ?></p>
+            <p class="documentBody"><strong>Location:</strong>
+                <?php echo $_SESSION['dBody_BS']['customerLocation'] ?? "No data found"; ?></p>
+            <p class="documentBody"><strong>Billing Statement #:</strong>
+                <?php echo $_SESSION['BillingStatementID'] ?? "No data found"; ?></p>
         </div>
         <div class="table">
-            <?php if (!empty($items_SR) && is_array($items_SR)) : ?>
-                <table border="1" cellspacing="0" cellpadding="5">
-                    <tr>
-                        <th>Unit</th>
-                        <th>Activity Performed</th>
-                        <th>Qty.</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                    </tr>
-                    <?php foreach ($items_SR as $item) : ?>
+            <table border="1" cellspacing="0" cellpadding="5">
+                <tr>
+                    <th>Unit/Item</th>
+                    <th>Activity Performed/Description</th>
+                    <th>Qty.</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+
+                <!-- Items from $items_QUO -->
+                <?php if (!empty($items_QUO) && is_array($items_QUO)): ?>
+                    <?php foreach ($items_QUO as $item): ?>
                         <tr>
                             <td class="TD1"><?= $item['item'] ?></td>
                             <td class="TD2"><?= $item['description'] ?></td>
@@ -127,23 +109,50 @@ if ($quotationID) {
                             <td><?= $item['total'] ?></td>
                         </tr>
                     <?php endforeach; ?>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><strong>Final Amount =></strong></td>
-                    <td><strong><?php echo $billingStatementAmount ?></strong></td>
-                </table>
-            <?php else : ?>
-                <p>No items found in session.</p>
-            <?php endif; ?>
+                <?php endif; ?>
+
+                <!-- Items from $items_SR -->
+                <?php if (!empty($items_SR) && is_array($items_SR)): ?>
+                    <?php foreach ($items_SR as $item): ?>
+                        <tr>
+                            <td class="TD1"><?= $item['item'] ?></td>
+                            <td class="TD2"><?= $item['description'] ?></td>
+                            <td class="TD3"><?= $item['quantity'] ?></td>
+                            <td class="TD4"><?= $item['price'] ?></td>
+                            <td><?= $item['total'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+
+                    <!-- Final Amount Row -->
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Final Price =></strong></td>
+                        <td><strong><?php echo $billingStatementAmount ?></strong></td>
+                    </tr>
+                <?php endif; ?>
+
+                <!-- If both tables are empty, show a message -->
+                <?php if (empty($items_QUO) && empty($items_SR)): ?>
+                    <tr>
+                        <td colspan="5">No items found in session.</td>
+                    </tr>
+                <?php endif; ?>
+            </table>
         </div>
+
         <div class="body1">
-            <p class="TechInfoText"><strong><?php echo $_SESSION['dFooter_BS']['remarks'] ?? "No data found"; ?></strong></p>
+            <p class="TechInfoText">
+                <strong><?php echo $_SESSION['dFooter_BS']['remarks'] ?? "No data found"; ?></strong></p>
         </div>
         <div class="techInfo">
             <div class="columnSR">
-                <p class="TechInfoText"><strong><?php echo $_SESSION['dFooter_BS']['authorizedName'] ?? "No data found"; ?></strong></p>
-                <p class="TechInfoText">Authorized <?php echo $_SESSION['dFooter_BS']['authorizedRole'] ?? "No data found"; ?> Signature over Printed Name:</p>
+                <p class="TechInfoText">
+                    <strong><?php echo $_SESSION['dFooter_BS']['authorizedName'] ?? "No data found"; ?></strong></p>
+                <p class="TechInfoText">Authorized
+                    <?php echo $_SESSION['dFooter_BS']['authorizedRole'] ?? "No data found"; ?> Signature over Printed
+                    Name:</p>
             </div>
         </div>
     </div>
