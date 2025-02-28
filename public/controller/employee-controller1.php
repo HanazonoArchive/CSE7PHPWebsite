@@ -18,14 +18,15 @@ class EmployeeManager
             $order = $order ?? $this->default_order; // Use default order if not provided
 
             $stmt = $this->conn->prepare("SELECT
-                    employee.id AS Employee_ID,
-                    employee.name AS Employee_Name,
-                    employee.contact_number AS Contact_Number,
-                    employee.role AS Role,
-                    employee.status AS Status,
-                    employee.pay AS Pay,
-                    employee.days_of_work AS Work_Days
-                FROM employee $order");
+                employee.id AS Employee_ID,
+                employee.name AS Employee_Name,
+                employee.contact_number AS Contact_Number,
+                employee.role AS Role,
+                employee.status AS Status,
+                employee.pay AS Pay,
+                employee.days_of_work AS Work_Days,
+                (employee.pay * employee.days_of_work) AS Total_Pay
+            FROM employee $order");
 
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -33,13 +34,14 @@ class EmployeeManager
             if (count($results) > 0) {
                 echo "<table border='1' class='appointment-table'>";
                 echo "<tr>";
-                $headers = ['Employee_ID', 'Employee_Name', 'Contact_Number', 'Role', 'Status', 'Pay', 'Work_Days'];
+                $headers = ['Employee_ID', 'Employee_Name', 'Contact_Number', 'Role', 'Status', 'Pay', 'Work_Days', 'Total_Pay'];
                 foreach ($headers as $columnName) {
                     echo "<th>" . htmlspecialchars(str_replace("_", " ", $columnName)) . "</th>";
                 }
                 echo "</tr>";
 
                 foreach ($results as $row) {
+                    echo "<tr>";
                     foreach ($headers as $column) {
                         echo "<td>" . htmlspecialchars($row[$column]) . "</td>";
                     }
@@ -54,20 +56,22 @@ class EmployeeManager
         }
     }
 
-    public function handlePostRequest() {
+
+    public function handlePostRequest()
+    {
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['sql_query'])) {
             $query = trim($_POST['sql_query']);
-    
+
             // Ensure the query always has a valid ORDER BY
             if (!str_contains($query, needle: "ORDER BY")) {
                 $query .= " ORDER BY employee.id ASC";
             }
-    
+
             $this->fetchEmployee($query);
             exit;
         }
     }
-    
+
     public function fetchEmployeeIDs()
     {
         try {

@@ -10,6 +10,17 @@
   --afuckingtextcolor: #102027; /* Dark Blue-Grey */
 }
 
+input[type="number"] {
+  appearance: textfield; /* Standard */
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge, Opera */
+  margin: 0;
+}
+
 .appointmentCreate {
   background-color: var(--navbar-color);
   border-radius: 10px;

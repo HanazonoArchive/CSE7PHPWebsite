@@ -15,26 +15,25 @@ class Quotation
     public function createQuotation($employeeID1, $employeeID2, $employeeID3, $appointmentID, $totalAmount, $newStatus)
     {
         try {
-
-            // 1st: Check if the quotation already exists
+            // Check if a quotation already exists for this appointment
             $stmt1 = $this->conn->prepare("SELECT id FROM quotation WHERE appointment_id = :id LIMIT 1");
             $stmt1->execute(['id' => $appointmentID]);
             $quotation = $stmt1->fetch(PDO::FETCH_ASSOC);
 
             if ($quotation) {
-                // 2nd: Notify the existing quotation
-                error_log("Quotation ID $appointmentID already exists.");
+                error_log("Quotation for Appointment ID $appointmentID already exists.");
             } else {
-                // 2nd: Create a new quotation
-                error_log("Creating new quotation for appointment ID: $appointmentID");
+                error_log("Creating new quotation for Appointment ID: $appointmentID");
+
+                // Insert the new quotation
                 $stmt2 = $this->conn->prepare("INSERT INTO quotation (appointment_id, amount) VALUES (:appointment_id, :totalAmount)");
                 $stmt2->execute(['appointment_id' => $appointmentID, 'totalAmount' => $totalAmount]);
                 $quotationID = $this->conn->lastInsertId();
 
-                $_SESSION['quotationID_QUO'] = $quotationID; // Store the quotation ID in the session
+                $_SESSION['quotationID_QUO'] = $quotationID; // Store the quotation ID in session
 
                 if ($quotationID) {
-                    // 3rd: Update the appointment status to new status
+                    // Update appointment status
                     $stmt3 = $this->conn->prepare("UPDATE appointment SET status = :newStatus WHERE id = :appointmentID");
                     if ($stmt3->execute(['newStatus' => $newStatus, 'appointmentID' => $appointmentID])) {
                         error_log("Appointment ID $appointmentID updated successfully.");
@@ -43,6 +42,24 @@ class Quotation
                             error_log("Data successfully stored in session.");
                             $data = $_SESSION['data_QUO'];
                             $this->createQuotationTableData($data);
+
+                            // Prepare insert statement for employee_log
+                            $stmt4 = $this->conn->prepare("INSERT INTO employee_log (employee_id, appointment_id) VALUES (:employee_id, :appointment_id)");
+
+                            // Get unique employee IDs
+                            $uniqueEmployees = array_unique([$employeeID1, $employeeID2, $employeeID3]);
+
+                            // Insert only employees who are not already logged for this appointment
+                            foreach ($uniqueEmployees as $employeeID) {
+                                $stmtCheck = $this->conn->prepare("SELECT COUNT(*) FROM employee_log WHERE employee_id = :employee_id AND appointment_id = :appointment_id");
+                                $stmtCheck->execute(['employee_id' => $employeeID, 'appointment_id' => $appointmentID]);
+                                $exists = $stmtCheck->fetchColumn();
+
+                                if ($exists == 0) {
+                                    // Only insert if the employee is not already logged for this appointment
+                                    $stmt4->execute(['employee_id' => $employeeID, 'appointment_id' => $appointmentID]);
+                                }
+                            }
                         } else {
                             error_log("Failed to store data in session.");
                             throw new Exception("Failed to store data in session.");
@@ -59,6 +76,7 @@ class Quotation
             throw new Exception("An error occurred while creating the quotation.");
         }
     }
+
 
     public function createQuotationTableData($data)
     {
@@ -190,7 +208,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
             exit;
         }
-    }
+    } elseif (isset($data["action"]) && $data["action"] === "cancel") {
+        try {
+            // Extract appointment_ID from received data
+            $appointmentID = $data["appointment_ID"] ?? null;
+    
+            // Validate the received appointment ID
+            if (!$appointmentID) {
+                echo json_encode(["status" => "error", "message" => "Invalid appointment ID."]);
+                exit;
+            }
+    
+            $conn = Database::getInstance();
+    
+            // Execute a DELETE or UPDATE query depending on the cancellation logic
+            $stmt = $conn->prepare("UPDATE appointment SET status = 'Cancelled' WHERE id = :appointmentID");
+            $stmt->execute(['appointmentID' => $appointmentID]);
+    
+            // Check if any row was affected
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(["status" => "success", "message" => "Appointment cancelled successfully.", "reload" => true]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "No matching appointment found.", "reload" => false]);
+            }            
+        } catch (Exception $e) {
+            error_log("Error cancelling the appointment: " . $e->getMessage());
+            echo json_encode(["status" => "error", "message" => "Error cancelling appointment.", "error" => $e->getMessage()]);
+        }
+    }        
 }
 
 class AppointmentManager
@@ -258,6 +303,31 @@ class AppointmentManager
             echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
         }
     }
+
+    public function fetchEmployeeIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT employee.id, employee.name 
+            FROM employee ORDER BY employee.id ASC
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
+        }
+    }
+}
+
+// Check if request is made to fetch appointment IDs
+if (isset($_GET['fetch_Employee'])) {
+    $conn = Database::getInstance();
+    $appointmentManager = new AppointmentManager($conn);
+    $appointmentManager->fetchEmployeeIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
 }
 
 // Check if request is made to fetch appointment IDs

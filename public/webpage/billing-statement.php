@@ -21,6 +21,7 @@ include PROJECT_ROOT . "/controller/billingStatement-controller.php";
     <?php require PROJECT_ROOT . "/component/togglesidebar.php"; ?>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="<?= JUST_URL ?>/js/billing-statement/billingStatementFunction.js"></script>
+    <script src="<?= JUST_URL ?>/js/billing-statement/billingStatementCollection.js"></script>
     <div class="content">
         <div class="billingStatementDetails">
             <p class="titleHeader">Document Details</p>
@@ -87,6 +88,30 @@ include PROJECT_ROOT . "/controller/billingStatement-controller.php";
                 </div>
                 <div class="column">
                     <p class="statusNotifier" id="statusGenerateNotifier"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pendingCollectionTable">
+            <p class="titleHeader">Pending Collection Table</p>
+            <?php
+            $appointmentManager->fetchPendingCollection();
+            ?>
+        </div>
+        <div class="pendingCollection">
+            <div class="titleContent">
+                <div class="column">
+                    <select class="dropdown1" name="selectCollectionID" id="selectCollection_ID">
+                        <option value="">Loading...</option>
+                    </select>
+                    <select class="dropdown1" name="selectStatus" id="statusCollection">
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <button class="submitButton1" id="submitCollection">Submit</button>
+                    <p class="statusNotifier1" id="QueryCollectionStatus"></p>
                 </div>
             </div>
         </div>

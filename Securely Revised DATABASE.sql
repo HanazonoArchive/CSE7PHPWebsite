@@ -55,7 +55,7 @@ CREATE TABLE `pending_collection` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `billing_statement_id` INT UNSIGNED NOT NULL,
     `amount` DECIMAL(10, 2) NOT NULL,
-    `status` ENUM('Pending', 'Paid', 'Overdue') NOT NULL,
+    `status` ENUM('Pending', 'Paid') NOT NULL,
     FOREIGN KEY (`billing_statement_id`) REFERENCES `billing_statement`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -63,7 +63,6 @@ CREATE TABLE `employee_log` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `employee_id` INT UNSIGNED NOT NULL,
     `appointment_id` INT UNSIGNED,  -- Allow NULL to prevent foreign key errors
-    `status` ENUM('Working', 'Available', 'On-Leave', 'Absent') NOT NULL,
     FOREIGN KEY (`employee_id`) REFERENCES `employee`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`appointment_id`) REFERENCES `appointment`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB;

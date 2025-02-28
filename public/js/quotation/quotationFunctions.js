@@ -23,6 +23,60 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching appointments:", error));
 
+    //Employee ID 1
+    fetch("/CSE7PHPWebsite/public/controller/quotation-controller.php?fetch_Employee=true")
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = document.getElementById(
+        "quotationDetails_EmployeeID1"
+      );
+      dropdown.innerHTML = "<option value=''>Select Employee - NONE</option>";
+
+      data.forEach((appointment) => {
+        const option = document.createElement("option");
+        option.value = appointment.id;
+        option.textContent = `${appointment.id} - ${appointment.name}`;
+        dropdown.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching appointments:", error));
+
+    //Employee ID 2
+    fetch("/CSE7PHPWebsite/public/controller/quotation-controller.php?fetch_Employee=true")
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = document.getElementById(
+        "quotationDetails_EmployeeID2"
+      );
+      dropdown.innerHTML = "<option value=''>Select Employee - NONE</option>";
+
+      data.forEach((appointment) => {
+        const option = document.createElement("option");
+        option.value = appointment.id;
+        option.textContent = `${appointment.id} - ${appointment.name}`;
+        dropdown.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching appointments:", error));
+
+    //Employee ID 3
+    fetch("/CSE7PHPWebsite/public/controller/quotation-controller.php?fetch_Employee=true")
+    .then((response) => response.json())
+    .then((data) => {
+      const dropdown = document.getElementById(
+        "quotationDetails_EmployeeID3"
+      );
+      dropdown.innerHTML = "<option value=''>Select Employee - NONE</option>";
+
+      data.forEach((appointment) => {
+        const option = document.createElement("option");
+        option.value = appointment.id;
+        option.textContent = `${appointment.id} - ${appointment.name}`;
+        dropdown.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching appointments:", error));
+
   document.getElementById("generateQoutation").addEventListener("click", async function () {
     
       updateQueryStatus("Sending Query...", "gray", "lightgray");

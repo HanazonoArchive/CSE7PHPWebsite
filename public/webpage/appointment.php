@@ -31,7 +31,7 @@ include PROJECT_ROOT . "/controller/appointment-controller.php";
                 <div class="column">
                     <input class="inputField" id="appointmentCreateCustomer_Name" type="text"
                         placeholder="Customer Name">
-                    <input class="inputField" id="appointmentCreateCustomer_ContactNumber" type="text"
+                    <input class="inputField" id="appointmentCreateCustomer_ContactNumber" type="number"
                         placeholder="Contact Number">
                 </div>
                 <div class="column">

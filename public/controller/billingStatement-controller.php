@@ -12,7 +12,7 @@ class BillingStatement
         $this->conn = $db;
     }
 
-    public function createServiceReport($appointmentID)
+    public function createBillingStatement($appointmentID)
     {
         try {
             // Get the ID and amount from the quotation using appointment ID
@@ -92,6 +92,10 @@ class BillingStatement
                     'newStatus' => $defaultStatus
                 ]);
             }
+
+            // Update Days
+            $stmtUpdateDays = $this->conn->prepare("UPDATE employee SET days_of_work = days_of_work + 1 WHERE id IN (SELECT employee_id FROM employee_log WHERE appointment_id = :appointmentID)");
+            $stmtUpdateDays->execute(['appointmentID' => $appointmentID]);
         } catch (Exception $e) {
             error_log("Error creating service report: " . $e->getMessage());
             throw new Exception("An error occurred while creating the service report.");
@@ -109,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $conn = Database::getInstance();
             $conn->beginTransaction();
 
-            $serviceReportHandler = new BillingStatement($conn);
+            $billingStatementHandler = new BillingStatement($conn);
 
             // Database DATA INFORMATION
             $appointmentID = trim($data["appointmentID"] ?? "");
@@ -120,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['dFooter_BS'] = $documentData["footer"] ?? [];
 
             // Call the method with employee IDs dynamically
-            $serviceReportHandler->createServiceReport($appointmentID);
+            $billingStatementHandler->createBillingStatement($appointmentID);
 
             $conn->commit();
             header('Content-Type: application/json');
@@ -134,6 +138,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 "message" => "Failed to process the request.",
                 "error" => $e->getMessage()
             ]);
+        }
+    } elseif (isset($data["action"]) && $data["action"] === "PendingCollection") {
+        try {
+            // Extract appointment_ID from received data
+            $pendingCollectionID = $data["collection_ID"] ?? null;
+            $pendingCollectionStatus = $data["collectionStatus"] ?? null;
+    
+            // Validate the received appointment ID
+            if (!$pendingCollectionID) {
+                echo json_encode(["status" => "error", "message" => "Invalid collection ID."]);
+                exit;
+            }
+    
+            $conn = Database::getInstance();
+    
+            // Execute a DELETE or UPDATE query depending on the cancellation logic
+            $stmt = $conn->prepare("UPDATE pending_collection SET status = :newStatus WHERE id = :collectionID");
+            $stmt->execute(['newStatus' => $pendingCollectionStatus,'collectionID' => $pendingCollectionID]);
+    
+            // Check if any row was affected
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(["status" => "success", "message" => "Appointment cancelled successfully.", "reload" => true]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "No matching appointment found.", "reload" => false]);
+            }            
+        } catch (Exception $e) {
+            error_log("Error cancelling the appointment: " . $e->getMessage());
+            echo json_encode(["status" => "error", "message" => "Error cancelling appointment.", "error" => $e->getMessage()]);
         }
     }
 }
@@ -195,6 +227,49 @@ class AppointmentManager
         }
     }
 
+    public function fetchPendingCollection($order = null)
+    {
+        try {
+            $order = $order ?? $this->default_order;
+
+            $stmt = $this->conn->prepare("SELECT
+            customer.name AS Name,
+            customer.address AS Address,
+            appointment.id AS `App. ID`,
+            appointment.category AS Category,
+            appointment.date AS Date,
+            appointment.status AS Status,
+            billing_statement.id AS `Statement ID`,
+            billing_statement.amount AS Amt,
+            pending_collection.status AS `Collection Status`
+        FROM appointment
+        JOIN customer ON appointment.customer_id = customer.id
+        LEFT JOIN quotation ON quotation.appointment_id = appointment.id
+        LEFT JOIN billing_statement ON billing_statement.quotation_id = quotation.id
+        LEFT JOIN pending_collection ON pending_collection.billing_statement_id = billing_statement.id
+        WHERE appointment.status = 'Completed' $order");
+
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($results) {
+                echo "<table border='1' class='appointment-table'>";
+                echo "<tr><th>Name</th><th>Address</th><th>App. ID</th><th>Category</th><th>Date</th><th>Status</th><th>Statement ID</th><th>Amt.</th><th>Collection Status</th></tr>";
+
+                foreach ($results as $row) {
+                    echo "<tr onclick='updateDetails(" . htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8') . ")'>";
+                    echo "<td>{$row['Name']}</td><td>{$row['Address']}</td><td>{$row['App. ID']}</td><td>{$row['Category']}</td><td>{$row['Date']}</td><td>{$row['Status']}</td><td>{$row['Statement ID']}</td><td>{$row['Amt']}</td><td>{$row['Collection Status']}</td>";
+                    echo "</tr>";
+                }
+                echo "</table>";
+            } else {
+                echo "No Completed Work Orders found.";
+            }
+        } catch (PDOException $e) {
+            echo "Error fetching data: " . $e->getMessage();
+        }
+    }
+
     public function fetchAppointmentIDs()
     {
         try {
@@ -214,7 +289,37 @@ class AppointmentManager
             echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
         }
     }
+
+    public function fetchPendingCollectionIDs()
+    {
+        try {
+            $stmt = $this->conn->prepare("
+            SELECT pending_collection.id, customer.name 
+            FROM pending_collection
+            JOIN billing_statement ON pending_collection.billing_statement_id = billing_statement.id
+            JOIN quotation ON billing_statement.quotation_id = quotation.id
+            JOIN appointment ON quotation.appointment_id = appointment.id
+            JOIN customer ON appointment.customer_id = customer.id
+            ORDER BY pending_collection.id ASC
+        ");
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            header('Content-Type: application/json');
+            echo json_encode($results);
+        } catch (PDOException $e) {
+            echo json_encode(["error" => "Error fetching appointment IDs: " . $e->getMessage()]);
+        }
+    }
 }
+
+if (isset($_GET['fetch_pending_collection'])) {
+    $conn = Database::getInstance();
+    $appointmentManager = new AppointmentManager($conn);
+    $appointmentManager->fetchPendingCollectionIDs(); // Calls the function to output JSON
+    exit; // Stop further execution
+}
+
 
 // Check if request is made to fetch appointment IDs
 if (isset($_GET['fetch_appointments'])) {

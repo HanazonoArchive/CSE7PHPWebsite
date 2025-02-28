@@ -36,14 +36,13 @@ CREATE TABLE `pending_collection`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `billing_statement_id` INT UNSIGNED NULL,
     `amount` DECIMAL(10, 2) NOT NULL,
-    `status` ENUM('Pending', 'Paid', 'Overdue') NOT NULL
+    `status` ENUM('Pending', 'Paid') NOT NULL
 );
 
 CREATE TABLE `employee_log`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `employee_id` INT UNSIGNED NULL,
-    `appointment_id` INT UNSIGNED NULL,
-    `status` ENUM('Working', 'Available', 'On-Leave', 'Absent') NOT NULL
+    `appointment_id` INT UNSIGNED NULL
 );
 
 CREATE TABLE `customer_feedback`(

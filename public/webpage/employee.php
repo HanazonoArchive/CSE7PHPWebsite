@@ -25,6 +25,7 @@ require PROJECT_ROOT . "/controller/employee-controller2.php";
     <script src="<?= JUST_URL ?>/js/employee/employeeUpdate.js"></script>
     <script src="<?= JUST_URL ?>/js/employee/employeeDelete.js"></script>
     <script src="<?= JUST_URL ?>/js/employee/employee-filter.js"></script>
+    <script src="<?= JUST_URL ?>/js/employee/employeePay.js"></script>
     <div class="content">
         <div class="employeeFilterBar">
             <div class="column_filter">
@@ -101,19 +102,37 @@ require PROJECT_ROOT . "/controller/employee-controller2.php";
                 </div>
             </div>
         </div>
-        <div class="deleteEmployee">
-            <div class="titleHeader">Delete Employee</div>
-            <div class="titleContent">
-                <div class="column">
-                    <select class="dropdown" name="selectEmployeeID" id="DeleteEmployee_ID">
-                        <option value="">Loading...</option>
-                    </select>
-                    <input class="inputField" id="DeleteEmployee_Confirmation" type="text"
-                        placeholder='Type "DELETE" to confirm'>
+        <div class="employeeModofication">
+            <div class="deleteEmployee">
+                <div class="titleHeader">Delete Employee</div>
+                <div class="titleContent">
+                    <div class="column">
+                        <select class="dropdown" name="selectEmployeeID" id="DeleteEmployee_ID">
+                            <option value="">Loading...</option>
+                        </select>
+                        <input class="inputField" id="DeleteEmployee_Confirmation" type="text"
+                            placeholder='Type "DELETE" to confirm'>
+                    </div>
+                    <div class="column">
+                        <button class="submitButton" id="submitEmployeeDelete">Delete</button>
+                        <p class="statusNotifier" id="QueryStatusDelete"></p>
+                    </div>
                 </div>
-                <div class="column">
-                    <button class="submitButton" id="submitEmployeeDelete">Delete</button>
-                    <p class="statusNotifier" id="QueryStatusDelete"></p>
+            </div>
+            <div class="payingEmployee">
+                <div class="titleHeader">Delete Employee</div>
+                <div class="titleContent">
+                    <div class="column">
+                        <select class="dropdown" name="selectEmployeeID" id="payEmployee_ID">
+                            <option value="">Loading...</option>
+                        </select>
+                        <input class="inputField" id="payEmployee_Confirmation" type="text"
+                            placeholder='Type the "Total Pay" to confirm'>
+                    </div>
+                    <div class="column">
+                        <button class="submitButton" id="submitEmployeePay">Delete</button>
+                        <p class="statusNotifier" id="QueryStatusPay"></p>
+                    </div>
                 </div>
             </div>
         </div>

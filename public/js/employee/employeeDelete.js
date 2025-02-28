@@ -19,7 +19,7 @@ class DeleteEmployeeForm {
 
     if (confirmationTEXT !== "DELETE") {
       this.updateQueryStatus(
-        "Confirmation text is Invalid Or Haven't Selected Employee!",
+        "Invalid Confirmation",
         "red",
         "lightcoral"
       );

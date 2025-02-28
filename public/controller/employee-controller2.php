@@ -89,6 +89,33 @@ class Employee
         }
     }
 
+    public function EmployeePay($employeeID, $employeeAmmount) {
+        try {
+            // Fetch employee details in a single query
+            $stmt = $this->conn->prepare("SELECT id, days_of_work, pay FROM employee WHERE id = :id LIMIT 1");
+            $stmt->execute(['id' => $employeeID]);
+            $employee = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($employee) {
+                $calculatedAmount = floatval($employee['pay']) * intval($employee['days_of_work']);
+                if ($employeeAmmount == $calculatedAmount) {
+                    $stmtUpdate = $this->conn->prepare("UPDATE employee SET days_of_work = 0 WHERE id = :id");
+                    $stmtUpdate->execute(['id' => $employeeID]);
+                    return "Employee payment processed successfully.";
+                } else {
+                    error_log("Error: Incorrect verification number. Expected: $calculatedAmount, Received: $employeeAmmount.");
+                    return "Error: Incorrect verification number.";
+                }
+            } else {
+                error_log("Error: Employee not found.");
+                return "Error: Employee not found.";
+            }
+    
+        } catch (Exception $e) {
+            error_log("Error processing payment: " . $e->getMessage());
+            return "Error processing payment.";
+        }
+    }
 }
 
 // Process request
@@ -192,6 +219,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (!empty($employeeID)) {
                 $employeeHandler->deleteEmployee($employeeID);
+            }
+
+            $conn->commit();
+            header('Content-Type: application/json');
+            echo json_encode(["status" => "success", "message" => "Update successful", "reload" => true]);
+        } catch (Exception $e) {
+            $conn->rollBack();
+            error_log("Transaction failed: " . $e->getMessage());
+            header('Content-Type: application/json');
+            echo json_encode(["status" => "error", "message" => "Failed to Delete. Please try again."]);
+        }
+    } elseif ($action === "payingEmployee") {
+        try {
+            $conn = Database::getInstance();
+            if (!$conn) {
+                error_log("Database connection failed.");
+                header('Content-Type: application/json');
+                echo json_encode(["status" => "error", "message" => "Database connection failed."]);
+                exit;
+            }
+
+            $conn->beginTransaction();
+            $employeeHandler = new Employee($conn);
+
+            $employeeID = trim($_POST["employee_ID"] ?? "");
+            $employeeConfirmationTEXT = trim($_POST["confirmationTEXT"] ?? "");
+
+            if (!empty($employeeID)) {
+                $employeeHandler->EmployeePay($employeeID, $employeeConfirmationTEXT);
             }
 
             $conn->commit();

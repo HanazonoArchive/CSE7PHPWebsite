@@ -21,7 +21,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.employeeFilterBar {
+.customerFilterBar {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 10px 0px;
@@ -127,17 +127,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 10px 0px;
 }
 
-.employeeTable {
-  background-color: var(--navbar-color);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  margin-right: 1%;
-  padding: 10px 0px 10px 10px;
-  width: 100%;
-  height: 400px;
-  overflow: auto;
-}
-
 .addEmployee {
   background-color: var(--navbar-color);
   border-radius: 10px;
@@ -153,7 +142,7 @@ input[type="number"]::-webkit-outer-spin-button {
   margin-top: 10px;
 }
 
-.updateEmployee {
+.updateCustomer {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 0px 10px;
@@ -165,9 +154,10 @@ input[type="number"]::-webkit-outer-spin-button {
   justify-content: center;
   width: 100%;
   margin-bottom: 10px;
+  margin-top: 1%;
 }
 
-.deleteEmployee {
+.deleteCustomer {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 0px 10px;
@@ -178,6 +168,7 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: flex-start;
   justify-content: center;
   width: 100%;
+  margin-top: 1%;
   margin-right: 0.5%;
 }
 
@@ -224,23 +215,34 @@ input[type="number"]::-webkit-outer-spin-button {
   align-items: flex-start;
 }
 
+.employeeLogTable {
+  background-color: var(--navbar-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-right: 1%;
+  padding: 10px 0px 10px 10px;
+  width: 100%;
+  height: 450px;
+  overflow: auto;
+}
+
 /* Custom scrollbar */
-.employeeTable::-webkit-scrollbar {
+.employeeLogTable::-webkit-scrollbar {
   width: 10px;
 }
 
-.employeeTable::-webkit-scrollbar-track {
+.employeeLogTable::-webkit-scrollbar-track {
   background: var(--navbar-color);
   border-radius: 10px;
 }
 
-.employeeTable::-webkit-scrollbar-thumb {
+.employeeLogTable::-webkit-scrollbar-thumb {
   background: var(--optional-color);
   border-radius: 10px;
   transition: background 0.3s ease-in-out;
 }
 
-.employeeTable table {
+.employeeLogTable table {
   width: 100%;
   border-collapse: collapse;
   border: none;
@@ -248,7 +250,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 5px;
 }
 
-.employeeTable th {
+.employeeLogTable th {
   color: white;
   background: var(--highlighted-color);
   font-weight: 400;
@@ -256,32 +258,38 @@ input[type="number"]::-webkit-outer-spin-button {
   padding: 4px 0px;
 }
 
-.employeeTable tr:nth-child(even) td {
+.employeeLogTable tr:nth-child(even) td {
   background-color: var(--navbar-color);
   color: var(--text-color);
   border-bottom: 1px solid var(--optional-color);
 }
 
-.employeeTable tr:nth-child(odd) td {
+.employeeLogTable tr:nth-child(odd) td {
   background-color: var(--background-color);
   color: var(--text-color);
   border-bottom: 1px solid var(--optional-color);
 }
 
-.employeeTable td {
+.employeeLogTable td {
   padding: 10px 4px;
   transition: 0.3s ease-in-out;
 }
 
-.employeeModofication {
+.addCustomerFeedback {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin-right: 0.5%;
 }
 
-.payingEmployee {
+.updateCustomerFeedback {
   background-color: var(--navbar-color);
   border-radius: 10px;
   padding: 0px 10px;
@@ -293,4 +301,35 @@ input[type="number"]::-webkit-outer-spin-button {
   justify-content: center;
   width: 100%;
   margin-left: 0.5%;
+}
+
+.deleteCustomerFeedback {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1%;
+  margin-left: 0.5%;
+}
+
+.deleteContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedbackContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 }

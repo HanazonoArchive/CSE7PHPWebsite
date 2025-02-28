@@ -22,16 +22,39 @@ include PROJECT_ROOT . "/controller/quotation-controller.php";
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="<?= JUST_URL ?>/js/quotation/quotationTableFunctions.js"></script>
     <script src="<?= JUST_URL ?>/js/quotation/quotationFunctions.js"></script>
+    <script src="<?= JUST_URL ?>/js/quotation/quotationCancel.js"></script>
     <div class="content">
+        <div class="cancelAppointment">
+            <div class="titleHeader">Cancel Appointment</div>
+            <div class="titleContent">
+                <div class="column">
+                    <select class="dropdownCancel" name="selectEmployeeID" id="cancelAppointment_ID">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                <div class="column">
+                    <button class="submitButtonCancel" id="submitCancelAppointment">Cancel</button>
+                </div>
+                <div class="column">
+                    <p class="statusNotifierCancel" id="QueryStatusCancel"></p>
+                </div>
+            </div>
+        </div>
         <div class="qoutationDetials">
             <p class="titleHeader">Document Details</p>
             <div class="titleContent">
                 <div class="column">
-                    <input class="inputField" id="quotationDetails_EmployeeID1" type="number" placeholder="Employee ID 1">
-                    <input class="inputField" id="quotationDetails_EmployeeID2" type="number" placeholder="Employee ID 2 (can be blank)">
+                    <select class="dropdown" id="quotationDetails_EmployeeID1">
+                        <option value="">Loading...</option>
+                    </select>
+                    <select class="dropdown" id="quotationDetails_EmployeeID2">
+                        <option value="">Loading...</option>
+                    </select>
                 </div>
                 <div class="column">
-                    <input class="inputField" id="quotationDetails_EmployeeID3" type="number" placeholder="Employee ID 3 (can be blank)">
+                    <select class="dropdown" id="quotationDetails_EmployeeID3">
+                        <option value="">Loading...</option>
+                    </select>
                     <select class="dropdown" id="quotationDetails_AppointmentID">
                         <option value="">Loading...</option>
                     </select>
