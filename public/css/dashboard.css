@@ -1,0 +1,417 @@
+@import url("./fonts/inter.css");
+
+:root {
+  --background-color: #e3f2fd; /* Light Blue */
+  --navbar-color: #f5f5f5; /* Soft Blue */
+  --text-color: #000000; /* Deep Blue */
+  --optional-color: #42a5f5; /* Vibrant Blue */
+  --highlighted-color: #1e88e5; /* Medium Blue */
+  --afuckingcolor: #64b5f6; /* Sky Blue */
+  --afuckingtextcolor: #102027; /* Dark Blue-Grey */
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboardDivider1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+}
+
+.dashboardDivider1_1 {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 50%;
+  height: 100%;
+}
+
+.dashboardDivider1_2 {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 50%;
+  height: 100%;
+}
+
+.dashboardDivider1_2_1 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+  height: 50%;
+}
+
+.dashboardDivider1_2_2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+  height: 50%;
+}
+
+.dashboardDivider1_1_1 {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: stretch;
+  width: 100%;
+  height: 60%;
+  flex-direction: column;
+}
+
+.dashboardDivider1_1_2 {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: stretch;
+  width: 100%;
+  height: 40%;
+  margin-top: 10px;
+}
+
+.dashboardDivider1_2_2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+  height: 50%;
+}
+
+.dashboardDivider1_2_1_1 {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+  margin-left: 10px;
+  justify-content: center;
+}
+
+.dashboardDivider1_2_1_2 {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.dashboardDivider1_2_2_1 {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  padding: 0px 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: stretch;
+  width: 100%;
+  height: 97%;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.titleHeader {
+  margin: 0px;
+  padding: 10px 5px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/*Schedule Table*/
+.scheduleTable {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  margin-right: 1%;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Custom scrollbar */
+.scheduleTable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scheduleTable::-webkit-scrollbar-track {
+  background: var(--navbar-color);
+  border-radius: 10px;
+}
+
+.scheduleTable::-webkit-scrollbar-thumb {
+  background: var(--optional-color);
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+.scheduleTable table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  height: 100px;
+  border-radius: 5px;
+}
+
+.scheduleTable th {
+  color: white;
+  background: var(--highlighted-color);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 4px 0px;
+}
+
+.scheduleTable tr:nth-child(even) td {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.scheduleTable tr:nth-child(odd) td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.scheduleTable td {
+  padding: 10px 4px;
+  transition: 0.3s ease-in-out;
+  font-size: 12px;
+}
+
+/*Pending Table*/
+.pendingTable {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  margin-right: 1%;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Custom scrollbar */
+.pendingTable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.pendingTable::-webkit-scrollbar-track {
+  background: var(--navbar-color);
+  border-radius: 10px;
+}
+
+.pendingTable::-webkit-scrollbar-thumb {
+  background: var(--optional-color);
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+.pendingTable table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  height: 100px;
+  border-radius: 5px;
+}
+
+.pendingTable th {
+  color: white;
+  background: var(--highlighted-color);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 4px 0px;
+}
+
+.pendingTable tr:nth-child(even) td {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.pendingTable tr:nth-child(odd) td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.pendingTable td {
+  padding: 10px 4px;
+  transition: 0.3s ease-in-out;
+  font-size: 12px;
+}
+
+/*Employee Table*/
+.employeeTable {
+  background-color: var(--navbar-color);
+  border-radius: 10px;
+  margin-right: 1%;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Custom scrollbar */
+.employeeTable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.employeeTable::-webkit-scrollbar-track {
+  background: var(--navbar-color);
+  border-radius: 10px;
+}
+
+.employeeTable::-webkit-scrollbar-thumb {
+  background: var(--optional-color);
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+.employeeTable table {
+  width: 100%;
+  border-collapse: collapse;
+  border: none;
+  height: 100px;
+  border-radius: 5px;
+}
+
+.employeeTable th {
+  color: white;
+  background: var(--highlighted-color);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 4px 0px;
+}
+
+.employeeTable tr:nth-child(even) td {
+  background-color: var(--navbar-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.employeeTable tr:nth-child(odd) td {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--optional-color);
+}
+
+.employeeTable td {
+  padding: 10px 4px;
+  transition: 0.3s ease-in-out;
+  font-size: 12px;
+}
+
+/* Container for the circle */
+.progressContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 50vmin; /* Use viewport units for responsive scaling */
+  height: 50vmin; /* Same here to maintain a square aspect ratio */
+  max-width: 200px; /* Limit the maximum size on larger screens */
+  max-height: 200px; /* Same for height */
+  min-width: 100px; /* Set a minimum size for smaller screens */
+  min-height: 100px; /* Same for height */
+  margin: 0 auto; /* Center it horizontally */
+}
+
+/* Styling for the progress circle */
+.progressCircle {
+  width: 100%; /* Inherit width from the container */
+  height: 100%; /* Inherit height from the container */
+  border-radius: 50%; /* Make it circular */
+  background: conic-gradient(#ddd 0%, #ddd 100%); /* Background circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3vw; /* Responsive font size relative to viewport */
+  font-weight: bold;
+  position: relative;
+  transition: font-size 0.3s ease; /* Smooth font size transition */
+}
+
+/* SVG styling */
+.progressCircle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* Start the progress circle from top */
+}
+
+.centerCircle {
+  width: 80%; /* Inherit width from the container */
+  height: 80%; /* Inherit height from the container */
+  border-radius: 50%; /* Make it circular */
+  background: var(--navbar-color); /* Background circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: font-size 0.3s ease; /* Smooth font size transition */
+}
+
+/* Circle element inside SVG */
+.progressCircle circle {
+  fill: none;
+  stroke-width: 10; /* Stroke width for the circle */
+  stroke-linecap: round; /* Rounded edges for the progress stroke */
+  transition: stroke-dasharray 1s ease-in-out; /* Smooth progress animation */
+}
+
+/* Background circle */
+.progressCircle .bgCircle {
+  stroke: #ddd; /* Light gray background */
+}
+
+/* Progress stroke */
+.progressCircle .progress {
+  stroke: var(--highlighted-color); /* Color for the progress stroke */
+  stroke-dasharray: 0, 283; /* Full circle circumference */
+}
+
+/* Progress number styling */
+.progressNumber {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 25%; /* Font size relative to the circle size */
+  font-weight: bold;
+  transition: font-size 0.3s ease; /* Smooth font size transition */
+}

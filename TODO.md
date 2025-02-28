@@ -2,7 +2,7 @@
 
 1. **Customer Page** (DONE)
 2. **Employee Log Page** (DONE)
-3. **Dashboard** (WORKING) <-- CURRENTLY
+3. **Dashboard** (DONE)
 4. **Home** (Optional)
 
 ## Current Progress

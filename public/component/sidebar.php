@@ -8,7 +8,7 @@ define('SPECIFIC_URL', '/CSE7PHPWebsite')
 
 <div class="sidebar" id="sidebar">
 
-    <a href="<?= SPECIFIC_URL ?>/index.php" class="logo" id="logo">
+    <a href="<?= SPECIFIC_URL ?>/public/webpage/dashboard.php" class="logo" id="logo">
         <img class="logo_icon" src="<?= BASE_URL ?>/assets/Firefly.png">
         <span class="logo-text">Coolant</span>
     </a>

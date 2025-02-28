@@ -331,8 +331,8 @@ input[type="number"]::-webkit-outer-spin-button {
   color: white;
   background: var(--highlighted-color);
   font-weight: 400;
-  font-size: 16px;
-  padding: 4px 0px;
+  font-size: 14px;
+  padding: 4px 2px;
 }
 
 .appointmentTable tr:nth-child(even) td {
@@ -348,8 +348,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .appointmentTable td {
-  padding: 2px 3px;
+  padding: 10px 4px;
   transition: 0.3s ease-in-out;
+  font-size: 12px;
 }
 
 .visitPrint {
@@ -380,3 +381,5 @@ input[list]::-webkit-calendar-picker-indicator {
 input[list] {
   appearance: none;
 }
+
+
