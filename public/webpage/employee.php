@@ -120,7 +120,7 @@ require PROJECT_ROOT . "/controller/employee-controller2.php";
                 </div>
             </div>
             <div class="payingEmployee">
-                <div class="titleHeader">Delete Employee</div>
+                <div class="titleHeader">Pay Employee</div>
                 <div class="titleContent">
                     <div class="column">
                         <select class="dropdown" name="selectEmployeeID" id="payEmployee_ID">
