@@ -85,7 +85,7 @@ function getDateColor(appointmentDate) {
     } else if (appointment.getMonth() === currentDate.getMonth() && appointment.getFullYear() === currentDate.getFullYear()) {
         return "#f1c40f"; // Yellow (This month)
     } else {
-        return "#2ecc71"; // Green (More than a month away)
+        return "#0000FF"; // Green (More than a month away)
     }
 }
 
@@ -94,7 +94,7 @@ function getLightColor(color) {
     const lightColors = {
         "#e74c3c": "#f8d7da", // Light Red
         "#f1c40f": "#fff3cd", // Light Yellow
-        "#2ecc71": "#d4edda", // Light Green
+        "#0000FF": "#ADD8E6", // Light Green
         "#3498db": "#d6eaf8"  // Light Blue
     };
     return lightColors[color] || "#f8f9fa"; // Default Light Gray

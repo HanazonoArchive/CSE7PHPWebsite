@@ -1,4 +1,3 @@
--- Ensure InnoDB for Foreign Key support
 SET FOREIGN_KEY_CHECKS = 0;  
 
 CREATE TABLE `employee` (
@@ -88,5 +87,4 @@ CREATE TABLE `service_report_data` (
     FOREIGN KEY (`service_report_id`) REFERENCES `service_report`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- Enable foreign key checks again
 SET FOREIGN_KEY_CHECKS = 1;

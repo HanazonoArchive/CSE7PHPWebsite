@@ -1,4 +1,3 @@
--- Development-Friendly Schema (Relaxed Constraints)
 
 CREATE TABLE `employee`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
